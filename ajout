@@ -1,0 +1,41 @@
+Ajouter la création automatique du client si inexistant
+exemple automatiquelet client = await Client.findByPk(client_id);
+
+if (!client && req.body.client) {
+  client = await Client.create(req.body.client);
+}
+
+
+Dans le controller devis 
+    getAllDevis
+        Trier par date
+        Trier par statut
+        Ou filtre dynamique
+
+
+génération PDF facture
+dashboard simple
+
+table payement:
+1 payement correspond à 1 factures
+une facture peut avoir plusieurs paiements
+calcul automatique du reste à payer
+passer en "payee" quand total atteint
+
+FRONT
+
+✅ Afficher clients
+✅ Afficher devis
+✅ Voir détail d’un devis (avec items) ← très stylé
+✅ Créer un devis depuis le front
+✅ Ajouter paiement
+✅ Voir statut facture évoluer en live 👀
+
+Faut poour la compta 
+les recettes et les dépences à l'année et au mois
+calcul les bénéf net (CA - dépenses - charges)
+Avec le détail pour controlle 
+
+    Ajout d'une tables pour les dépenses et les charges
+    A paraméttré plus tard avec maman, les charges sont variables
+    
