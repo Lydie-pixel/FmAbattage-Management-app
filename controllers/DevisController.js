@@ -1,5 +1,6 @@
 const { Devis, DevisItem, Client } = require("../models");
 const sequelize = require("../config/database");
+const { Op } = require("sequelize");
 
 exports.createDevis = async (req, res) => {
 
@@ -96,9 +97,15 @@ exports.getDevisById = async (req, res) => {
 exports.getAllDevis = async (req, res) => {
   try {
     const devis = await Devis.findAll({
-      where: {
-        statut: ['en_attente', 'accepte']
+    include: [
+    {
+      model: Client,
+      as: "client"}],
+    where: {
+      statut: {
+        [Op.in]: ['en_attente', 'accepte']
       }
+    }
     });
 
     res.json(devis);

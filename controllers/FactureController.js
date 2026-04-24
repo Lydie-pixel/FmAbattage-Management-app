@@ -1,20 +1,34 @@
 const Facture = require("../models/FactureModel");
-const { Devis, DevisItem } = require("../models");
+const { Devis, DevisItem, Client  } = require("../models");
 const sequelize = require("../config/database");
 
 exports.getAllFactures = async (req, res) => {
   try {
-    const factures = await Facture.findAll();
+    const factures = await Facture.findAll({
+      include: [
+        {
+          model: Client,
+          as: "client"
+        }
+      ]
+    });
+
     res.json(factures);
-  } 
-  catch (error) {
+  } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
 exports.getFactureById = async (req, res) => {
   try {
-    const factures = await Facture.findByPk(req.params.id);
+    const factures = await Facture.findByPk(req.params.id, {
+      include: [
+        {
+          model: Client,
+          as: "client"
+        }
+      ]
+    });
     if (factures) {
       res.json(factures);
     } else {
