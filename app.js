@@ -5,6 +5,11 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 
+
+const path = require("path");
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 // Routes
 
 const devisRoutes = require("./routes/DevisRoutes");
