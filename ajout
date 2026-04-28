@@ -1,4 +1,4 @@
-
+node server.js
 
 Ajouter la création automatique du client si inexistant
 exemple automatiquelet client = await Client.findByPk(client_id);

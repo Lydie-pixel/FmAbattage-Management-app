@@ -1,5 +1,5 @@
 // Affiche le header
-fetch("./components/Header.html")
+fetch("/components/Header.html")
 .then(res => res.text())
 .then(data => {
     const header = document.getElementById("header");
@@ -7,7 +7,7 @@ fetch("./components/Header.html")
 });
 
 // Affiche le footer
-fetch("./components/Footer.html")
+fetch("/components/Footer.html")
 .then(res => res.text())
 .then(data => {
     const footer = document.getElementById("footer");
