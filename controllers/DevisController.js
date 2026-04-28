@@ -100,7 +100,13 @@ exports.getAllDevis = async (req, res) => {
     include: [
     {
       model: Client,
-      as: "client"}],
+      as: "client"
+    },
+    {
+      model: DevisItem,
+      as: "items"
+    }
+  ],
     where: {
       statut: {
         [Op.in]: ['en_attente', 'accepte']
