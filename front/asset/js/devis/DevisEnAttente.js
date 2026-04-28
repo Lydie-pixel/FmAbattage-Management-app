@@ -34,6 +34,12 @@ fetch("http://localhost:3000/api/devis")
 
       const echeance = new Date(d.date_echeance);
       const diff = (echeance - today) / (1000 * 60 * 60 * 24);
+      const statutLabels = {
+        en_attente: "En attente ⏳",
+        accepte: "Accepté ✅",
+        refuse: "Refusé ❌",
+        archive: "Archivé 📦"
+      };
 
       let badge = "bg-success";
       if (diff < 3) badge = "bg-danger";
@@ -45,7 +51,7 @@ fetch("http://localhost:3000/api/devis")
           <td>${d.client?.nom || "-"}</td>
           <td>${d.client?.tel || "-"}</td>
           <td>${d.date_echeance}</td>
-          <td><span class="badge ${badge}">${d.statut}</span></td>
+          <td><span class="badge ${badge}">${statutLabels[d.statut] || d.statut}</span></td>
         </tr>
       `;
     });
