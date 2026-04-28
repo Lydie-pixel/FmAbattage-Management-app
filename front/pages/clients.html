@@ -15,14 +15,65 @@
         <div id="header"></div>
 
         <main>
-            <h1>Tableau de clients</h1>
-            <p>Bienvenue sur notre application de gestion des clients.</p>
+            <h1>Clients</h1>
+
+            <button class="btn btn-primary mb-3" onclick="openCreateModal()">
+            Nouveau client
+            </button>
+
+            <div id="clientsTable"></div>
+
+            <div class="modal fade" id="clientModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modalTitle">Nouveau client</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <form id="clientForm">
+                                <input type="hidden" id="clientId">
+
+                                <div class="mb-2">
+                                    <label>Nom</label>
+                                    <input type="text" id="nom" class="form-control" required>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Téléphone</label>
+                                    <input type="text" id="tel" class="form-control">
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Email</label>
+                                    <input type="email" id="email" class="form-control" required>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label>Adresse</label>
+                                    <input type="text" id="adresse" class="form-control">
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button class="btn btn-primary" onclick="saveClient()">Enregistrer</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </main>
 
         <div id="footer"></div>
     </body>
 
-    <script src="./asset/js/clients/TableClient.js"></script>
+    <script src="/asset/js/clients/TableClient.js"></script>
+    <script src="/asset/js/clients/TableClient.js"></script>
+    <script src="/asset/js/clients/FicheClient.js"></script>
     <script src="/asset/js/componement.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>

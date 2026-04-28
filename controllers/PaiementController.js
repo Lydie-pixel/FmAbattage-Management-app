@@ -5,7 +5,12 @@ const { Op } = require("sequelize");
 
 exports.getAllPaiements = async (req, res) => {
   try {
-    const paiements = await Paiement.findAll();
+    const paiements = await Paiement.findAll({
+      include: [{
+        model: Facture,
+        as: "facture"
+      }]
+    });
     res.json(paiements);
   } catch (error) {
     res.status(500).json({ error: error.message });

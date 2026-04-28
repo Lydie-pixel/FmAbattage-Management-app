@@ -1,0 +1,122 @@
+const params = new URLSearchParams(window.location.search);
+const clientId = params.get("id");
+
+fetch(`http://localhost:3000/api/client/${clientId}`)
+  .then(res => res.json())
+  .then(client => {
+
+    const div = document.getElementById("clientInfo");
+
+    div.innerHTML = `
+      <div class="card p-3">
+        <h4>${client.nom}</h4>
+        <p><strong>Téléphone :</strong> ${client.tel || "-"}</p>
+        <p><strong>Email :</strong> ${client.email}</p>
+        <p><strong>Adresse :</strong> ${client.adresse || "-"}</p>
+      </div>
+    `;
+  });
+
+  fetch("http://localhost:3000/api/devis")
+  .then(res => res.json())
+  .then(data => {
+
+    const devis = data.filter(d => d.client_id == clientId);
+    const container = document.getElementById("clientDevis");
+
+    let html = `
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Numéro</th>
+            <th>Montant</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    devis.forEach(d => {
+      html += `
+        <tr>
+          <td>${d.numero}</td>
+          <td>${d.montant} €</td>
+          <td>${d.statut}</td>
+        </tr>
+      `;
+    });
+
+    html += `</tbody></table>`;
+
+    container.innerHTML = html;
+  });
+
+  fetch("http://localhost:3000/api/facture")
+  .then(res => res.json())
+  .then(data => {
+
+    const factures = data.filter(f => f.client_id == clientId);
+    const container = document.getElementById("clientFactures");
+
+    let html = `
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Numéro</th>
+            <th>Montant</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    factures.forEach(f => {
+      html += `
+        <tr>
+          <td>${f.numero}</td>
+          <td>${f.montant} €</td>
+          <td>${f.statut}</td>
+        </tr>
+      `;
+    });
+
+    html += `</tbody></table>`;
+
+    container.innerHTML = html;
+  });
+
+  fetch("http://localhost:3000/api/paiement")
+  .then(res => res.json())
+  .then(data => {
+
+    const container = document.getElementById("clientPaiements");
+
+    // ⚠️ on passe par facture
+    const paiements = data.filter(p => {
+      return p.facture?.client_id == clientId;
+    });
+
+    let html = `
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Montant</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    paiements.forEach(p => {
+      html += `
+        <tr>
+          <td>${p.montant} €</td>
+          <td>${p.date_paiement}</td>
+        </tr>
+      `;
+    });
+
+    html += `</tbody></table>`;
+
+    container.innerHTML = html;
+  });

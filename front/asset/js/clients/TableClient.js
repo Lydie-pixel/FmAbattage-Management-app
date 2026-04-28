@@ -1,7 +1,7 @@
 fetch("http://localhost:3000/api/client")
   .then(response => response.json())
   .then(data => {
-    const div = document.getElementById("resultat");
+    const div = document.getElementById("clientsTable");
 
     let html = `
       <table class="table table-striped">
@@ -25,9 +25,9 @@ fetch("http://localhost:3000/api/client")
           <td>${client.email}</td>
           <td>${client.adresse || "-"}</td>
           <td>
-            <button class="btn btn-sm btn-primary">Voir</button>
-            <button class="btn btn-sm btn-secondary">Modifier</button>
-            <button class="btn btn-sm btn-danger">Supprimer</button>
+            <a href="/pages/FicheClient.html?id=${client.id}" class="btn btn-primary mb-3">Voir</a>
+            <button class="btn btn-sm btn-secondary" onclick="openEditModal(${client.id})">Modifier</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteClient(${client.id})">Supprimer</button>
          </td>
         </tr>
       `;

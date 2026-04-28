@@ -30,13 +30,20 @@ factures.forEach(f => {
   let badge = "bg-warning";
   if (f.statut === "partielle") badge = "bg-info";
 
+        const statutLabels = {
+    en_attente: "En attente de payement",
+    payee: "Facture payée",
+    partielle: "Paiement partiel",
+    archive: "Archivé"
+  };
+  
   html += `
     <tr>
       <td>${f.numero}</td>
       <td>${f.client?.nom || "-"}</td>
       <td>${f.client?.tel || "-"}</td>
       <td>${f.montant} €</td>
-      <td><span class="badge ${badge}">${f.statut}</span></td>
+      <td><span class="badge ${badge}">${statutLabels[f.statut] || d.statut}</span></td>
     </tr>
   `;
 });
