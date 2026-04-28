@@ -30,27 +30,30 @@ fetch("http://localhost:3000/api/client")
 
 // Ajout d'un item
 function addItem() {
-  const div = document.getElementById("items");
+const container = document.getElementById("items");
 
-  div.innerHTML += `
-    <div class="item row mb-2">
-      <div class="col">
-        <input placeholder="Description" class="form-control desc">
-      </div>
-      <div class="col">
-        <input type="number" placeholder="Qté" class="form-control qty" oninput="updateTotals()">
-      </div>
-      <div class="col">
-        <input type="number" placeholder="Prix" class="form-control price" oninput="updateTotals()">
-      </div>
-      <div class="col">
-        <input type="text" class="form-control totalLigne" disabled>
-      </div>
-      <div class="col-auto">
-        <button class="btn btn-danger" onclick="this.parentElement.parentElement.remove(); updateTotals()">❌</button>
-      </div>
-    </div>
-  `;
+const newItem = document.createElement("div");
+newItem.className = "item row mb-2";
+
+newItem.innerHTML = `
+  <div class="col">
+    <input placeholder="Description" class="form-control desc">
+  </div>
+  <div class="col">
+    <input type="number" placeholder="Qté" class="form-control qty" oninput="updateTotals()">
+  </div>
+  <div class="col">
+    <input type="number" placeholder="Prix" class="form-control price" oninput="updateTotals()">
+  </div>
+  <div class="col">
+    <input type="text" class="form-control totalLigne" disabled>
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-danger" onclick="this.closest('.item').remove(); updateTotals()">❌</button>
+  </div>
+`;
+
+container.appendChild(newItem);
 }
 
 // Mise à jour des totaux
@@ -113,3 +116,21 @@ document.getElementById("devisForm").addEventListener("submit", function(e) {
     window.location.href = "/pages/devis.html";
   });
 });
+
+//Générer PDF
+function generatePDF() {
+  const devisId = prompt("ID du devis à générer");
+
+  fetch(`http://localhost:3000/api/pdf/devis/${devisId}`)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+
+      if (data.url) {
+        window.open(data.url, "_blank"); // 🔥 ouvre le PDF
+      } else {
+        alert("Erreur génération PDF");
+      }
+    })
+    .catch(err => console.error(err));
+}

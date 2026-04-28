@@ -16,6 +16,7 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "mysql2": "^3.22.2",
+    "puppeteer": "^24.42.0",
     "sequelize": "^6.37.8"
   },
   "devDependencies": {

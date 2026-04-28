@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="http://localhost:3000/asset/css/pdf.css">
+</head>
+
+<body>
+
+<div class="top">
+  <div>
+    <strong>FM ABATTAGE</strong><br>
+    14 rue du Thou<br>
+    01240 Saint Paul de Varax<br>
+    Tél : 06 78 69 66 86<br>
+    Email : fmabattage@gmail.com
+  </div>
+
+  <div class="logo">
+    <img src="http://localhost:3000/asset/img/logo.png" width="120">
+  </div>
+</div>
+
+<div class="section">
+  <h2>DEVIS</h2>
+</div>
+
+<div class="box">
+  <strong>Client</strong><br>
+  {{client_nom}}<br>
+  {{client_adresse}}<br>
+  {{client_tel}}
+</div>
+
+<div class="section">
+  <p>Date devis : {{date_devis}}</p>
+  <p>Échéance : {{date_echeance}}</p>
+  <p>Numéro : {{numero}}</p>
+</div>
+
+<table>
+  <tr>
+    <th>Description</th>
+    <th>Prix</th>
+    <th>Qté</th>
+    <th>Total</th>
+  </tr>
+
+  {{items}}
+</table>
+
+<div class="section right">
+  <p>Frais : {{frais}}</p>
+  <p>Total : {{total}}</p>
+</div>
+
+<p>
+Lu et approuvé
+<br>
+Le :
+<br>
+Signature :
+<br>
+Devis reçu avant l'exécution des travaux
+<br>
+Les prix indiqués pourront être révisés en fonction de l’évolution du coût du carburant
+entre la date du devis et la réalisation de la prestation
+<br>
+Conditions de paiement :
+<br>
+Mentions :
+<br>
+TVA non applicable – Article 293B du Code général des impôts
+<br>
+RÉSERVE DE PROPRIÉTÉ : Les marchandises restent notre propriété jusqu'à complet paiement
+</p>
+<footer>
+    FM ABATTAGE 
+    14 rue du Thou, 01240 Saint Paul de Varax
+    Tél : 06 78 69 66 86
+    Email : fmabattage@gmail.com
+    N° SIRET : 914 446 364 
+    Site web : www.fmabattage.fr
+</footer>
+
+</body>
+</html>
