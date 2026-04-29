@@ -19,24 +19,36 @@ exports.generateDevisPDF = async (req, res) => {
     }
 
     // ✅ 2. charger le template
+    function formatDate(date) {
+      const d = new Date(date);
+      return d.toLocaleDateString("fr-FR");
+    }
+    function formatPrice(value) {
+      return Number(value).toLocaleString("fr-FR", {
+        minimumFractionDigits: 2
+      }) + " €";
+    }
     let html = fs.readFileSync("./templates/devis.html", "utf8");
 
     // ✅ 3. remplacer les variables
     html = html.replace("{{client_nom}}", devis.client.nom);
     html = html.replace("{{client_tel}}", devis.client.tel || "");
     html = html.replace("{{client_adresse}}", devis.client.adresse || "");
+html = html.replaceAll("{{client_code_postal}}", devis.client.code_postal || "");
+html = html.replaceAll("{{client_ville}}", devis.client.ville || "");
+    html = html.replace("{{client_email}}", devis.client.email || "");
     html = html.replace("{{numero}}", devis.numero);
-    html = html.replace("{{date_devis}}", devis.date_devis);
-    html = html.replace("{{date_echeance}}", devis.date_echeance);
+   html = html.replaceAll("{{date_devis}}", formatDate(devis.date_devis));
+    html = html.replace("{{date_echeance}}", formatDate(devis.date_echeance));
     html = html.replace("{{frais}}", devis.frais_deplacement + " €");
-    html = html.replace("{{total}}", devis.montant + " €");
+    html = html.replaceAll("{{total}}", devis.montant);
 
     // ✅ 4. générer les lignes
     const itemsHTML = devis.items.map(item => `
       <tr>
         <td>${item.description}</td>
-        <td>${item.prix_unitaire} €</td>
         <td>${item.quantite}</td>
+        <td>${item.prix_unitaire} €</td>
         <td>${item.prix_unitaire * item.quantite} €</td>
       </tr>
     `).join("");
@@ -53,7 +65,8 @@ exports.generateDevisPDF = async (req, res) => {
 
     await page.pdf({
       path: filePath,
-      format: "A4"
+      format: "A4",
+      printBackground: true // 🔥 OBLIGATOIRE
     });
 
     await browser.close();

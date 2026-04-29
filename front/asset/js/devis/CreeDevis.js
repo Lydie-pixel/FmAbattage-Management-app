@@ -116,21 +116,3 @@ document.getElementById("devisForm").addEventListener("submit", function(e) {
     window.location.href = "/pages/devis.html";
   });
 });
-
-//Générer PDF
-function generatePDF() {
-  const devisId = prompt("ID du devis à générer");
-
-  fetch(`http://localhost:3000/api/pdf/devis/${devisId}`)
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-
-      if (data.url) {
-        window.open(data.url, "_blank"); // 🔥 ouvre le PDF
-      } else {
-        alert("Erreur génération PDF");
-      }
-    })
-    .catch(err => console.error(err));
-}

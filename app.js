@@ -5,7 +5,6 @@ const cors = require("cors");
 app.use(express.json());
 app.use(cors());
 
-
 const path = require("path");
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -23,5 +22,8 @@ app.use("/api/facture", factureRoutes);
 
 const paiementRoutes = require("./routes/PaiementRoutes");
 app.use("/api/paiement", paiementRoutes);
+
+const pdfRoutes = require("./routes/PdfRoutes");
+app.use("/api/pdf", pdfRoutes);
 
 module.exports = app;

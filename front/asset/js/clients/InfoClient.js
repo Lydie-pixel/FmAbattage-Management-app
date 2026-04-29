@@ -13,6 +13,8 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
         <p><strong>Téléphone :</strong> ${client.tel || "-"}</p>
         <p><strong>Email :</strong> ${client.email}</p>
         <p><strong>Adresse :</strong> ${client.adresse || "-"}</p>
+        <p><strong>Ville :</strong> ${client.ville || "-"}</p>
+        <p><strong>Code postal :</strong> ${client.code_postal || "-"}</p>
       </div>
     `;
   });

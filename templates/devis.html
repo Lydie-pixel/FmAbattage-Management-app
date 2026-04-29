@@ -1,87 +1,274 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
   <meta charset="UTF-8">
+
   <link rel="stylesheet" href="http://localhost:3000/asset/css/pdf.css">
-</head>
 
-<body>
+  <style>
+    * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 
-<div class="top">
-  <div>
-    <strong>FM ABATTAGE</strong><br>
-    14 rue du Thou<br>
-    01240 Saint Paul de Varax<br>
-    Tél : 06 78 69 66 86<br>
-    Email : fmabattage@gmail.com
-  </div>
+  .header {
+    display: flex;
+    justify-content: space-between;
+    text-decoration-color: gray;
+  }
 
-  <div class="logo">
-    <img src="http://localhost:3000/asset/img/logo.png" width="120">
-  </div>
-</div>
+  .client {
+    text-align: left;
+    padding: 3px;
+  }
 
-<div class="section">
-  <h2>DEVIS</h2>
-</div>
+  .devis {
+    margin-top: 20px;
+    margin: 2px;
+    width: 50%;
+    margin-left: auto;
+    text-align: left;
+  }
 
-<div class="box">
-  <strong>Client</strong><br>
-  {{client_nom}}<br>
-  {{client_adresse}}<br>
-  {{client_tel}}
-</div>
+  .gray {
+    background: #D9D9D9;
+    padding: 3px;
+    text-align: right;
+    display: inline-block; 
+    margin-left: auto; 
+  }
 
-<div class="section">
-  <p>Date devis : {{date_devis}}</p>
-  <p>Échéance : {{date_echeance}}</p>
-  <p>Numéro : {{numero}}</p>
-</div>
+  .tdevis td {
+    text-align: right;
+    border: none;
+    padding: 3;
+    margin-left: 10;
+  }
 
-<table>
-  <tr>
-    <th>Description</th>
-    <th>Prix</th>
-    <th>Qté</th>
-    <th>Total</th>
-  </tr>
+  .tdevis th {
+    background-color: white;
+    text-align: left;
+    text-decoration: none;
+    border: none;
+    padding: 3;
+    margin-left: 10;
+  }
 
-  {{items}}
-</table>
+  .devis th {
+    text-align: left;
+    border: none;
+    padding: 3;
+    margin-left: 10;
+  }
 
-<div class="section right">
-  <p>Frais : {{frais}}</p>
-  <p>Total : {{total}}</p>
-</div>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
 
-<p>
-Lu et approuvé
-<br>
-Le :
-<br>
-Signature :
-<br>
-Devis reçu avant l'exécution des travaux
-<br>
-Les prix indiqués pourront être révisés en fonction de l’évolution du coût du carburant
-entre la date du devis et la réalisation de la prestation
-<br>
-Conditions de paiement :
-<br>
-Mentions :
-<br>
-TVA non applicable – Article 293B du Code général des impôts
-<br>
-RÉSERVE DE PROPRIÉTÉ : Les marchandises restent notre propriété jusqu'à complet paiement
-</p>
-<footer>
-    FM ABATTAGE 
-    14 rue du Thou, 01240 Saint Paul de Varax
-    Tél : 06 78 69 66 86
-    Email : fmabattage@gmail.com
-    N° SIRET : 914 446 364 
-    Site web : www.fmabattage.fr
-</footer>
+  th {
+    background: #D9D9D9;
+    text-align: center;
+  }
 
-</body>
+  td {
+    text-align: left;
+  }
+
+  th, td {
+    border: 1px solid gray;
+    padding: 6px;
+    margin-left: 10;
+  }
+
+  tfoot td, tfoot th {
+    border: none;
+    padding: 5;
+  }
+
+  .footer-line {
+    border-top: 1px solid #D9D9D9;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  .footer {
+    position: fixed;
+    bottom: 20px;
+    left: 40px;
+    right: 40px;
+    font-size: 10px;
+    width: 80%;
+    text-align: center;
+    margin-top: 40px;
+    font-size: 10px;
+    text-decoration-color: gray;
+  }
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .footer-left {
+    text-align: left;
+  }
+
+  .footer-right {
+    text-align: left;
+  }
+  </style>
+
+  </head>
+
+  <body>
+
+    <!-- 🔝 HEADER -->
+    <div class="header">
+      <div>
+        <strong>FM ABATTAGE</strong><br>
+        14 rue du Thou<br>
+        01240 Saint Paul de Varax<br>
+        Tél : 06 78 69 66 86<br>
+        Email : fmabattage@gmail.com
+      </div>
+
+      <div>
+        <img src="http://localhost:3000/asset/img/logo.png" width="120">
+      </div>
+    </div>
+
+    <!-- 📄 TITRE -->
+    <div style="width: 50%; margin-left: auto; text-align: left;">
+      <h2 style="margin:0;">Devis</h2>
+      <div style="border-top: 1px solid black; margin-top:5px;"></div>
+    </div>
+
+    <!-- 📌 INFOS -->
+    <div class="info" style="display:flex; justify-content:space-between;">
+      
+      <!-- gauche -->
+        <div class="client">
+        <strong>Client</strong><br>
+        {{client_nom}}<br>
+        {{client_adresse}}<br>
+        {{client_code_postal}} {{client_ville}}<br>
+        France <br>
+        {{client_tel}}
+      </div>
+
+      <!-- droite -->
+      <div class="devis">
+        <table>
+        <tbody class="tdevis">
+          <tr>
+            <th scope="col">Numéro du devis :</th>
+            <td>{{numero}}</td>
+          </tr>
+          <tr>
+            <th scope="col">Date du devis :</th>
+            <td>{{date_devis}}</td>
+          </tr>
+          <tr>
+            <th scope="col">Validité :</th>
+            <td>14 jours</td>
+          </tr>
+          <tr>
+            <th scope="col">Date d'échéance :</th>
+            <td>{{date_echeance}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th style="background-color: #D9D9D9; text-align: left;"><strong>Total à payer :</strong></td>
+            <td style="background-color: #D9D9D9; text-align: right;"><strong>{{total}} €</strong></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- 📊 TABLEAU -->
+    <table>
+        <colgroup>
+        <col style="width:50%">
+        <col style="width:15%">
+        <col style="width:15%">
+        <col style="width:20%">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Quantité</th>
+          <th>Prix unitaire HT</th>
+          <th>Montant</th>
+        </tr>
+      </thead>
+    
+
+      <tbody>
+        {{items}}
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td></td>
+          <th colspan="2" style="text-align: left;">Frais de carburant estimés :</th>
+          <td style="background-color: #D9D9D9; text-align: right;">{{frais}}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <th colspan="2" style="text-align: left;">Total HT :</th>
+          <td style="background-color: #D9D9D9; text-align: right;"><strong>{{total}} €</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div>
+      <span><strong>Lu et approuvé</strong></span>
+      <br> <br>
+      Le :
+      <br> <br>
+      Signature :
+    </div>
+    <div style="margin-top:20px;">
+      <p>
+      Devis reçu avant l'exécution des travaux
+      <br>
+      Les prix indiqués pourront être révisés en fonction de l’évolution du coût du carburant
+      entre la date du devis et la réalisation de la prestation
+    </div>
+    <div style="margin-top:20px;">
+      <p>
+      Conditions de paiement :
+      <br>
+      Mentions :
+    </div>
+    <div>
+      <p><i></i>
+      TVA non applicable – Article 293B du Code général des impôts
+      <br>
+      RÉSERVE DE PROPRIÉTÉ : Les marchandises restent notre propriété jusqu'à complet paiement
+      </i></p>
+    </div>
+
+    <!-- 🔻 FOOTER -->
+    <div class="footer">
+      <div class="footer-line"></div>
+
+      <div class="footer-content">
+        <div class="footer-left">
+          <p><strong>FM ABATTAGE</strong></p>
+          <p>14 rue du Thou, 01240 Saint Paul de Varax</p>
+          <p><strong>Tél : </strong>06 78 69 66 86</p>
+        </div>
+
+        <div class="footer-right">
+          <p><strong>Email : </strong>fmabattage@gmail.com</p>
+          <p><strong>N° SIRET : </strong>914 446 364</p>
+          <p><strong>Site web : </strong>www.fmabattage.fr</p>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
