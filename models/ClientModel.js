@@ -24,6 +24,16 @@ const Client = sequelize.define("Client", {
     allowNull: true
   },
 
+  code_postal: {
+    type: DataTypes.STRING(20),
+    allowNull: true
+  },
+
+  ville: {
+    type: DataTypes.STRING(100),
+    allowNull: true
+  },
+
   createdAt: {
   type: DataTypes.DATE,
   defaultValue: DataTypes.NOW

@@ -7,6 +7,8 @@ function openCreateModal() {
   document.getElementById("tel").value = "";
   document.getElementById("email").value = "";
   document.getElementById("adresse").value = "";
+  document.getElementById("ville").value = "";
+  document.getElementById("code_postal").value = "";
 
   const modal = new bootstrap.Modal(document.getElementById("clientModal"));
   modal.show();
@@ -34,6 +36,8 @@ function openEditModal(id) {
       document.getElementById("tel").value = client.tel;
       document.getElementById("email").value = client.email;
       document.getElementById("adresse").value = client.adresse;
+      document.getElementById("ville").value = client.ville;
+      document.getElementById("code_postal").value = client.code_postal;
     });
 
   const modal = new bootstrap.Modal(document.getElementById("clientModal"));
@@ -45,6 +49,8 @@ function saveClient() {
   const id = document.getElementById("clientId").value;
   document.getElementById("email").value = "";
   document.getElementById("adresse").value = "";
+  document.getElementById("ville").value = "";
+  document.getElementById("code_postal").value = "";
 
   const modal = new bootstrap.Modal(document.getElementById("clientModal"));
   modal.show();
@@ -58,7 +64,9 @@ function saveClient() {
     nom: document.getElementById("nom").value,
     tel: document.getElementById("tel").value,
     email: document.getElementById("email").value,
-    adresse: document.getElementById("adresse").value
+    adresse: document.getElementById("adresse").value,
+    ville: document.getElementById("ville").value,
+    code_postal: document.getElementById("code_postal").value
   };
 
   const url = id
