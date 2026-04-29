@@ -97,22 +97,28 @@ document.getElementById("devisForm").addEventListener("submit", function(e) {
     });
   });
 
-  fetch("http://localhost:3000/api/devis", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      client_id,
-      date_devis,
-      date_echeance,
-      frais_deplacement: frais,
-      items
-    })
+fetch("http://localhost:3000/api/devis", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    client_id,
+    date_devis,
+    date_echeance,
+    frais_deplacement: frais,
+    items
   })
-  .then(res => res.json())
-  .then(() => {
-    alert("Devis créé avec succès");
-    window.location.href = "/pages/devis.html";
+})
+.then(res => res.json()) // 🔥 TRÈS IMPORTANT
+.then(data => {
+  console.log(data); // debug
+
+const url = `http://localhost:3000/api/pdf/devis/${data.id}`;
+window.open(url, "_blank") || (window.location.href = url);
+})
+  .catch(err => {
+  console.error("Erreur front :", err);
+  alert("Erreur lors de la création du devis");
   });
 });

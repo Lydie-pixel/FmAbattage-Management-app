@@ -28,25 +28,13 @@ function changeStatut(id, statut) {
     body: JSON.stringify({ statut })
   })
   .then(() => {
-    console.log("Statut mis à jour");
+    alerte("Statut mis à jour");
   });
 }
 
 //Générer PDF
-function generatePDF() {
-
-  fetch(`http://localhost:3000/api/pdf/devis/${devisId}`)
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-
-      if (data.url) {
-        window.open(data.url, "_blank"); // 🔥 ouvre le PDF
-      } else {
-        alert("Erreur génération PDF");
-      }
-    })
-    .catch(err => console.error(err));
+function generatePDF(id) {
+  window.open(`http://localhost:3000/api/pdf/devis/${id}`, "_blank");
 }
 
 fetch("http://localhost:3000/api/devis")
@@ -107,8 +95,8 @@ fetch("http://localhost:3000/api/devis")
           </select>
         </td>
         <td>
+          <button type="button" onclick="generatePDF(${devis.id})">📄 PDF</button>
           ${factureBtn}
-          <button type="button" onclick="generatePDF()">📄 Générer PDF</button>
           <button class="btn btn-sm btn-primary">Modifier</button>
           <button class="btn btn-sm btn-danger">Supprimer</button>
         </td>
@@ -120,3 +108,7 @@ fetch("http://localhost:3000/api/devis")
 
     container.innerHTML = html;
 });
+
+window.facturer = facturer;
+window.changeStatut = changeStatut;
+window.generatePDF = generatePDF;

@@ -64,19 +64,27 @@ exports.createDevis = async (req, res) => {
       }, { transaction });
     }
 
-    await transaction.commit();
+      await transaction.commit(); // ✅ OK
 
-    res.status(201).json({
-      message: "Devis complet créé avec succès",
-      devis_id: devis.id,
-      numero
-    });
+} catch (error) {
+  await transaction.rollback(); // ✅ uniquement ici
+  return res.status(500).json({ error: error.message });
+}
 
-  } catch (error) {
-    await transaction.rollback();
-    res.status(500).json({ error: error.message });
-  }
-};
+// 🔥 EN DEHORS DU TRY/CATCH
+try {
+  await PdfController.generateDevisPDFInternal(devis.id);
+} catch (err) {
+  console.error("Erreur PDF :", err);
+}
+
+// ✅ réponse envoyée quoi qu’il arrive
+res.status(201).json({
+  message: "Devis complet créé avec succès",
+  id: devis.id,
+  numero
+});
+  };
 
 exports.getDevisById = async (req, res) => {
   try {
