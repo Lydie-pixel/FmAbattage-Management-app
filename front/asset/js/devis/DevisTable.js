@@ -18,6 +18,44 @@ function facturer(id) {
   });
 }
 
+// Action sur un devis
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("btn-supprimer")) {
+
+    const id = e.target.dataset.id;
+
+    if (!confirm("Supprimer ce devis ?")) return;
+
+    fetch(`http://localhost:3000/api/devis/${id}`, {
+      method: "DELETE"
+    })
+    .then(res => res.json())
+    .then(() => {
+      alert("Devis supprimé");
+      location.reload(); // refresh liste
+    })
+    .catch(err => console.error(err));
+  }
+
+  if (e.target.classList.contains("btn-modifier")) {
+  const id = e.target.dataset.id;
+  window.location.href = `/pages/ModifDevis.html?id=${id}`;
+}
+if (e.target.classList.contains("btn-facturer")) {
+  const id = e.target.dataset.id;
+
+  fetch(`http://localhost:3000/api/facture/${id}`, {
+    method: "POST"
+  })
+  .then(res => res.json())
+  .then(() => {
+    alert("Facture créée");
+    location.reload();
+  })
+  .catch(err => console.error(err));
+}
+});
+
 //Changer de statut
 function changeStatut(id, statut) {
   fetch(`http://localhost:3000/api/devis/${id}/statut`, {
@@ -71,13 +109,20 @@ fetch("http://localhost:3000/api/devis")
 
       let factureBtn = "";
 
-    if (devis.statut === "accepte") {
-      factureBtn = `
-        <button class="btn btn-sm btn-success" onclick="facturer(${devis.id})">
-          Facturer
-        </button>
-      `;
-    }
+let actions = "";
+
+// Bouton modifier seulement si PAS accepté
+if (devis.statut !== "accepte") {
+  actions += `<button class="btn btn-warning btn-modifier" data-id="${devis.id}">Modifier</button>`;
+}
+
+// Bouton facturer uniquement si accepté
+if (devis.statut === "accepte") {
+  actions += `<button class="btn btn-success btn-facturer" data-id="${devis.id}">Facturer</button>`;
+}
+
+// Toujours afficher supprimer (ou à adapter selon ton besoin)
+actions += `<button class="btn btn-danger btn-supprimer" data-id="${devis.id}">Supprimer</button>`;
 
     html += `
       <tr>
@@ -96,9 +141,7 @@ fetch("http://localhost:3000/api/devis")
         </td>
         <td>
           <button type="button" onclick="generatePDF(${devis.id})">📄 PDF</button>
-          ${factureBtn}
-          <button class="btn btn-sm btn-primary">Modifier</button>
-          <button class="btn btn-sm btn-danger">Supprimer</button>
+          ${actions}
         </td>
       </tr>
     `;

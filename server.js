@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 });
 
 // connexion + lancement serveur
-sequelize.sync({ alter: true }) //A retirer en prod, sinon risque de perdre des données 
+sequelize.sync() 
   .then(() => {
     app.listen(PORT, () => {
       console.log(`Serveur lancé sur le port ${PORT}`);
