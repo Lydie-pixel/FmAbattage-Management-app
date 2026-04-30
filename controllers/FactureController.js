@@ -1,6 +1,7 @@
 const Facture = require("../models/FactureModel");
 const { Devis, DevisItem, Client  } = require("../models");
 const sequelize = require("../config/database");
+const { Op } = require("sequelize");
 
 exports.getAllFactures = async (req, res) => {
   try {
@@ -172,46 +173,6 @@ exports.updateFactureStatus = async (req, res) => {
     facture.statut = statut;
     await facture.save();
     res.json({ message: "Statut de la facture mis à jour avec succès", facture });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-exports.getMonthlyStats = async (req, res) => {
-  const { year, month } = req.params;
-
-  try {
-    const factures = await Facture.findAll({
-      where: {
-        date_facture: {
-          [Op.between]: [
-            `${year}-${month}-01`,
-            `${year}-${month}-31`
-          ]
-        }
-      }
-    });
-
-    let total = 0;
-    let paye = 0;
-    let enAttente = 0;
-
-    factures.forEach(f => {
-      total += parseFloat(f.montant);
-
-      if (f.statut === "payee") paye += parseFloat(f.montant);
-      if (f.statut === "en_attente" || f.statut === "partielle") {
-        enAttente += parseFloat(f.montant);
-      }
-    });
-
-    res.json({
-      total,
-      paye,
-      enAttente,
-      nb_factures: factures.length
-    });
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

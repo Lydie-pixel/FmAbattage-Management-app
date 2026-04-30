@@ -1,21 +1,14 @@
-//Facturer un devis
-function facturer(id) {
-  const frais = prompt("Frais de déplacement final ?");
+// Mettre les dates au format FR
+function formatDateFR(dateString) {
+  if (!dateString) return "";
 
-  fetch(`http://localhost:3000/api/facture/from-devis/${id}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      frais_deplacement_final: frais || 0
-    })
-  })
-  .then(res => res.json())
-  .then(() => {
-    alert("Facture créée 🔥");
-    location.reload();
-  });
+  const date = new Date(dateString);
+
+  const jour = String(date.getDate()).padStart(2, "0");
+  const mois = String(date.getMonth() + 1).padStart(2, "0");
+  const annee = date.getFullYear();
+
+  return `${jour}/${mois}/${annee}`;
 }
 
 // Action sur un devis
@@ -43,16 +36,7 @@ document.addEventListener("click", function(e) {
 }
 if (e.target.classList.contains("btn-facturer")) {
   const id = e.target.dataset.id;
-
-  fetch(`http://localhost:3000/api/facture/${id}`, {
-    method: "POST"
-  })
-  .then(res => res.json())
-  .then(() => {
-    alert("Facture créée");
-    location.reload();
-  })
-  .catch(err => console.error(err));
+  facturer(id);
 }
 });
 
@@ -67,6 +51,34 @@ function changeStatut(id, statut) {
   })
   .then(() => {
     alerte("Statut mis à jour");
+  });
+}
+
+function facturer(devisId) {
+  const frais = prompt("Frais de carburant final ?") || 0;
+
+  fetch(`http://localhost:3000/api/facture/from-devis/${devisId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      frais_deplacement_final: frais
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert("Facture créée 💰");
+
+    // ouvrir PDF facture
+    window.open(`http://localhost:3000/api/pdf/facture/${data.facture.id}`, "_blank");
+
+    // refresh
+    location.reload();
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Erreur lors de la facturation");
   });
 }
 
@@ -129,7 +141,7 @@ actions += `<button class="btn btn-danger btn-supprimer" data-id="${devis.id}">S
         <td>${devis.numero}</td>
         <td>${devis.client?.nom || "-"}</td>
         <td>${devis.client?.tel || "-"}</td>
-        <td>${devis.date_echeance}</td>
+        <td>${formatDateFR(devis.date_echeance)}</td>
         <td>${devis.montant} €</td>
         <td>
           <select onchange="changeStatut(${devis.id}, this.value)" class="form-select form-select-sm">

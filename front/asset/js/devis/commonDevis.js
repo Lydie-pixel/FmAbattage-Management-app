@@ -1,7 +1,14 @@
 // Mettre les dates au format FR
-function formatDate(date) {
-  const d = new Date(date);
-  return d.toLocaleDateString("fr-FR");
+function formatDateFR(dateString) {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+
+  const jour = String(date.getDate()).padStart(2, "0");
+  const mois = String(date.getMonth() + 1).padStart(2, "0");
+  const annee = date.getFullYear();
+
+  return `${jour}/${mois}/${annee}`;
 }
 
 //Charger les clients
