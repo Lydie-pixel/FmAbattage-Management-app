@@ -1,17 +1,20 @@
-const Facture = require("../models/FactureModel");
-const { Devis, DevisItem, Client  } = require("../models");
+const { Facture, Devis, DevisItem, Client } = require("../models");
 const sequelize = require("../config/database");
 const { Op } = require("sequelize");
 
 exports.getAllFactures = async (req, res) => {
   try {
     const factures = await Facture.findAll({
-      include: [
-        {
-          model: Client,
-          as: "client"
-        }
-      ]
+    include: [
+      {
+        model: Client,
+        as: "client"
+      },
+      {
+        model: Devis,
+        as: "devis"
+      }
+    ]
     });
 
     res.json(factures);

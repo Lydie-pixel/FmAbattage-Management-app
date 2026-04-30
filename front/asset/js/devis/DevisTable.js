@@ -50,12 +50,13 @@ function changeStatut(id, statut) {
     body: JSON.stringify({ statut })
   })
   .then(() => {
-    alerte("Statut mis à jour");
+    alert("Statut mis à jour");
+    location.reload();
   });
 }
 
 function facturer(devisId) {
-  const frais = prompt("Frais de carburant final ?") || 0;
+  const frais = prompt("Frais de déplacement final ?");
 
   fetch(`http://localhost:3000/api/facture/from-devis/${devisId}`, {
     method: "POST",
@@ -63,18 +64,17 @@ function facturer(devisId) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      frais_deplacement_final: frais
+      frais_deplacement_final: frais || 0
     })
   })
   .then(res => res.json())
   .then(data => {
-    alert("Facture créée 💰");
 
-    // ouvrir PDF facture
+    // 👉 1. ouvrir le PDF
     window.open(`http://localhost:3000/api/pdf/facture/${data.facture.id}`, "_blank");
 
-    // refresh
-    location.reload();
+    // 👉 2. rediriger vers la page factures
+    window.location.href = "/pages/factures.html";
   })
   .catch(err => {
     console.error(err);

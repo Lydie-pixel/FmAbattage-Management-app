@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const PdfController = require("../controllers/PdfController");
+const PdfFactureController = require("../controllers/PdfFactureController");
+
 
 router.get("/devis/:id", PdfController.generateDevisPDF);
+router.get("/facture/:id", PdfFactureController.generateFacturePDF);
 
 module.exports = router;
