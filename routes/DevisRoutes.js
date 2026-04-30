@@ -14,6 +14,7 @@ router.get("/", devisController.getAllDevis);
 router.get("/:id", devisController.getDevisById);
 
 // actions
+router.put("/:id", devisController.updateDevis);
 router.put("/:id/statut", devisController.updateDevisStatut);
 router.put("/:id/archive", devisController.archiveDevis);
 router.delete("/:id", devisController.deleteDevis);

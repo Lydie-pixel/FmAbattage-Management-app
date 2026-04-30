@@ -16,68 +16,6 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("date_echeance").value = formatDate(echeance);
 });
 
-//Charger les clients
-fetch("http://localhost:3000/api/client")
-  .then(res => res.json())
-  .then(data => {
-    const select = document.getElementById("client");
-
-    data.forEach(c => {
-      select.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
-    });
-  });
-
-
-// Ajout d'un item
-function addItem() {
-const container = document.getElementById("items");
-
-const newItem = document.createElement("div");
-newItem.className = "item row mb-2";
-
-newItem.innerHTML = `
-  <div class="col">
-    <input placeholder="Description" class="form-control desc">
-  </div>
-  <div class="col">
-    <input type="number" placeholder="Qté" class="form-control qty" oninput="updateTotals()">
-  </div>
-  <div class="col">
-    <input type="number" placeholder="Prix" class="form-control price" oninput="updateTotals()">
-  </div>
-  <div class="col">
-    <input type="text" class="form-control totalLigne" disabled>
-  </div>
-  <div class="col-auto">
-    <button class="btn btn-danger" onclick="this.closest('.item').remove(); updateTotals()">❌</button>
-  </div>
-`;
-
-container.appendChild(newItem);
-}
-
-// Mise à jour des totaux
-function updateTotals() {
-  let totalGlobal = 0;
-
-  document.querySelectorAll(".item").forEach(item => {
-    const qty = parseFloat(item.querySelector(".qty").value) || 0;
-    const price = parseFloat(item.querySelector(".price").value) || 0;
-
-    const total = qty * price;
-
-    item.querySelector(".totalLigne").value = total.toFixed(2) + " €";
-
-    totalGlobal += total;
-  });
-
-  const frais = parseFloat(document.getElementById("frais").value) || 0;
-
-  totalGlobal += frais;
-
-  document.getElementById("totalGlobal").innerText = totalGlobal.toFixed(2) + " €";
-}
-
 //Envoi du formulaire
 document.getElementById("devisForm").addEventListener("submit", function(e) {
   e.preventDefault();
@@ -97,28 +35,34 @@ document.getElementById("devisForm").addEventListener("submit", function(e) {
     });
   });
 
-fetch("http://localhost:3000/api/devis", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    client_id,
-    date_devis,
-    date_echeance,
-    frais_deplacement: frais,
-    items
+  fetch("http://localhost:3000/api/devis", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      client_id,
+      date_devis,
+      date_echeance,
+      frais_deplacement: frais,
+      items
+    })
   })
-})
-.then(res => res.json()) // 🔥 TRÈS IMPORTANT
-.then(data => {
-  console.log(data); // debug
 
-const url = `http://localhost:3000/api/pdf/devis/${data.id}`;
-window.open(url, "_blank") || (window.location.href = url);
+  .then(res => res.json()) // 🔥 on revient au JSON
+  .then(data => {
+    console.log("DATA :", data);
+
+  const url = `http://localhost:3000/api/pdf/devis/${data.id}`;
+
+  // 👉 ouvre le PDF
+  window.open(url, "_blank");
+
+  // 👉 redirige vers la liste
+  window.location.href = "/pages/devis.html";
 })
   .catch(err => {
-  console.error("Erreur front :", err);
-  alert("Erreur lors de la création du devis");
-  });
+    console.error("Erreur front :", err);
+    alert("Erreur lors de la modélisation PDF du devis");
+  })
 });

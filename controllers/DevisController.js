@@ -2,11 +2,13 @@ const { Devis, DevisItem, Client } = require("../models");
 const sequelize = require("../config/database");
 const { Op } = require("sequelize");
 
+const PdfController = require("./PdfController");
+
 exports.createDevis = async (req, res) => {
 
   const { client_id, date_devis, date_echeance, frais_deplacement = 0, items } = req.body;
 
-  //  VALIDATION
+  // VALIDATION
   if (!client_id || !date_devis || !date_echeance) {
     return res.status(400).json({ error: "Champs obligatoires manquants" });
   }
@@ -17,16 +19,17 @@ exports.createDevis = async (req, res) => {
 
   const transaction = await sequelize.transaction();
 
-  try {
+  let devis; // 🔥 IMPORTANT : déclaré ici
 
-    //  calcul total
+  try {
+    // calcul total
     let total = 0;
     items.forEach(item => {
       total += item.quantite * item.prix_unitaire;
     });
     total += parseFloat(frais_deplacement);
 
-    //  génération numéro
+    // génération numéro
     const year = new Date().getFullYear();
 
     const lastDevis = await Devis.findOne({
@@ -43,8 +46,8 @@ exports.createDevis = async (req, res) => {
 
     const numero = `D-${year}-${String(nextNumber).padStart(3, '0')}`;
 
-    //  création devis
-    const devis = await Devis.create({
+    // création devis
+    devis = await Devis.create({
       numero,
       client_id,
       date_devis,
@@ -53,7 +56,7 @@ exports.createDevis = async (req, res) => {
       montant: total
     }, { transaction });
 
-    //  items
+    // création items
     for (const item of items) {
       await DevisItem.create({
         devis_id: devis.id,
@@ -64,27 +67,27 @@ exports.createDevis = async (req, res) => {
       }, { transaction });
     }
 
-      await transaction.commit(); // ✅ OK
+    await transaction.commit();
 
-} catch (error) {
-  await transaction.rollback(); // ✅ uniquement ici
-  return res.status(500).json({ error: error.message });
-}
+  } catch (error) {
+    await transaction.rollback();
+    return res.status(500).json({ error: error.message });
+  }
 
-// 🔥 EN DEHORS DU TRY/CATCH
-try {
-  await PdfController.generateDevisPDFInternal(devis.id);
-} catch (err) {
-  console.error("Erreur PDF :", err);
-}
+  // 🔥 PDF en dehors de la transaction
+  try {
+    await PdfController.generateDevisPDFInternal(devis.id);
+  } catch (err) {
+    console.error("Erreur PDF :", err);
+  }
 
-// ✅ réponse envoyée quoi qu’il arrive
-res.status(201).json({
-  message: "Devis complet créé avec succès",
-  id: devis.id,
-  numero
-});
-  };
+  // ✅ réponse propre JSON
+  res.status(201).json({
+    message: "Devis créé",
+    id: devis.id,
+    numero: devis.numero
+  });
+};
 
 exports.getDevisById = async (req, res) => {
   try {
@@ -197,6 +200,59 @@ exports.getArchivedDevis = async (req, res) => {
 
     res.json(devis);
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Modifier un devis (hors items)
+exports.updateDevis = async (req, res) => {
+  const { id } = req.params;
+  const { client_id, date_devis, date_echeance, frais_deplacement, items } = req.body;
+
+  const transaction = await sequelize.transaction();
+
+  try {
+    const devis = await Devis.findByPk(id);
+
+    if (!devis) {
+      return res.status(404).json({ error: "Devis non trouvé" });
+    }
+
+    if (devis.statut === "accepte") {
+      return res.status(400).json({ error: "Modification impossible" });
+    }
+
+    // update devis
+    await devis.update({
+      client_id,
+      date_devis,
+      date_echeance,
+      frais_deplacement
+    }, { transaction });
+
+    // supprimer anciens items
+    await DevisItem.destroy({
+      where: { devis_id: id },
+      transaction
+    });
+
+    // recréer items
+    for (const item of items) {
+      await DevisItem.create({
+        devis_id: id,
+        description: item.description,
+        quantite: item.quantite,
+        prix_unitaire: item.prix_unitaire,
+        total_ligne: item.quantite * item.prix_unitaire
+      }, { transaction });
+    }
+
+    await transaction.commit();
+
+    res.json({ message: "Devis mis à jour" });
+
+  } catch (error) {
+    await transaction.rollback();
     res.status(500).json({ error: error.message });
   }
 };
