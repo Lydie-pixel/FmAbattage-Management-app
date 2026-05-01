@@ -118,3 +118,51 @@ function generateFacturePDF(id) {
 window.changeStatutFacture = changeStatutFacture;
 window.deleteFacture = deleteFacture;
 window.generateFacturePDF = generateFacturePDF;
+
+// Créer une facture depuis un devis
+function ouvrirCreationFacture() {
+  fetch("http://localhost:3000/api/devis")
+    .then(res => res.json())
+    .then(devis => {
+
+      // filtrer les devis acceptés
+      const acceptes = devis.filter(d => d.statut === "accepte");
+
+      let message = "Choisir un devis :\n";
+
+      acceptes.forEach(d => {
+        message += `${d.id} - ${d.numero} (${d.client?.nom})\n`;
+      });
+
+      const id = prompt(message);
+
+      if (!id) return;
+
+      facturerDepuisListe(id);
+    });
+}
+
+// Créer facture depuis liste
+function facturerDepuisListe(id) {
+  const frais = prompt("Frais de déplacement final ?");
+
+  fetch(`http://localhost:3000/api/facture/from-devis/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      frais_deplacement_final: frais || 0
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert("Facture créée 💰");
+
+    // ouvrir PDF direct 🔥
+    window.open(`http://localhost:3000/api/pdf/facture/${data.facture.id}`, "_blank");
+
+    // refresh
+    location.reload();
+  });
+}
