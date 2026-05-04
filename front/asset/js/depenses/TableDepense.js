@@ -1,51 +1,12 @@
-function loadStats() {
-  const year = document.getElementById("year").value;
-  const month = document.getElementById("month").value;
-
-  let url = "";
-
-  if (month) {
-    url = `/api/facture/stats/${year}/${month}`;
-  } else {
-    url = `/api/facture/stats/year/${year}`;
+function formatType(type) {
+  switch (type) {
+    case "frais_carburant": return "Carburant";
+    case "frais_materiel": return "Matériel";
+    case "charges": return "Charges";
+    case "autre": return "Autre";
+    default: return type;
   }
-
-  function formatPrice(value) {
-    return Number(value).toLocaleString("fr-FR") + " €";
-  }
-
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("total").innerText = formatPrice(data.total);
-      document.getElementById("paye").innerText = formatPrice(data.paye);
-      document.getElementById("nb").innerText = data.nb_factures;
-    })
-    .catch(error => {
-      console.error("Erreur lors du chargement des statistiques :", error);
-    });
 }
-
-function initYearSelect() {
-  const select = document.getElementById("year");
-  const currentYear = new Date().getFullYear();
-
-  for (let i = currentYear; i >= currentYear - 5; i--) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    select.appendChild(option);
-  }
-
-  // sélection automatique de l'année actuelle
-  select.value = currentYear;
-}
-
-window.onload = () => {
-  initYearSelect();
-  loadStats();
-  loadDepenses();
-};
 
 // Table des dépenses
 function loadDepenses() {
@@ -59,7 +20,7 @@ function loadDepenses() {
         table.innerHTML += `
           <tr>
             <td>${new Date(d.date).toLocaleDateString()}</td>
-            <td>${d.type}</td>
+            <td>${formatType(d.type)}</td>
             <td>${d.description || ""}</td>
             <td>${Number(d.montant).toFixed(2)} €</td>
             <td>
@@ -87,16 +48,14 @@ function addDepense() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
-  .then(() => {
-    loadDepenses();
-    bootstrap.Modal.getInstance(document.getElementById('depenseModal')).hide();
-  })
-  .then(() => {
+.then(() => {
   loadDepenses();
+  bootstrap.Modal.getInstance(document.getElementById('depenseModal')).hide();
+
   document.getElementById("date").value = "";
   document.getElementById("description").value = "";
   document.getElementById("montant").value = "";
-})
+});
 }
 
 // Supprimer une dépense

@@ -6,6 +6,7 @@ router.post("/", depenseController.createDepense);;
 
 // liste générale
 router.get("/", depenseController.getAllDepenses);
+router.get("/stats", depenseController.getDepensesStats);
 
 // détail
 router.get("/:id", depenseController.getDepenseById);

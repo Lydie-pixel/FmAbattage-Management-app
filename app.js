@@ -26,4 +26,10 @@ app.use("/api/paiement", paiementRoutes);
 const pdfRoutes = require("./routes/PdfRoutes");
 app.use("/api/pdf", pdfRoutes);
 
+const depenseRoutes = require("./routes/DepenseRoutes")
+app.use("/api/depense", depenseRoutes);
+
+const statsRoutes = require("./routes/StatsRoutes");
+app.use("/api/stats", statsRoutes);
+
 module.exports = app;

@@ -5,9 +5,6 @@ const factureController = require("../controllers/FactureController");
 router.get("/", factureController.getAllFactures);
 
 router.get("/archives", factureController.getArchivedFactures);
-router.get("/stats/year/:year", factureController.getYearlyStats);
-router.get("/stats/:year/:month", factureController.getMonthlyStats);
-
 
 router.get("/:id", factureController.getFactureById);
 router.put("/:id/statut", factureController.updateFactureStatus);
