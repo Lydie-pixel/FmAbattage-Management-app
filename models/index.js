@@ -3,6 +3,7 @@ const Devis = require('./DevisModel');
 const DevisItem = require('./DevisItemModel');
 const Facture = require('./FactureModel');
 const Paiement = require('./PaiementModel');
+const Depense = require('./DepenseModel');
 
 // 👤 Client → Devis
 Client.hasMany(Devis, {
@@ -64,5 +65,6 @@ module.exports = {
   Devis,
   DevisItem,
   Facture,
-  Paiement
+  Paiement,
+  Depense
 };

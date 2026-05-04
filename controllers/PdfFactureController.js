@@ -46,8 +46,6 @@ const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
 const echeance = new Date(facture.date_facture);
 echeance.setDate(echeance.getDate() + 20);
 
-html = html.replace("{{date_echeance}}", formatDate(echeance));
-
     // ✅ 3. remplacer les variables
     html = html.replace("{{logo}}", logoBase64);
     html = html.replace("{{client_nom}}", facture.client.nom);
@@ -58,19 +56,21 @@ html = html.replaceAll("{{client_ville}}", facture.client.ville || "");
     html = html.replace("{{client_email}}", facture.client.email || "");
     html = html.replace("{{numero}}", facture.numero);
    html = html.replaceAll("{{date_facture}}", formatDate(facture.date_facture));
-    html = html.replace("{{date_echeance}}", formatDate(facture.date_echeance));
+    html = html.replace("{{date_echeance}}", formatDate(echeance));
 html = html.replace("{{frais}}", formatPrice(facture.frais_deplacement_final));
     html = html.replaceAll("{{total}}", formatPrice(facture.montant));
 
     // ✅ 4. générer les lignes
-    const itemsHTML = facture.devis.items.map(item => `
-      <tr>
-        <td>${item.description}</td>
-        <td>${item.quantite}</td>
-        <td>${formatPrice(item.prix_unitaire)}</td>
-        <td>${formatPrice(item.prix_unitaire * item.quantite)}</td>
-      </tr>
-    `).join("");
+const items = facture.devis?.items || [];
+
+const itemsHTML = items.map(item => `
+  <tr>
+    <td>${item.description}</td>
+    <td>${item.quantite}</td>
+    <td>${formatPrice(item.prix_unitaire)}</td>
+    <td>${formatPrice(item.prix_unitaire * item.quantite)}</td>
+  </tr>
+`).join("");
 
     html = html.replace("{{items}}", itemsHTML);
 
@@ -124,8 +124,6 @@ exports.generateFacturePDFInternal = async (id) => {
 const echeance = new Date(facture.date_facture);
 echeance.setDate(echeance.getDate() + 20);
 
-html = html.replace("{{date_echeance}}", formatDate(echeance));
-
     // ✅ 3. remplacer les variables
     html = html.replace("{{client_nom}}", facture.client.nom);
     html = html.replace("{{client_tel}}", facture.client.tel || "");
@@ -135,19 +133,21 @@ html = html.replaceAll("{{client_ville}}", facture.client.ville || "");
     html = html.replace("{{client_email}}", facture.client.email || "");
     html = html.replace("{{numero}}", facture.numero);
    html = html.replaceAll("{{date_facture}}", formatDate(facture.date_facture));
-    html = html.replace("{{date_echeance}}", formatDate(facture.date_echeance));
+    html = html.replace("{{date_echeance}}", formatDate(echeance));
     html = html.replace("{{frais}}", formatPrice(facture.frais_deplacement_final));
     html = html.replaceAll("{{total}}", formatPrice(facture.montant));
 
     // ✅ 4. générer les lignes
-    const itemsHTML = facture.devis.items.map(item => `
-      <tr>
-        <td>${item.description}</td>
-        <td>${item.quantite}</td>
-        <td>${formatPrice(item.prix_unitaire)}</td>
-        <td>${formatPrice(item.prix_unitaire * item.quantite)}</td>
-      </tr>
-    `).join("");
+const items = facture.devis?.items || [];
+
+const itemsHTML = items.map(item => `
+  <tr>
+    <td>${item.description}</td>
+    <td>${item.quantite}</td>
+    <td>${formatPrice(item.prix_unitaire)}</td>
+    <td>${formatPrice(item.prix_unitaire * item.quantite)}</td>
+  </tr>
+`).join("");
 
     html = html.replace("{{items}}", itemsHTML);
 

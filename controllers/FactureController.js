@@ -47,6 +47,25 @@ exports.createFactureFromDevis = async (req, res) => {
 
   const { frais_deplacement_final = 0 } = req.body;
 
+  const devis = await Devis.findByPk(req.params.id, {
+    include: [{ model: DevisItem, as: "items" }]
+  });
+
+  if (!devis) {
+    return res.status(404).json({ error: "Devis non trouvé" });
+  }
+
+  // ✅ ici seulement
+  const existingFacture = await Facture.findOne({
+    where: { devis_id: devis.id }
+  });
+
+if (existingFacture) {
+  return res.status(400).json({
+    error: "Une facture existe déjà pour ce devis"
+  });
+}
+
   try {
 
     const devis = await Devis.findByPk(req.params.id, {
@@ -81,10 +100,11 @@ exports.createFactureFromDevis = async (req, res) => {
     let total = 0;
 
     devis.items.forEach(item => {
-      total += item.total_ligne;
+      total += item.quantite * item.prix_unitaire;
     });
 
-    total += parseFloat(frais_deplacement_final);
+    const frais = parseFloat(frais_deplacement_final) || 0;
+      total += frais;
 
     // 🧾 création facture
     const facture = await Facture.create({
@@ -182,16 +202,15 @@ exports.updateFactureStatus = async (req, res) => {
 };
 
 exports.getMonthlyStats = async (req, res) => {
-  const { year, month } = req.params;
-
+  const year = parseInt(req.params.year);
+  const month = parseInt(req.params.month);
+  const start = new Date(year, month - 1, 1);
+  const end = new Date(year, month, 0);
   try {
     const factures = await Facture.findAll({
       where: {
         date_facture: {
-          [Op.between]: [
-            `${year}-${month}-01`,
-            `${year}-${month}-31`
-          ]
+          [Op.between]: [start, end]
         }
       }
     });
@@ -213,6 +232,43 @@ exports.getMonthlyStats = async (req, res) => {
       total,
       paye,
       enAttente,
+      nb_factures: factures.length
+    });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.getYearlyStats = async (req, res) => {
+  const { year } = req.params;
+
+  try {
+    const factures = await Facture.findAll({
+      where: {
+        date_facture: {
+          [Op.between]: [
+            `${year}-01-01 00:00:00`,
+            `${year}-12-31 23:59:59`
+          ]
+        }
+      }
+    });
+
+    let total = 0;
+    let paye = 0;
+
+    factures.forEach(f => {
+      total += parseFloat(f.montant);
+
+      if (f.statut === "payee") {
+        paye += parseFloat(f.montant);
+      }
+    });
+
+    res.json({
+      total,
+      paye,
       nb_factures: factures.length
     });
 
