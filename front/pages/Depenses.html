@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Statistiques</title>
+
+        <link href="/asset/img/favicon/favicon.png" rel="icon">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    </head>
+
+    <body>
+        <div id="header"></div>
+
+        <main>
+            <h1>Statistiques</h1>
+            <div>
+                <select id="year"></select>
+                <select id="month">
+                <option value="">Toute l'année</option>
+                <option value="1">Janvier</option>
+                <option value="2">Février</option>
+                <option value="3">Mars</option>
+                <option value="4">Avril</option>
+                <option value="5">Mai</option>
+                <option value="6">Juin</option>
+                <option value="7">Juillet</option>
+                <option value="8">Août</option>
+                <option value="9">Septembre</option>
+                <option value="10">Octobre</option>
+                <option value="11">Novembre</option>
+                <option value="12">Décembre</option>
+                </select>
+
+                <button onclick="loadStats()">Filtrer</button>
+
+                <div id="stats" class="d-flex gap-3 mt-3">
+                    <div class="card">
+                        <h5>Total des factures</h5>
+                        <p id="total"></p>
+                    </div>
+
+                    <div class="card">
+                        <h5>Payé :</h5>
+                        <p id="paye"></p>
+                    </div>
+
+                    <div class="card">
+                        <h5>Nombre de factures :</h5>
+                        <p id="nb"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depenseModal">
+                    Ajouter une dépense
+                </button>
+                <table class="table mt-3">
+                    <thead>
+                        <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Montant</th>
+                        <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="depenseTable"></tbody>
+                </table>
+                <div class="modal fade" id="depenseModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Ajouter une dépense</h5>
+                    </div>
+
+                    <div class="modal-body">
+                        <input type="date" id="date" class="form-control mb-2">
+                        
+                        <select id="type" class="form-control mb-2">
+                        <option value="carburant">Carburant</option>
+                        <option value="materiel">Matériel</option>
+                        <option value="charge">Charge</option>
+                        <option value="autre">Autre</option>
+                        </select>
+
+                        <input type="text" id="description" placeholder="Description" class="form-control mb-2">
+                        <input type="number" id="montant" placeholder="Montant" class="form-control">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-success" onclick="addDepense()">Valider</button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </main>
+        
+        <div id="footer"></div>
+    </body>
+    <script src="/asset/js/depenses/TableDepense.js"></script>
+    <script src="/asset/js/componement.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>

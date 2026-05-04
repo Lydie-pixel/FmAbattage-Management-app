@@ -1,19 +1,33 @@
 const sequelize = require("../config/database");
-const { Depence, Facture, Devis, DevisItem, Client } = require("../models");
+const { Depense } = require("../models");
 
 exports.getAllDepenses = async (req, res) => {
-    try {
-        const depenses = await Depence.findAll();
-        res.json(depenses);
+  try {
+    const { year, month } = req.query;
+
+    let where = {};
+
+    if (year && month) {
+      where.date = {
+        [Op.between]: [
+          `${year}-${month}-01 00:00:00`,
+          `${year}-${month}-31 23:59:59`
+        ]
+      };
     }
-    catch (error) {
-        res.status(500).json({ error: error.message });
-    }
+
+    const depenses = await Depense.findAll({ where });
+
+    res.json(depenses);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 exports.createDepense = async (req, res) => {
     try {
-        const depense = await Depence.create(req.body);
+        const depense = await Depense.create(req.body);
         res.status(201).json(depense);
     }
     catch (error) {
@@ -23,7 +37,7 @@ exports.createDepense = async (req, res) => {
 
 exports.deleteDepense = async (req, res) => {
     try {
-        const depense = await Depence.findByPk(req.params.id);
+        const depense = await Depense.findByPk(req.params.id);
         if (!depense) {
             return res.status(404).json({ error: "Dépense non trouvée" });
         }
@@ -33,4 +47,19 @@ exports.deleteDepense = async (req, res) => {
     catch (error) {
         res.status(500).json({ error: error.message });
     }
+};
+
+exports.getDepenseById = async (req, res) => {
+  try {
+    const depense = await Depense.findByPk(req.params.id);
+
+    if (!depense) {
+      return res.status(404).json({ error: "Dépense non trouvée" });
+    }
+
+    res.json(depense);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };

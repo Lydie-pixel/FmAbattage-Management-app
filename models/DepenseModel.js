@@ -14,7 +14,7 @@ const Depense = sequelize.define("Depense", {
   },
 
   type: {
-    type: DataTypes.ENUM("frais_carburant", "frais_materiel", "Charges", "autre"),
+    type: DataTypes.ENUM("frais_carburant", "frais_materiel", "charges", "autre"),
     allowNull: false
   },
 

@@ -47,9 +47,18 @@ exports.createFactureFromDevis = async (req, res) => {
 
   const { frais_deplacement_final = 0 } = req.body;
 
+  const devis = await Devis.findByPk(req.params.id, {
+    include: [{ model: DevisItem, as: "items" }]
+  });
+
+  if (!devis) {
+    return res.status(404).json({ error: "Devis non trouvé" });
+  }
+
+  // ✅ ici seulement
   const existingFacture = await Facture.findOne({
-  where: { devis_id: devis.id }
-});
+    where: { devis_id: devis.id }
+  });
 
 if (existingFacture) {
   return res.status(400).json({
@@ -193,16 +202,15 @@ exports.updateFactureStatus = async (req, res) => {
 };
 
 exports.getMonthlyStats = async (req, res) => {
-  const { year, month } = req.params;
-
+  const year = parseInt(req.params.year);
+  const month = parseInt(req.params.month);
+  const start = new Date(year, month - 1, 1);
+  const end = new Date(year, month, 0);
   try {
     const factures = await Facture.findAll({
       where: {
         date_facture: {
-          [Op.between]: [
-            `${year}-${month}-01`,
-            `${year}-${month}-31`
-          ]
+          [Op.between]: [start, end]
         }
       }
     });
@@ -240,8 +248,8 @@ exports.getYearlyStats = async (req, res) => {
       where: {
         date_facture: {
           [Op.between]: [
-            `${year}-01-01`,
-            `${year}-12-31`
+            `${year}-01-01 00:00:00`,
+            `${year}-12-31 23:59:59`
           ]
         }
       }
