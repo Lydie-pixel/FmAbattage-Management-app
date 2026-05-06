@@ -17,6 +17,9 @@
 
             <h1>Tableau de devis</h1>
             <a href="/pages/CreeDevis.html"><button class="btn btn-primary mb-3">Créer un devis</button></a>
+            <select 
+                    id="yearFilter" class="form-select w-auto mb-3" onchange="devis()">
+                </select>
             <div id="tableDevis"></div>
             
         </main>
@@ -25,5 +28,6 @@
     </body>
     <script src="/asset/js/componement.js"></script>
     <script src="/asset/js/devis/DevisTable.js"></script>
+    <script src="/asset/js/devis/commonDevis.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>

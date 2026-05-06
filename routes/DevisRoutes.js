@@ -6,6 +6,7 @@ router.post("/", devisController.createDevis);
 
 // routes spécifiques d'abord
 router.get("/archives", devisController.getArchivedDevis);
+router.get("/accueil", devisController.getDevisAccueil);
 
 // liste générale
 router.get("/", devisController.getAllDevis);

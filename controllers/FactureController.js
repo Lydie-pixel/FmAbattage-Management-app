@@ -1,4 +1,4 @@
-const { Facture, Devis, DevisItem, Client } = require("../models");
+const { Facture, Devis, DevisItem, Client, Paiement } = require("../models");
 const sequelize = require("../config/database");
 const { Op } = require("sequelize");
 
@@ -13,8 +13,11 @@ exports.getAllFactures = async (req, res) => {
       {
         model: Devis,
         as: "devis"
-      }
-    ]
+      },
+        { 
+          model: Paiement,
+          as: "paiements" 
+        }]
     });
 
     res.json(factures);
@@ -55,7 +58,6 @@ exports.createFactureFromDevis = async (req, res) => {
     return res.status(404).json({ error: "Devis non trouvé" });
   }
 
-  // ✅ ici seulement
   const existingFacture = await Facture.findOne({
     where: { devis_id: devis.id }
   });
@@ -67,10 +69,6 @@ if (existingFacture) {
 }
 
   try {
-
-    const devis = await Devis.findByPk(req.params.id, {
-      include: [{ model: DevisItem, as: "items" }]
-    });
 
     if (!devis) {
       return res.status(404).json({ error: "Devis non trouvé" });

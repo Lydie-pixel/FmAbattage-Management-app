@@ -11,24 +11,42 @@ function formatDateFR(dateString) {
   return `${jour}/${mois}/${annee}`;
 }
 
-const badge = {
-  en_attente: "secondary",
-  partielle: "warning",
-  payee: "success"
-};
-
 const statutLabel = {
   en_attente: "En attente",
   partielle: "Paiement partiel",
   payee: "Payée"
 };
 
-// Charger les factures
-fetch("http://localhost:3000/api/facture")
-  .then(res => res.json())
-  .then(data => {
+// Trier par année
+function initYearFilter() {
+  const select = document.getElementById("yearFilter");
+  const currentYear = new Date().getFullYear();
 
+  for (let i = currentYear; i >= currentYear - 5; i--) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = i;
+    select.appendChild(option);
+  }
+
+  select.value = currentYear;
+}
+
+// Charger les factures
+function facture(){
+fetch("/api/facture")
+    .then(res => res.json())
+    .then(data => {
+
+      const selectedYear = document.getElementById("yearFilter").value;
+
+      data = data.filter(d => {
+        if (!d.date_facture) return false;
+        return new Date(d.date_facture).getFullYear() == selectedYear;
+      });
     const container = document.getElementById("tableFactures");
+    const totalPaye = facture.paiements?.reduce((sum, p) => sum + Number(p.montant), 0) || 0;
+    const reste = facture.montant - totalPaye;
 
     let html = `
       <table class="table table-striped">
@@ -39,6 +57,8 @@ fetch("http://localhost:3000/api/facture")
             <th>Client</th>
             <th>Date</th>
             <th>Montant</th>
+            <th>Payé</th>
+            <th>Reste à payer</th>
             <th>Statut</th>
             <th>Actions</th>
           </tr>
@@ -47,6 +67,8 @@ fetch("http://localhost:3000/api/facture")
     `;
 
     data.forEach(facture => {
+    const totalPaye = facture.paiements?.reduce((sum, p) => sum + Number(p.montant), 0) || 0;
+    const reste = facture.montant - totalPaye;
 
       html += `
         <tr>
@@ -54,12 +76,10 @@ fetch("http://localhost:3000/api/facture")
           <td>${facture.devis?.numero || "-"}</td>
           <td>${facture.client?.nom || "-"}</td>
           <td>${formatDateFR(facture.date_facture)}</td>
-          <td>${facture.montant} €</td>
-            <td>
-            <span class="badge bg-${badge[facture.statut]}">
-                ${facture.statut}
-            </span>
-
+          <td>${facture.montant}€</td>
+          <td>${totalPaye.toFixed(2)} €</td>
+          <td>${reste.toFixed(2)} €</td>
+          <td>
             <select onchange="changeStatutFacture(${facture.id}, this.value)" 
                     class="form-select form-select-sm mt-1">
 
@@ -79,6 +99,7 @@ fetch("http://localhost:3000/api/facture")
     html += `</tbody></table>`;
     container.innerHTML = html;
   });
+}
 
   // Changer statut
 function changeStatutFacture(id, statut) {
@@ -166,3 +187,8 @@ function facturerDepuisListe(id) {
     location.reload();
   });
 }
+
+window.onload = () => {
+  initYearFilter();
+  facture();
+};

@@ -118,18 +118,43 @@ exports.getAllDevis = async (req, res) => {
       as: "items"
     }
   ],
-    where: {
-      statut: {
-        [Op.in]: ['en_attente', 'accepte']
-      }
+  where: {
+    statut: {
+      [Op.in]: ["en_attente", "accepte", "refuse"]
     }
-    });
+  },
+  order: [["date_devis", "DESC"]],
+        });
 
     res.json(devis);
   } 
   catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+exports.getDevisAccueil = async (req, res) => {
+    const devis = await Devis.findAll({
+      include: [
+      {
+        model: Client,
+        as: "client"
+      },
+      {
+        model: DevisItem,
+        as: "items"
+      }
+    ],
+    where: {
+      statut: "en_attente",
+      date_echeance: {
+        [Op.gte]: new Date()
+      }
+    },
+    order: [["date_echeance", "ASC"]]
+  });
+
+  res.json(devis);
 };
 
 exports.updateDevisStatut = async (req, res) => {
