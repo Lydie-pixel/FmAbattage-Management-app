@@ -8,7 +8,8 @@ exports.getAllPaiements = async (req, res) => {
     const paiements = await Paiement.findAll({
       include: [{
         model: Facture,
-        as: "facture"
+        as: "facture",
+        attributes: ["numero", "montant"]
       }]
     });
     res.json(paiements);

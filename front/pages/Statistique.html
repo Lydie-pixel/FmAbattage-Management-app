@@ -17,63 +17,61 @@
         <main>
             <div class="container mt-4">
 
-            <h1 class="mb-4">Tableau de bord</h1>
+                <h1 class="mb-4">Tableau de bord</h1>
 
-            <!-- FILTRES -->
-            <div class="d-flex gap-2 mb-4">
-                <select id="year" class="form-select w-auto"></select>
+                <!-- FILTRES -->
+                <div class="d-flex gap-2 mb-4">
+                    <select id="year" class="form-select w-auto"></select>
 
-                <select id="month" class="form-select w-auto">
-                <option value="">Toute l'année</option>
-                <option value="1">Janvier</option>
-                <option value="2">Février</option>
-                <option value="3">Mars</option>
-                <option value="4">Avril</option>
-                <option value="5">Mai</option>
-                <option value="6">Juin</option>
-                <option value="7">Juillet</option>
-                <option value="8">Août</option>
-                <option value="9">Septembre</option>
-                <option value="10">Octobre</option>
-                <option value="11">Novembre</option>
-                <option value="12">Décembre</option>
-                </select>
+                    <select id="month" class="form-select w-auto">
+                    <option value="">Toute l'année</option>
+                    <option value="1">Janvier</option>
+                    <option value="2">Février</option>
+                    <option value="3">Mars</option>
+                    <option value="4">Avril</option>
+                    <option value="5">Mai</option>
+                    <option value="6">Juin</option>
+                    <option value="7">Juillet</option>
+                    <option value="8">Août</option>
+                    <option value="9">Septembre</option>
+                    <option value="10">Octobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Décembre</option>
+                    </select>
 
-                <button class="btn btn-primary" onclick="loadStats()">Filtrer</button>
+                    <button class="btn btn-primary" onclick="reloadAll()">Filtrer</button>
+                </div>
+
+                <!-- CARDS -->
+                <div class="row g-3">
+
+                    <!-- FACTURES -->
+                    <div class="col-md-4">
+                    <div class="card p-3 shadow-sm">
+                        <h5> Factures</h5>
+                        <p>Prestation facturé: <strong id="ca">0 €</strong></p>
+                        <p>Payé : <strong id="paye">0 €</strong></p>
+                        <p>En attente de paiement: <strong id="attente">0 €</strong></p>
+                    </div>
+                    </div>
+
+                    <!-- BENEFICE -->
+                    <div class="col-md-4">
+                    <div class="card p-3 shadow-sm text-center">
+                        <h5>Résultat</h5>
+                        <h2 id="benefice">0 €</h2>
+                    </div>
+                    </div>
+
+                    <!-- DEPENSES -->
+                    <div class="col-md-4">
+                    <div class="card p-3 shadow-sm">
+                        <h5>Dépenses</h5>
+                        <p>Total : <strong id="depenses">0 €</strong></p>
+                    </div>
+                </div>
             </div>
-
-            <!-- CARDS -->
-            <div class="row g-3">
-
-                <!-- FACTURES -->
-                <div class="col-md-4">
-                <div class="card p-3 shadow-sm">
-                    <h5> Factures</h5>
-                    <p>Prestation facturé: <strong id="ca">0 €</strong></p>
-                    <p>Payé : <strong id="paye">0 €</strong></p>
-                    <p>En attente de paiement: <strong id="attente">0 €</strong></p>
-                </div>
-                </div>
-
-                <!-- BENEFICE -->
-                <div class="col-md-4">
-                <div class="card p-3 shadow-sm text-center">
-                    <h5>Résultat</h5>
-                    <h2 id="benefice">0 €</h2>
-                </div>
-                </div>
-
-                <!-- DEPENSES -->
-                <div class="col-md-4">
-                <div class="card p-3 shadow-sm">
-                    <h5>Dépenses</h5>
-                    <p>Total : <strong id="depenses">0 €</strong></p>
-                </div>
-                </div>
-
-            </div>
-
-            </div>
+            <div id="depenseByType" class="mt-4"></div>
         </main>
         
         <div id="footer"></div>

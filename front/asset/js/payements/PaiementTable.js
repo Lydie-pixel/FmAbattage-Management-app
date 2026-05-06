@@ -11,6 +11,12 @@ function formatDateFR(dateString) {
   return `${jour}/${mois}/${annee}`;
 }
 
+//Mettre les prix au format €
+function formatPrice(value) {
+  return Number(value).toLocaleString("fr-FR") + " €";
+}
+
+//UX des mode de paiement
 function formatMode(mode_paiement) {
   switch (mode_paiement) {
     case "virement_A": return "Virement compte A";
@@ -38,59 +44,77 @@ function initYearFilter() {
 }
 
 //Tableau de paiement
-function loadPaie (){
-fetch("/api/paiement")
+function loadPaie () {
+  fetch("/api/paiement")
     .then(res => {
       if (!res.ok) throw new Error("Erreur API");
       return res.json();
     })
-  .then(data => {
-    const selectedYear = document.getElementById("yearFilter").value;
-        data = data.filter(d => {
+    .then(data => {
+
+      const selectedYear = document.getElementById("yearFilter").value;
+
+      data = data.filter(d => {
         const year = new Date(d.date_paiement).getFullYear();
         return year == selectedYear;
-    });
-    const div = document.getElementById("paiementTable");
+      });
 
-    let html = `
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Numéro de facture</th>
-            <th>Montant réglé</th>
-            <th>Date de paiement</th>
-            <th>Mode de paiement</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
+      // 🔥 Calcul total payé par facture
+      const paiementsParFacture = {};
 
-    data.forEach(paiement => {
-      html += `
-        <tr>
-          <td>${paiement.facture_id}</td>
-          <td>${paiement.montant}</td>
-          <td>${paiement.date_paiement}</td>
-          <td>${formatMode(paiement.mode_paiement)}</td>
-          <td>
-            <button class="btn btn-sm btn-secondary" onclick="openEditModal(${paiement.id})">Modifier</button>
-            <button class="btn btn-sm btn-danger" onclick="deletePaiement(${paiement.id})">Supprimer</button>
-         </td>
-        </tr>
-      `;
-    });
-
-    html += `</tbody></table>`;
-
-                  if (data.length === 0) {
-          div.innerHTML = "<p>Aucun paiement pour le moment</p>";
-          return;
+      data.forEach(p => {
+        if (!paiementsParFacture[p.facture_id]) {
+          paiementsParFacture[p.facture_id] = 0;
         }
+        paiementsParFacture[p.facture_id] += Number(p.montant);
+      });
 
-    div.innerHTML = html;
-  })
-  .catch(error => console.error(error));
+      const div = document.getElementById("paiementTable");
+
+      if (data.length === 0) {
+        div.innerHTML = "<p>Aucun paiement pour le moment</p>";
+        return;
+      }
+
+      let html = `
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Numéro de facture</th>
+              <th>Montant réglé</th>
+              <th>Date de paiement</th>
+              <th>Mode de paiement</th>
+              <th>Reste à payer</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      data.forEach(paiement => {
+        const totalPaye = paiementsParFacture[paiement.facture_id] || 0;
+        const montantFacture = paiement.facture?.montant || 0;
+        const reste = montantFacture - totalPaye;
+
+        html += `
+          <tr>
+            <td>${paiement.facture?.numero || "-"}</td>
+            <td>${formatPrice(paiement.montant)}</td>
+            <td>${formatDateFR(paiement.date_paiement)}</td>
+            <td>${formatMode(paiement.mode_paiement)}</td>
+            <td>${formatPrice(reste)}</td>
+            <td>
+              <button class="btn btn-sm btn-secondary" onclick="openEditModal(${paiement.id})">Modifier</button>
+              <button class="btn btn-sm btn-danger" onclick="deletePaiement(${paiement.id})">Supprimer</button>
+            </td>
+          </tr>
+        `;
+      });
+
+      html += `</tbody></table>`;
+      div.innerHTML = html;
+    })
+    .catch(error => console.error(error));
 }
 
 // Supprimer un paiement
@@ -119,32 +143,50 @@ function loadFactures() {
 
 // Ajouter un paiement
 function addPaie() {
-    const data = {
-        facture_id: document.getElementById("facture_id").value,
-        montant: document.getElementById("montant").value,
-        date_paiement: document.getElementById("date_paiement").value,
-        mode_paiement: document.getElementById("mode_paiement").value
-    };
+  const data = {
+    facture_id: document.getElementById("facture_id").value,
+    montant: document.getElementById("montant").value,
+    date_paiement: document.getElementById("date_paiement").value,
+    mode_paiement: document.getElementById("mode_paiement").value
+  };
 
-  fetch("/api/paiement", {
-    method: "POST",
+  const method = editingId ? "PUT" : "POST";
+  const url = editingId ? `/api/paiement/${editingId}` : "/api/paiement";
+
+  fetch(url, {
+    method,
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
-.then(() => {
-  loadPaie();
-  bootstrap.Modal.getInstance(document.getElementById('paieModal')).hide();
+  .then(() => {
+    editingId = null;
+    loadPaie();
 
-  document.getElementById("facture_id").value = "";
-  document.getElementById("montant").value = "";
-  document.getElementById("date_paiement").value = "";
-  document.getElementById("mode_paiement").value = "";
-});
+    bootstrap.Modal.getInstance(document.getElementById('paieModal')).hide();
+  });
 }
 
+//Ouviri la modal
 function openCreateModal() {
   const modal = new bootstrap.Modal(document.getElementById('paieModal'));
   modal.show();
+}
+
+//Ouvrir une modale selon l'id
+function openEditModal(id) {
+  fetch(`/api/paiement/${id}`)
+    .then(res => res.json())
+    .then(p => {
+      editingId = id;
+
+      document.getElementById("facture_id").value = p.facture_id;
+      document.getElementById("montant").value = p.montant;
+      document.getElementById("date_paiement").value = p.date_paiement;
+      document.getElementById("mode_paiement").value = p.mode_paiement;
+
+      const modal = new bootstrap.Modal(document.getElementById('paieModal'));
+      modal.show();
+    });
 }
 
 window.onload = () => {

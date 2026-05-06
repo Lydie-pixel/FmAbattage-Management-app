@@ -118,3 +118,43 @@ exports.getDepensesStats = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+//Trie par poste de dépense:
+exports.getDepensesByType = async (req, res) => {
+  const { year, month } = req.query;
+
+  let where = {};
+
+  if (year) {
+    if (month) {
+      const start = new Date(year, month - 1, 1);
+      const end = new Date(year, month, 0);
+
+      where.date = {
+        [Op.between]: [start, end]
+      };
+    } else {
+      where.date = {
+        [Op.between]: [
+          `${year}-01-01`,
+          `${year}-12-31`
+        ]
+      };
+    }
+  }
+
+  try {
+    const result = await Depense.findAll({
+      attributes: [
+        "type",
+        [fn("SUM", col("montant")), "total"]
+      ],
+      where,
+      group: ["type"]
+    });
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

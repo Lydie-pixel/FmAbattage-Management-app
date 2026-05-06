@@ -1,3 +1,13 @@
+function formatType(type) {
+  switch (type) {
+    case "frais_carburant": return "Carburant";
+    case "frais_materiel": return "Matériel";
+    case "charges": return "Charges";
+    case "autre": return "Autre";
+    default: return type;
+  }
+}
+
 function loadStats() {
   const year = document.getElementById("year").value;
   const month = document.getElementById("month").value;
@@ -84,6 +94,47 @@ function initYearSelect() {
 
 window.onload = () => {
   initYearSelect();
-  loadStats();
-  loadDepenses();
+  reloadAll();
 };
+
+function reloadAll() {
+  loadStats();
+  loadDepensesByType();
+  loadDepenses();
+}
+
+function loadDepensesByType() {
+  const year = document.getElementById("year").value;
+  const month = document.getElementById("month").value;
+
+  let url = `/api/depense/by-type?year=${year}`;
+
+  if (month) {
+    url += `&month=${month}`;
+  }
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      const div = document.getElementById("depenseByType");
+
+      if (!data.length) {
+        div.innerHTML = "<p>Aucune dépense sur cette période</p>";
+        return;
+      }
+
+      let html = `<div class="d-flex gap-3 flex-wrap">`;
+
+      data.forEach(d => {
+        html += `
+          <div class="card p-3 shadow-sm" style="min-width:150px;">
+            <h6>${formatType(d.type)}</h6>
+            <strong>${Number(d.total).toFixed(2)} €</strong>
+          </div>
+        `;
+      });
+
+      html += `</div>`;
+      div.innerHTML = html;
+    });
+}
