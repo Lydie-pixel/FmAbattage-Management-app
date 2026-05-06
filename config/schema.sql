@@ -16,6 +16,8 @@ CREATE TABLE clients (
     tel VARCHAR(20) NOT NULL,
     email VARCHAR(255),
     adresse VARCHAR(255) NOT NULL,
+    code_postal VARCHAR (5) NOT NULL,
+    ville VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -88,3 +90,16 @@ CREATE TABLE paiements (
 
     FOREIGN KEY (facture_id) REFERENCES factures(id) ON DELETE CASCADE
 );
+
+-- =========================
+-- Table Dépenses
+-- =========================
+
+CREATE TABLE depenses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    date_depenses DATE NOT NULL,
+    montant DECIMAL(10, 2) NOT NULL,
+    type ENUM("frais_carburant", "frais_materiel", "charges", "autre") NOT NULL,
+    description VARCHAR(250),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+)
