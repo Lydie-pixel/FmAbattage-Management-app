@@ -20,44 +20,38 @@
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depenseModal">
                     Ajouter une dépense
                 </button>
-                <table class="table mt-3">
-                    <thead>
-                        <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                        <th>Montant</th>
-                        <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="depenseTable"></tbody>
-                </table>
-                <div class="modal fade" id="depenseModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5>Ajouter une dépense</h5>
-                    </div>
-
-                    <div class="modal-body">
-                        <input type="date" id="date" class="form-control mb-2">
-                        
-                        <select id="type" class="form-control mb-2">
-                            <option value="frais_carburant">Carburant</option>
-                            <option value="frais_materiel">Matériel</option>
-                            <option value="charges">Charges</option>
-                            <option value="autre">Autre</option>
-                        </select>
-
-                        <input type="text" id="description" placeholder="Description" class="form-control mb-2">
-                        <input type="number" id="montant" placeholder="Montant" class="form-control">
-                    </div>
-
-                    <div class="modal-footer">
-                        <button class="btn btn-success" onclick="addDepense()">Valider</button>
-                    </div>
-                    </div>
+                <select 
+                    id="yearFilter" class="form-select w-auto mb-3" onchange="loadDepenses()">
+                </select>
+                <div 
+                    id="depenseTable">
                 </div>
+
+                <div class="modal fade" id="depenseModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5>Ajouter une dépense</h5>
+                            </div>
+
+                        <div class="modal-body">
+                            <input type="date" id="date" class="form-control mb-2">
+                            
+                            <select id="type" class="form-control mb-2">
+                                <option value="frais_carburant">Carburant</option>
+                                <option value="frais_materiel">Matériel</option>
+                                <option value="charges">Charges</option>
+                                <option value="autre">Autre</option>
+                            </select>
+
+                            <input type="text" id="description" placeholder="Description" class="form-control mb-2">
+                            <input type="number" id="montant" placeholder="Montant" class="form-control">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button class="btn btn-success" onclick="addDepense()">Valider</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>

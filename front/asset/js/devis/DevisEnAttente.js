@@ -35,10 +35,10 @@ fetch("http://localhost:3000/api/devis")
       const echeance = new Date(d.date_echeance);
       const diff = (echeance - today) / (1000 * 60 * 60 * 24);
       const statutLabels = {
-        en_attente: "En attente ⏳",
-        accepte: "Accepté ✅",
-        refuse: "Refusé ❌",
-        archive: "Archivé 📦"
+        en_attente: "En attente",
+        accepte: "Accepté",
+        refuse: "Refusé",
+        archive: "Archivé"
       };
 
       let badge = "bg-success";

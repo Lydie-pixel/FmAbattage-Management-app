@@ -11,13 +11,33 @@ function formatType(type) {
 // Table des dépenses
 function loadDepenses() {
   fetch("/api/depense")
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error("Erreur API");
+      return res.json();
+    })
     .then(data => {
-      const table = document.getElementById("depenseTable");
-      table.innerHTML = "";
-
+      const selectedYear = document.getElementById("yearFilter").value;
+      data = data.filter(d => {
+        const year = new Date(d.date).getFullYear();
+        return year == selectedYear;
+      });
+      const div = document.getElementById("depenseTable");
+      let html=`
+        <table class="table table-striped">
+          <thead>
+              <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Description</th>
+              <th>Montant</th>
+              <th>Action</th>
+              </tr>
+          </thead>
+          <tbody>
+          `;
+      data.sort((a, b) => new Date(b.date) - new Date(a.date));
       data.forEach(d => {
-        table.innerHTML += `
+        html += `
           <tr>
             <td>${new Date(d.date).toLocaleDateString()}</td>
             <td>${formatType(d.type)}</td>
@@ -28,9 +48,16 @@ function loadDepenses() {
                 Supprimer
               </button>
             </td>
-          </tr>
-        `;
-      });
+        </tr>
+      `;
+    });
+
+    html += `</tbody></table>`;
+                  if (data.length === 0) {
+          div.innerHTML = "<p>Aucune dépense pour le moment</p>";
+          return;
+        }
+      div.innerHTML = html;
     });
 }
 
@@ -66,4 +93,24 @@ function deleteDepense(id) {
     method: "DELETE"
   })
   .then(() => loadDepenses());
+}
+
+window.onload = () => {
+  initYearFilter();
+  loadDepenses();
+};
+
+// Trier par année
+function initYearFilter() {
+  const select = document.getElementById("yearFilter");
+  const currentYear = new Date().getFullYear();
+
+  for (let i = currentYear; i >= currentYear - 5; i--) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = i;
+    select.appendChild(option);
+  }
+
+  select.value = currentYear;
 }

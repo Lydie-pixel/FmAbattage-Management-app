@@ -16,11 +16,47 @@
 
         <main>
             <h1>Tableau de payement</h1>
-            <p>Bienvenue sur notre application de gestion des payements.</p>
+            <div>
+                <button class="btn btn-primary mb-3" onclick="openCreateModal()">
+                Nouveau Paiement
+                </button>
+                <select 
+                    id="yearFilter" class="form-select w-auto mb-3" onchange="loadPaie()">
+                </select>
+            </div>
+            <div id="paiementTable"></div>
+
+            <div class="modal fade" id="paieModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5>Ajouter un paiement</h5>
+                        </div>
+
+                    <div class="modal-body">
+                        
+                        <select id="facture_id" class="form-control mb-2"></select>
+                        <input type="number" id="montant" placeholder="0" class="form-control mb-2">
+                        <input type="date" id="date_paiement" class="form-control mb-2">
+                        <select id="mode_paiement" class="form-control mb-2">
+                            <option value="virement_A">Virement A</option>
+                            <option value="virement_B">Virement B</option>
+                            <option value="cheque">Chèque</option>
+                            <option value="especes">Espèce</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-success" onclick="addPaie()">Valider</button>
+                    </div>
+                </div>
+            </div>
         </main>
         
         <div id="footer"></div>
     </body>
+    <script src="/asset/js/payements/PaiementTable.js"></script>
     <script src="/asset/js/componement.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>
