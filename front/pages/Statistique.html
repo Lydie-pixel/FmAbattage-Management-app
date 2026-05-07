@@ -43,6 +43,7 @@
                     </select>
 
                     <button class="btn btn-primary" onclick="reloadAll()">Filtrer</button>
+                    </div>
                 </div>
             </div>
 
@@ -51,19 +52,34 @@
             <div class="stats-grid">
 
                 <div class="stats-card">
-                    <h5>Factures</h5>
+                    <div class="stats-header">
+                        <h5>Factures</h5>
+                        <div class="card-icon">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                    </div>
                     <p>Facturé : <strong id="ca">0 €</strong></p>
                     <p>Payé : <strong id="paye">0 €</strong></p>
                     <p>En attente : <strong id="attente">0 €</strong></p>
                 </div>
 
                 <div class="stats-card center-card">
-                    <h5>Résultat</h5>
+                    <div class="stats-header">
+                        <h5>Résultat</h5>
+                        <div class="card-icon">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                    </div>
                     <h2 id="benefice">0 €</h2>
                 </div>
 
                 <div class="stats-card">
-                    <h5>Dépenses</h5>
+                    <div class="stats-header">
+                        <h5>Dépenses</h5>
+                        <div class="card-icon">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+                    </div>
                     <p>Total : <strong id="depenses">0 €</strong></p>
                 </div>
             </div>
@@ -73,7 +89,12 @@
 
                 <!-- TABLEAU -->
                 <div class="stats-table-card">
-                    <h3>Paiements en attente</h3>
+                    <div class="stats-header">
+                        <h3>Paiements en attente</h3>
+                        <div class="card-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                    </div>
                     <div id="paiements"></div>
                 </div>
 

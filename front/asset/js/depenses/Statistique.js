@@ -8,6 +8,27 @@ function formatType(type) {
   }
 }
 
+function getDepenseIcon(type) {
+
+  switch(type){
+
+    case "frais_carburant":
+      return "bi-fuel-pump-fill";
+
+    case "frais_materiel":
+      return "bi-tools";
+
+    case "charges":
+      return "bi-bank";
+
+    case "autre":
+      return "bi-wallet2";
+
+    default:
+      return "bi-cash";
+  }
+}
+
 function loadStats() {
   const year = document.getElementById("year").value;
   const month = document.getElementById("month").value;
@@ -128,11 +149,14 @@ function loadDepensesByType() {
 
       data.forEach(d => {
     html += `
-        <div class="depense-card">
+    <div class="depense-card">
+          <div class="stats-header">
             <h6>${formatType(d.type)}</h6>
-            <strong>${Number(d.total).toFixed(2)} €</strong>
-        </div>
-    `;
+            <i class="bi ${getDepenseIcon(d.type)}"></i>
+          </div>
+        <strong>${Number(d.total).toFixed(2)} €</strong>
+    </div>
+`;
 });
       div.innerHTML = html;
     });
@@ -171,7 +195,7 @@ factures.forEach(f => {
       <td>${f.numero}</td>
       <td>${f.client?.nom || "-"}</td>
       <td>${f.montant} €</td>
-      <th>${f.date_facture}
+      <th>${f.date_facture}</th>
     </tr>
   `;
 });
