@@ -6,7 +6,7 @@ function loadDevisAccueil() {
       const container = document.getElementById("devis");
 
       if (!container) {
-        console.error("Div #devis introuvable ❌");
+        console.error("Div #devis introuvable");
         return;
       }
 
@@ -17,7 +17,7 @@ function loadDevisAccueil() {
       const devisProches = data.filter(d => {
         const echeance = new Date(d.date_echeance);
         const diff = (echeance - today) / (1000 * 60 * 60 * 24);
-        return diff <= 20;
+        return diff <= 7;
       });
 
       if (devisProches.length === 0) {

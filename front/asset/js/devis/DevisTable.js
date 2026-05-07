@@ -136,16 +136,31 @@ let actions = "";
 
 // Bouton modifier seulement si PAS accepté
 if (devis.statut !== "accepte") {
-  actions += `<button class="btn btn-warning btn-modifier" data-id="${devis.id}">Modifier</button>`;
+ actions += `
+  <button 
+    class="btn btn-warning btn-sm btn-modifier me-2" 
+    data-id="${devis.id}">
+    Modifier
+  </button>`;
 }
 
 // Bouton facturer uniquement si accepté
 if (devis.statut === "accepte") {
-  actions += `<button class="btn btn-success btn-facturer" data-id="${devis.id}">Facturer</button>`;
+  actions += `
+  <button 
+    class="btn btn-success btn-sm btn-facturer me-2" 
+    data-id="${devis.id}">
+    Facturer
+  </button>`;
 }
 
 // Toujours afficher supprimer (ou à adapter selon ton besoin)
-actions += `<button class="btn btn-danger btn-supprimer" data-id="${devis.id}">Supprimer</button>`;
+actions += `
+<button 
+  class="btn btn-danger btn-sm btn-supprimer" 
+  data-id="${devis.id}">
+  Supprimer
+</button>`;
 
     html += `
       <tr>
@@ -162,8 +177,13 @@ actions += `<button class="btn btn-danger btn-supprimer" data-id="${devis.id}">S
             <option value="archive" ${devis.statut === "archive" ? "selected" : ""}>Archivé</option>
           </select>
         </td>
-        <td>
-          <button type="button" onclick="generatePDF(${devis.id})">📄 PDF</button>
+        <td class="actions-cell">
+          <button 
+            type="button" 
+            class="btn btn-outline-secondary btn-sm"
+            onclick="generatePDF(${devis.id})">
+            <i class="bi bi-file-earmark-pdf"></i> PDF
+          </button>
           ${actions}
         </td>
       </tr>

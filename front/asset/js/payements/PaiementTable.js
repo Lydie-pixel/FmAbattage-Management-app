@@ -103,9 +103,17 @@ function loadPaie () {
             <td>${formatDateFR(paiement.date_paiement)}</td>
             <td>${formatMode(paiement.mode_paiement)}</td>
             <td>${formatPrice(reste)}</td>
-            <td>
-              <button class="btn btn-sm btn-secondary" onclick="openEditModal(${paiement.id})">Modifier</button>
-              <button class="btn btn-sm btn-danger" onclick="deletePaiement(${paiement.id})">Supprimer</button>
+            <td class="actions-cell">
+              <button
+                class="btn btn-sm btn-secondary" 
+                onclick="openEditModal(${paiement.id})">
+                Modifier
+              </button>
+              <button 
+                class="btn btn-sm btn-danger"
+                onclick="deletePaiement(${paiement.id})">
+                Supprimer
+              </button>
             </td>
           </tr>
         `;

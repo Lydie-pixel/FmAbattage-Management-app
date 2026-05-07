@@ -95,12 +95,13 @@ function initYearSelect() {
 window.onload = () => {
   initYearSelect();
   reloadAll();
+  paiement();
 };
 
 function reloadAll() {
   loadStats();
   loadDepensesByType();
-  loadDepenses();
+  paiement();
 }
 
 function loadDepensesByType() {
@@ -123,18 +124,60 @@ function loadDepensesByType() {
         return;
       }
 
-      let html = `<div class="d-flex gap-3 flex-wrap">`;
+      let html = "";
 
       data.forEach(d => {
-        html += `
-          <div class="card p-3 shadow-sm" style="min-width:150px;">
+    html += `
+        <div class="depense-card">
             <h6>${formatType(d.type)}</h6>
             <strong>${Number(d.total).toFixed(2)} €</strong>
-          </div>
-        `;
-      });
-
-      html += `</div>`;
+        </div>
+    `;
+});
       div.innerHTML = html;
     });
+}
+
+function paiement(){
+fetch("http://localhost:3000/api/facture")
+  .then(res => res.json())
+  .then(data => {
+
+    const container = document.getElementById("paiements");
+
+    const factures = data.filter(f =>
+      f.statut === "en_attente" || f.statut === "partielle"
+    );
+    console.log(data);
+    console.log(factures);
+
+      let html = `
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Numéro de facture</th>
+        <th>Client</th>
+        <th>Montant</th>
+        <th>Date de la facture</th>
+      </tr>
+    </thead>
+    <tbody>
+`;
+
+factures.forEach(f => {
+  
+  html += `
+    <tr>
+      <td>${f.numero}</td>
+      <td>${f.client?.nom || "-"}</td>
+      <td>${f.montant} €</td>
+      <th>${f.date_facture}
+    </tr>
+  `;
+});
+
+    html += `</tbody></table>`;
+
+    container.innerHTML = html;
+  });
 }

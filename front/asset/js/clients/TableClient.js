@@ -29,7 +29,11 @@ fetch("http://localhost:3000/api/client")
           <td>${client.ville || "-"}</td>
           <td>${client.code_postal || "-"}</td>
           <td>
-            <a href="/pages/FicheClient.html?id=${client.id}" class="btn btn-primary mb-3">Voir</a>
+            <a 
+              href="/pages/FicheClient.html?id=${client.id}" 
+              class="btn btn-dark btn-sm">
+              <i class="bi bi-person-vcard"></i> Voir
+            </a>
             <button class="btn btn-sm btn-secondary" onclick="openEditModal(${client.id})">Modifier</button>
             <button class="btn btn-sm btn-danger" onclick="deleteClient(${client.id})">Supprimer</button>
          </td>

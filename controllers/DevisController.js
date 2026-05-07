@@ -229,55 +229,68 @@ exports.getArchivedDevis = async (req, res) => {
   }
 };
 
-// Modifier un devis (hors items)
+// Modifier un devis
 exports.updateDevis = async (req, res) => {
-  const { id } = req.params;
-  const { client_id, date_devis, date_echeance, frais_deplacement, items } = req.body;
-
-  const transaction = await sequelize.transaction();
-
   try {
-    const devis = await Devis.findByPk(id);
+
+    const devis = await Devis.findByPk(req.params.id);
 
     if (!devis) {
-      return res.status(404).json({ error: "Devis non trouvé" });
+      return res.status(404).json({
+        error: "Devis non trouvé"
+      });
     }
 
-    if (devis.statut === "accepte") {
-      return res.status(400).json({ error: "Modification impossible" });
-    }
+    const {
+      client_id,
+      date_devis,
+      date_echeance,
+      frais_deplacement,
+      items
+    } = req.body;
+
+    // recalcul montant
+    let montant = 0;
+
+    items.forEach(item => {
+      montant += item.quantite * item.prix_unitaire;
+    });
+
+    montant += parseFloat(frais_deplacement || 0);
 
     // update devis
     await devis.update({
       client_id,
       date_devis,
       date_echeance,
-      frais_deplacement
-    }, { transaction });
+      frais_deplacement,
+      montant
+    });
 
     // supprimer anciens items
     await DevisItem.destroy({
-      where: { devis_id: id },
-      transaction
+      where: {
+        devis_id: devis.id
+      }
     });
 
     // recréer items
     for (const item of items) {
       await DevisItem.create({
-        devis_id: id,
+        devis_id: devis.id,
         description: item.description,
         quantite: item.quantite,
-        prix_unitaire: item.prix_unitaire,
-        total_ligne: item.quantite * item.prix_unitaire
-      }, { transaction });
+        prix_unitaire: item.prix_unitaire
+      });
     }
 
-    await transaction.commit();
-
-    res.json({ message: "Devis mis à jour" });
+    res.json({
+      message: "Devis modifié avec succès"
+    });
 
   } catch (error) {
-    await transaction.rollback();
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message
+    });
   }
 };

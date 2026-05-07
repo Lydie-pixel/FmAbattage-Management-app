@@ -88,9 +88,18 @@ fetch("/api/facture")
                 <option value="payee" ${facture.statut === "payee" ? "selected" : ""}>Payée</option>
             </select>
             </td>
-          <td>
-            <button onclick="generateFacturePDF(${facture.id})">📄 PDF</button>
-            <button class="btn btn-danger" onclick="deleteFacture(${facture.id})">Supprimer</button>
+          <td class="actions-cell">
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary btn-sm"
+              onclick="generateFacturePDF(${facture.id})">
+              <i class="bi bi-file-earmark-pdf"></i> PDF
+            </button>
+            <button 
+              class="btn btn-danger btn-sm btn-supprimer"  
+              onclick="deleteFacture(${facture.id})">
+              Supprimer
+            </button>
           </td>
         </tr>
       `;
