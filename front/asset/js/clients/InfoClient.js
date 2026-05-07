@@ -8,13 +8,13 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
     const div = document.getElementById("clientInfo");
 
     div.innerHTML = `
-      <div class="card p-3">
+      <div>
         <h4>${client.nom}</h4>
-        <p><strong>Téléphone :</strong> ${client.tel || "-"}</p>
-        <p><strong>Email :</strong> ${client.email}</p>
-        <p><strong>Adresse :</strong> ${client.adresse || "-"}</p>
-        <p><strong>Ville :</strong> ${client.ville || "-"}</p>
-        <p><strong>Code postal :</strong> ${client.code_postal || "-"}</p>
+        <span><strong>Téléphone :</strong> ${client.tel || "-"}</span><br>
+        <span><strong>Email :</strong> ${client.email}</span><br>
+        <span><strong>Adresse :</strong> ${client.adresse || "-"}</span><br>
+        <span><strong>Ville :</strong> ${client.ville || "-"}</span><br>
+        <span><strong>Code postal :</strong> ${client.code_postal || "-"}</span>
       </div>
     `;
   });
@@ -93,7 +93,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
 
     const container = document.getElementById("clientPaiements");
 
-    // ⚠️ on passe par facture
+    
     const paiements = data.filter(p => {
       return p.facture?.client_id == clientId;
     });
@@ -102,6 +102,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
       <table class="table">
         <thead>
           <tr>
+            <th>Facture</th>
             <th>Montant</th>
             <th>Date</th>
           </tr>
@@ -112,6 +113,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
     paiements.forEach(p => {
       html += `
         <tr>
+          <td>${p.facture}</td>
           <td>${p.montant} €</td>
           <td>${p.date_paiement}</td>
         </tr>

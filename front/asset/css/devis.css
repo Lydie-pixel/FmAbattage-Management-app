@@ -1,0 +1,46 @@
+.devis-layout{
+    display: grid;
+    grid-template-columns: 2fr 350px;
+    gap: 25px;
+    align-items: start;
+}
+
+.devis-form-card,
+.total-card{
+    background-color: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.form-section{
+    margin-bottom: 25px;
+}
+
+.form-grid{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.form-actions{
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.total-card{
+    position: sticky;
+    top: 30px;
+    text-align: center;
+}
+
+#totalGlobal{
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-top: 20px;
+    color: #2c3e50;
+}
+

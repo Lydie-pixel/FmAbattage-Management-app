@@ -1,3 +1,34 @@
+function formatType(type) {
+  switch (type) {
+    case "frais_carburant": return "Carburant";
+    case "frais_materiel": return "Matériel";
+    case "charges": return "Charges";
+    case "autre": return "Autre";
+    default: return type;
+  }
+}
+
+function getDepenseIcon(type) {
+
+  switch(type){
+
+    case "frais_carburant":
+      return "bi-fuel-pump-fill";
+
+    case "frais_materiel":
+      return "bi-tools";
+
+    case "charges":
+      return "bi-bank";
+
+    case "autre":
+      return "bi-wallet2";
+
+    default:
+      return "bi-cash";
+  }
+}
+
 function loadStats() {
   const year = document.getElementById("year").value;
   const month = document.getElementById("month").value;
@@ -84,6 +115,93 @@ function initYearSelect() {
 
 window.onload = () => {
   initYearSelect();
-  loadStats();
-  loadDepenses();
+  reloadAll();
+  paiement();
 };
+
+function reloadAll() {
+  loadStats();
+  loadDepensesByType();
+  paiement();
+}
+
+function loadDepensesByType() {
+  const year = document.getElementById("year").value;
+  const month = document.getElementById("month").value;
+
+  let url = `/api/depense/by-type?year=${year}`;
+
+  if (month) {
+    url += `&month=${month}`;
+  }
+
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      const div = document.getElementById("depenseByType");
+
+      if (!data.length) {
+        div.innerHTML = "<p>Aucune dépense sur cette période</p>";
+        return;
+      }
+
+      let html = "";
+
+      data.forEach(d => {
+    html += `
+    <div class="depense-card">
+          <div class="stats-header">
+            <h6>${formatType(d.type)}</h6>
+            <i class="bi ${getDepenseIcon(d.type)}"></i>
+          </div>
+        <strong>${Number(d.total).toFixed(2)} €</strong>
+    </div>
+`;
+});
+      div.innerHTML = html;
+    });
+}
+
+function paiement(){
+fetch("http://localhost:3000/api/facture")
+  .then(res => res.json())
+  .then(data => {
+
+    const container = document.getElementById("paiements");
+
+    const factures = data.filter(f =>
+      f.statut === "en_attente" || f.statut === "partielle"
+    );
+    console.log(data);
+    console.log(factures);
+
+      let html = `
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Numéro de facture</th>
+        <th>Client</th>
+        <th>Montant</th>
+        <th>Date de la facture</th>
+      </tr>
+    </thead>
+    <tbody>
+`;
+
+factures.forEach(f => {
+  
+  html += `
+    <tr>
+      <td>${f.numero}</td>
+      <td>${f.client?.nom || "-"}</td>
+      <td>${f.montant} €</td>
+      <th>${f.date_facture}</th>
+    </tr>
+  `;
+});
+
+    html += `</tbody></table>`;
+
+    container.innerHTML = html;
+  });
+}

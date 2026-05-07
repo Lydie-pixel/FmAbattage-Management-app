@@ -11,8 +11,8 @@ fetch(`http://localhost:3000/api/devis/${devisId}`)
   // Remplir le formulaire avec les données du devis
   function remplirFormulaire(devis) {
   document.getElementById("client").value = devis.client_id;
-  document.getElementById("date_devis").value = devis.date_devis;
-  document.getElementById("date_echeance").value = devis.date_echeance;
+  document.getElementById("date_devis").value = devis.date_devis.split("T")[0];
+  document.getElementById("date_echeance").value = devis.date_echeance.split("T")[0];
   document.getElementById("frais").value = devis.frais_deplacement;
 
   const container = document.getElementById("items");

@@ -6,6 +6,8 @@
         <title>Statistiques</title>
 
         <link href="/asset/img/favicon/favicon.png" rel="icon">
+        <link href="../asset/css/style.css" rel="stylesheet">
+        <link href="../asset/css/stats.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     
@@ -14,65 +16,92 @@
     <body>
         <div id="header"></div>
 
-        <main>
-            <div class="container mt-4">
+        <main class="stats-page">
+            <div class="page-header">
+                <h1>Tableau de statistiques</h1>
 
-            <h1 class="mb-4">Tableau de bord</h1>
+                <div class="card-cell">
+                
+                    <div class="d-flex gap-2 mb-4">
+                    <!-- Séléction de l'année-->
+                    <select id="year" class="form-select w-auto"></select>
+                    <!-- Séléction du mois-->
+                    <select id="month" class="form-select w-auto">
+                    <option value="">Toute l'année</option>
+                    <option value="1">Janvier</option>
+                    <option value="2">Février</option>
+                    <option value="3">Mars</option>
+                    <option value="4">Avril</option>
+                    <option value="5">Mai</option>
+                    <option value="6">Juin</option>
+                    <option value="7">Juillet</option>
+                    <option value="8">Août</option>
+                    <option value="9">Septembre</option>
+                    <option value="10">Octobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Décembre</option>
+                    </select>
 
-            <!-- FILTRES -->
-            <div class="d-flex gap-2 mb-4">
-                <select id="year" class="form-select w-auto"></select>
-
-                <select id="month" class="form-select w-auto">
-                <option value="">Toute l'année</option>
-                <option value="1">Janvier</option>
-                <option value="2">Février</option>
-                <option value="3">Mars</option>
-                <option value="4">Avril</option>
-                <option value="5">Mai</option>
-                <option value="6">Juin</option>
-                <option value="7">Juillet</option>
-                <option value="8">Août</option>
-                <option value="9">Septembre</option>
-                <option value="10">Octobre</option>
-                <option value="11">Novembre</option>
-                <option value="12">Décembre</option>
-                </select>
-
-                <button class="btn btn-primary" onclick="loadStats()">Filtrer</button>
+                    <button class="btn btn-primary" onclick="reloadAll()">Filtrer</button>
+                    </div>
+                </div>
             </div>
 
-            <!-- CARDS -->
-            <div class="row g-3">
+                
+            <!-- CARDS PRINCIPALES -->
+            <div class="stats-grid">
 
-                <!-- FACTURES -->
-                <div class="col-md-4">
-                <div class="card p-3 shadow-sm">
-                    <h5> Factures</h5>
-                    <p>Prestation facturé: <strong id="ca">0 €</strong></p>
+                <div class="stats-card">
+                    <div class="stats-header">
+                        <h5>Factures</h5>
+                        <div class="card-icon">
+                            <i class="bi bi-file-earmark-text"></i>
+                        </div>
+                    </div>
+                    <p>Facturé : <strong id="ca">0 €</strong></p>
                     <p>Payé : <strong id="paye">0 €</strong></p>
-                    <p>En attente de paiement: <strong id="attente">0 €</strong></p>
-                </div>
+                    <p>En attente : <strong id="attente">0 €</strong></p>
                 </div>
 
-                <!-- BENEFICE -->
-                <div class="col-md-4">
-                <div class="card p-3 shadow-sm text-center">
-                    <h5>Résultat</h5>
+                <div class="stats-card center-card">
+                    <div class="stats-header">
+                        <h5>Résultat</h5>
+                        <div class="card-icon">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                    </div>
                     <h2 id="benefice">0 €</h2>
                 </div>
-                </div>
 
-                <!-- DEPENSES -->
-                <div class="col-md-4">
-                <div class="card p-3 shadow-sm">
-                    <h5>Dépenses</h5>
+                <div class="stats-card">
+                    <div class="stats-header">
+                        <h5>Dépenses</h5>
+                        <div class="card-icon">
+                            <i class="bi bi-cash-coin"></i>
+                        </div>
+                    </div>
                     <p>Total : <strong id="depenses">0 €</strong></p>
                 </div>
-                </div>
-
             </div>
 
+            <!-- BAS DE PAGE -->
+            <div class="stats-bottom">
+
+                <!-- TABLEAU -->
+                <div class="stats-table-card">
+                    <div class="stats-header">
+                        <h3>Paiements en attente</h3>
+                        <div class="card-icon">
+                            <i class="bi bi-clock"></i>
+                        </div>
+                    </div>
+                    <div id="paiements"></div>
+                </div>
+
+                <!-- DETAILS DEPENSES -->
+                <div class="depenses-side">
+                    <div id="depenseByType"></div>
+                </div>
             </div>
         </main>
         

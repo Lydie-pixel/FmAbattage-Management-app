@@ -1,21 +1,31 @@
-fetch("http://localhost:3000/api/devis")
-  .then(res => res.json())
-  .then(data => {
+function loadDevisAccueil() {
+  fetch("http://localhost:3000/api/devis/accueil")
+    .then(res => res.json())
+    .then(data => {
 
-    const container = document.getElementById("devis");
+      const container = document.getElementById("devis");
 
-    const today = new Date();
+      if (!container) {
+        console.error("Div #devis introuvable");
+        return;
+      }
 
-    const devisProches = data.filter(d => {
-      if (d.statut !== "en_attente") return false;
+      console.log("DATA:", data);
 
-      const echeance = new Date(d.date_echeance);
-      const diff = (echeance - today) / (1000 * 60 * 60 * 24);
+      const today = new Date();
 
-      return diff <= 7;
-    });
+      const devisProches = data.filter(d => {
+        const echeance = new Date(d.date_echeance);
+        const diff = (echeance - today) / (1000 * 60 * 60 * 24);
+        return diff <= 7;
+      });
 
-    let html = `
+      if (devisProches.length === 0) {
+        container.innerHTML = "<p>Aucun devis proche 👍</p>";
+        return;
+      }
+
+      let html = `
       <h3>Devis proches échéance</h3>
       <table class="table table-striped">
         <thead>
@@ -24,7 +34,6 @@ fetch("http://localhost:3000/api/devis")
             <th>Client</th>
             <th>Téléphone</th>
             <th>Date échéance</th>
-            <th>Statut</th>
           </tr>
         </thead>
         <tbody>
@@ -34,24 +43,13 @@ fetch("http://localhost:3000/api/devis")
 
       const echeance = new Date(d.date_echeance);
       const diff = (echeance - today) / (1000 * 60 * 60 * 24);
-      const statutLabels = {
-        en_attente: "En attente",
-        accepte: "Accepté",
-        refuse: "Refusé",
-        archive: "Archivé"
-      };
-
-      let badge = "bg-success";
-      if (diff < 3) badge = "bg-danger";
-      else if (diff < 7) badge = "bg-warning";
 
       html += `
         <tr>
           <td>${d.numero}</td>
           <td>${d.client?.nom || "-"}</td>
           <td>${d.client?.tel || "-"}</td>
-          <td>${d.date_echeance}</td>
-          <td><span class="badge ${badge}">${statutLabels[d.statut] || d.statut}</span></td>
+          <td>${new Date(d.date_echeance).toLocaleDateString("fr-FR")}</td>
         </tr>
       `;
     });
@@ -59,4 +57,10 @@ fetch("http://localhost:3000/api/devis")
     html += `</tbody></table>`;
 
     container.innerHTML = html;
-  });
+    })
+    .catch(err => console.error(err));
+}
+
+window.onload = () => {
+  loadDevisAccueil();
+};

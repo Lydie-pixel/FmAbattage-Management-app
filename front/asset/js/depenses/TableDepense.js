@@ -43,8 +43,10 @@ function loadDepenses() {
             <td>${formatType(d.type)}</td>
             <td>${d.description || ""}</td>
             <td>${Number(d.montant).toFixed(2)} €</td>
-            <td>
-              <button class="btn btn-danger btn-sm" onclick="deleteDepense(${d.id})">
+            <td class="actions-cell">
+              <button 
+                class="btn btn-danger btn-sm" 
+                onclick="deleteDepense(${d.id})">
                 Supprimer
               </button>
             </td>
