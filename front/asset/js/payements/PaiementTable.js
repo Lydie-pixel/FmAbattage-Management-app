@@ -11,12 +11,14 @@ function formatDateFR(dateString) {
   return `${jour}/${mois}/${annee}`;
 }
 
+let editingId = null;
+
 //Mettre les prix au format €
 function formatPrice(value) {
   return Number(value).toLocaleString("fr-FR") + " €";
 }
 
-//UX des mode de paiement
+//UX des modes de paiement
 function formatMode(mode_paiement) {
   switch (mode_paiement) {
     case "virement_A": return "Virement compte A";
@@ -137,20 +139,40 @@ function deletePaiement(id) {
 
 //Charger les factures
 function loadFactures() {
+
   fetch("/api/facture")
     .then(res => res.json())
     .then(data => {
+
       const select = document.getElementById("facture_id");
+
       select.innerHTML = "";
 
-      data.forEach(f => {
-        select.innerHTML += `<option value="${f.id}">${f.numero}</option>`;
+      // 🔥 garder uniquement les factures non payées
+      const facturesFiltrees = data.filter(f =>
+        f.statut !== "payee"
+      );
+
+      if (facturesFiltrees.length === 0) {
+        select.innerHTML =
+          `<option>Aucune facture à payer</option>`;
+        return;
+      }
+
+      facturesFiltrees.forEach(f => {
+
+        select.innerHTML += `
+          <option value="${f.id}">
+            ${f.numero}
+          </option>
+        `;
       });
     });
 }
 
 // Ajouter un paiement
 function addPaie() {
+
   const data = {
     facture_id: document.getElementById("facture_id").value,
     montant: document.getElementById("montant").value,
@@ -159,24 +181,57 @@ function addPaie() {
   };
 
   const method = editingId ? "PUT" : "POST";
-  const url = editingId ? `/api/paiement/${editingId}` : "/api/paiement";
+  const url = editingId
+    ? `/api/paiement/${editingId}`
+    : "/api/paiement";
 
   fetch(url, {
     method,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(data)
   })
-  .then(() => {
+  .then(async res => {
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      throw new Error(result.error || "Erreur serveur");
+    }
+
+    return result;
+  })
+  .then(result => {
+
+    console.log("Paiement ajouté :", result);
+
     editingId = null;
+
     loadPaie();
 
-    bootstrap.Modal.getInstance(document.getElementById('paieModal')).hide();
+    bootstrap.Modal
+      .getInstance(document.getElementById("paieModal"))
+      .hide();
+
+    document.getElementById("paieForm").reset();
+  })
+  .catch(error => {
+    console.error(error);
+
+    alert(error.message);
   });
 }
 
 //Ouviri la modal
 function openCreateModal() {
-  const modal = new bootstrap.Modal(document.getElementById('paieModal'));
+
+  editingId = null;
+  document.getElementById("paieForm").reset();
+
+  const modal = new bootstrap.Modal(
+    document.getElementById('paieModal')
+  );
   modal.show();
 }
 

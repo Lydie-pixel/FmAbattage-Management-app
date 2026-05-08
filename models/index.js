@@ -28,7 +28,7 @@ DevisItem.belongsTo(Devis, {
 });
 
 // 📄 Devis → Facture
-Devis.hasOne(Facture, {
+Devis.hasMany(Facture, {
   foreignKey: 'devis_id',
   as: 'facture'
 });
