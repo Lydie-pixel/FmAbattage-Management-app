@@ -83,6 +83,7 @@ function loadPaie () {
           <thead>
             <tr>
               <th>Numéro de facture</th>
+              <th>Client</th>
               <th>Montant réglé</th>
               <th>Date de paiement</th>
               <th>Mode de paiement</th>
@@ -101,6 +102,7 @@ function loadPaie () {
         html += `
           <tr>
             <td>${paiement.facture?.numero || "-"}</td>
+            <td>${paiement.facture?.client?.nom || "-"}</td>
             <td>${formatPrice(paiement.montant)}</td>
             <td>${formatDateFR(paiement.date_paiement)}</td>
             <td>${formatMode(paiement.mode_paiement)}</td>

@@ -182,8 +182,9 @@ function ouvrirCreationFacture() {
         select.innerHTML += `
           <option value="${d.id}">
             ${d.numero}
-            - ${d.client?.nom || "Sans client"}
-            (${nbFactures} facture(s))
+            | ${d.client?.nom || "Sans client"}
+            | ${d.montant} €
+            | ${nbFactures} facture(s)
           </option>
         `;
       });
@@ -213,8 +214,19 @@ function createFactureFromModal() {
       frais_deplacement_final: frais
     })
   })
-  .then(res => res.json())
+  .then(async res => {
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Erreur création facture");
+    }
+
+    return data;
+  })
   .then(data => {
+
+    console.log(data);
 
     alert("Facture créée");
 
@@ -230,6 +242,10 @@ function createFactureFromModal() {
     );
 
     facture();
+  })
+  .catch(err => {
+    console.error(err);
+    alert(err.message);
   });
 }
 

@@ -1,5 +1,5 @@
 const Paiement = require("../models/PaiementModel");
-const { Facture } = require("../models");
+const { Facture, Client } = require("../models");
 const sequelize = require("../config/database");
 const { Op } = require("sequelize");
 
@@ -9,7 +9,12 @@ exports.getAllPaiements = async (req, res) => {
       include: [{
         model: Facture,
         as: "facture",
-        attributes: ["numero", "montant"]
+        attributes: ["numero", "montant", "client_id"],
+        include: [{
+          model: Client,
+          as: "client",
+          attributes: ["nom"]
+        }]
       }]
     });
     res.json(paiements);

@@ -29,13 +29,13 @@ DevisItem.belongsTo(Devis, {
 
 // 📄 Devis → Facture
 Devis.hasMany(Facture, {
-  foreignKey: 'devis_id',
-  as: 'facture'
+  foreignKey: "devis_id",
+  as: "factures"
 });
 
 Facture.belongsTo(Devis, {
-  foreignKey: 'devis_id',
-  as: 'devis'
+  foreignKey: "devis_id",
+  as: "devis"
 });
 
 // 👤 Client → Facture

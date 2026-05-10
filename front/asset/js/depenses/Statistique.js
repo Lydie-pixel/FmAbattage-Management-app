@@ -62,6 +62,7 @@ function loadStats() {
         data.forEach(m => {
           global.ca += m.ca || 0;
           global.paye += m.paye || 0;
+          global.enAttente += m.enAttente || 0;
           global.depenses += m.depenses || 0;
         });
 

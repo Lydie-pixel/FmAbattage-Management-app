@@ -1,6 +1,18 @@
 const params = new URLSearchParams(window.location.search);
 const clientId = params.get("id");
 
+function formatDateFR(dateString) {
+  if (!dateString) return "";
+
+  const date = new Date(dateString);
+
+  const jour = String(date.getDate()).padStart(2, "0");
+  const mois = String(date.getMonth() + 1).padStart(2, "0");
+  const annee = date.getFullYear();
+
+  return `${jour}/${mois}/${annee}`;
+}
+
 fetch(`http://localhost:3000/api/client/${clientId}`)
   .then(res => res.json())
   .then(client => {
@@ -113,9 +125,9 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
     paiements.forEach(p => {
       html += `
         <tr>
-          <td>${p.facture}</td>
+          <td>${p.facture?.numero || "-"}</td>
           <td>${p.montant} €</td>
-          <td>${p.date_paiement}</td>
+          <td>${formatDateFR(p.date_paiement)}</td>
         </tr>
       `;
     });
