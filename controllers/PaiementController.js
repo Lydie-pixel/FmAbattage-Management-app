@@ -1,5 +1,5 @@
 const Paiement = require("../models/PaiementModel");
-const { Facture } = require("../models");
+const { Facture, Client } = require("../models");
 const sequelize = require("../config/database");
 const { Op } = require("sequelize");
 
@@ -9,7 +9,12 @@ exports.getAllPaiements = async (req, res) => {
       include: [{
         model: Facture,
         as: "facture",
-        attributes: ["numero", "montant"]
+        attributes: ["numero", "montant", "client_id"],
+        include: [{
+          model: Client,
+          as: "client",
+          attributes: ["nom"]
+        }]
       }]
     });
     res.json(paiements);
@@ -64,7 +69,7 @@ exports.getMonthlyRevenue = async (req, res) => {
 };
 
 exports.createPaiement = async (req, res) => {
-  const { facture_id, montant, mode_paiement } = req.body;
+  const { facture_id, montant, mode_paiement, date_paiement } = req.body;
 
   try {
     const facture = await Facture.findByPk(facture_id, {
@@ -82,23 +87,24 @@ exports.createPaiement = async (req, res) => {
     });
 
     const reste = facture.montant - totalPaye;
+    const montantNumber = parseFloat(montant);
 
-    if (montant > reste) {
+    if (montantNumber > reste) {
       return res.status(400).json({
         error: "Montant supérieur au reste à payer"
       });
     }
 
-    // 💸 création paiement
+    // création paiement
     const paiement = await Paiement.create({
       facture_id,
-      montant,
+      montant: montantNumber,
       mode_paiement,
-      date_paiement: new Date(),
+      date_paiement
     });
 
-    // 🔄 mise à jour statut facture
-    const nouveauTotal = totalPaye + parseFloat(montant);
+    // mise à jour statut facture
+    const nouveauTotal = totalPaye + montantNumber;
 
     if (Math.abs(nouveauTotal - facture.montant) < 0.01) {
       facture.statut = "payee";
@@ -109,7 +115,7 @@ exports.createPaiement = async (req, res) => {
     await facture.save();
 
     res.status(201).json({
-      message: "Paiement ajouté 💸",
+      message: "Paiement ajouté",
       paiement,
       statut_facture: facture.statut
     });
@@ -127,14 +133,17 @@ exports.updatePaiement = async (req, res) => {
       return res.status(404).json({ error: "Paiement non trouvé" });
     }
 
-    const { montant, mode_paiement } = req.body;
+    const { montant, mode_paiement, date_paiement } = req.body;
+    const montantNumber = parseFloat(montant);
 
-    paiement.montant = montant;
     if (montant !== undefined) {
-      paiement.montant = montant;
+      paiement.montant = montantNumber;
     }
     if (mode_paiement !== undefined) {
       paiement.mode_paiement = mode_paiement;
+    }
+    if (date_paiement !== undefined) {
+      paiement.date_paiement = date_paiement;
     }
     await paiement.save();
 

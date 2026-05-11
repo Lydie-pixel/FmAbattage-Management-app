@@ -1,4 +1,4 @@
-const { Devis, DevisItem, Client } = require("../models");
+const { Devis, DevisItem, Client, Facture } = require("../models");
 const sequelize = require("../config/database");
 const { Op } = require("sequelize");
 
@@ -116,6 +116,10 @@ exports.getAllDevis = async (req, res) => {
     {
       model: DevisItem,
       as: "items"
+    },
+    {
+    model: Facture,
+    as: "factures"
     }
   ],
   where: {

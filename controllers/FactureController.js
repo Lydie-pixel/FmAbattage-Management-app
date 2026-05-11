@@ -58,16 +58,6 @@ exports.createFactureFromDevis = async (req, res) => {
     return res.status(404).json({ error: "Devis non trouvé" });
   }
 
-  const existingFacture = await Facture.findOne({
-    where: { devis_id: devis.id }
-  });
-
-if (existingFacture) {
-  return res.status(400).json({
-    error: "Une facture existe déjà pour ce devis"
-  });
-}
-
   try {
 
     if (!devis) {

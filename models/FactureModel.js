@@ -11,7 +11,7 @@ const Facture = sequelize.define("Facture", {
 
   devis_id: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true
   },
 
     client_id: {

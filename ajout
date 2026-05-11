@@ -1,43 +1,20 @@
 node server.js
 
-Ajouter la création automatique du client si inexistant
-exemple automatiquelet client = await Client.findByPk(client_id);
+- Mettre en place les impayée
+  -> Base de donnée ( n° de lettre, date, id-facture, facture-client, facture-montant)
+  -> Crée les modèle PDF des impayées
+  -> Mettre dans les paiememnts les impayées 
+- Crée des facture d'accomptes
+- Mettre la date d'échéance des facture à +30j
+- Passer les devis de +15j en refuser automatiquement
 
-if (!client && req.body.client) {
-  client = await Client.create(req.body.client);
-}
+UX:
+- Mettre des couleurs pour l'index sur les devis à venir
+  (vert:15j; bleu:10j; jaune:5j; rouge:3j)
+- Mettre des raccourcis sur l'index pour les ajouts 
+- Mettre des couleurs sur la page des stats
+- Mettre les dépenses sur 2 lignes
 
-
-Dans le controller devis 
-    getAllDevis
-        Trier par date
-        Trier par statut
-        Ou filtre dynamique
-
-
-génération PDF facture
-dashboard simple
-
-table payement:
-1 payement correspond à 1 factures
-une facture peut avoir plusieurs paiements
-calcul automatique du reste à payer
-passer en "payee" quand total atteint
-
-FRONT
-
-✅ Afficher clients
-✅ Afficher devis
-✅ Voir détail d’un devis (avec items) ← très stylé
-✅ Créer un devis depuis le front
-✅ Ajouter paiement
-✅ Voir statut facture évoluer en live 👀
-
-Faut poour la compta 
-les recettes et les dépences à l'année et au mois
-calcul les bénéf net (CA - dépenses - charges)
-Avec le détail pour controlle 
-
-    Ajout d'une tables pour les dépenses et les charges
-    A paraméttré plus tard avec maman, les charges sont variables
-    depenses
+Sécurité:
+- Mettre en place toute la sécurité du site
+- Faire des testes 

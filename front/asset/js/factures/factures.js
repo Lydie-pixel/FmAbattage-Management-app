@@ -45,8 +45,6 @@ fetch("/api/facture")
         return new Date(d.date_facture).getFullYear() == selectedYear;
       });
     const container = document.getElementById("tableFactures");
-    const totalPaye = facture.paiements?.reduce((sum, p) => sum + Number(p.montant), 0) || 0;
-    const reste = facture.montant - totalPaye;
 
     let html = `
       <table class="table table-striped">
@@ -151,28 +149,107 @@ window.generateFacturePDF = generateFacturePDF;
 
 // Créer une facture depuis un devis
 function ouvrirCreationFacture() {
-  fetch("http://localhost:3000/api/devis")
+
+  fetch("/api/devis")
     .then(res => res.json())
     .then(devis => {
 
-      // filtrer les devis acceptés
-      const acceptes = devis.filter(d => d.statut === "accepte");
+      const maintenant = new Date();
 
-      let message = "Choisir un devis :\n";
+      const devisDisponibles = devis.filter(d => {
 
-      acceptes.forEach(d => {
-        message += `${d.id} - ${d.numero} (${d.client?.nom})\n`;
+        if (d.statut !== "accepte") return false;
+
+        const dateDevis = new Date(d.date_devis);
+
+        const diffJours =
+          (maintenant - dateDevis)
+          / (1000 * 60 * 60 * 24);
+
+        return diffJours <= 400;
       });
 
-      const id = prompt(message);
+      const select =
+        document.getElementById("devisSelect");
 
-      if (!id) return;
+      select.innerHTML = "";
 
-      facturerDepuisListe(id);
+      devisDisponibles.forEach(d => {
+
+        const nbFactures =
+          d.factures?.length || 0;
+
+        select.innerHTML += `
+          <option value="${d.id}">
+            ${d.numero}
+            | ${d.client?.nom || "Sans client"}
+            | ${d.montant} €
+            | ${nbFactures} facture(s)
+          </option>
+        `;
+      });
+
+      const modal = new bootstrap.Modal(
+        document.getElementById("factureModal")
+      );
+
+      modal.show();
     });
 }
 
-// Créer facture depuis liste
+function createFactureFromModal() {
+
+  const id =
+    document.getElementById("devisSelect").value;
+
+  const frais =
+    document.getElementById("fraisFinal").value || 0;
+
+  fetch(`/api/facture/from-devis/${id}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      frais_deplacement_final: frais
+    })
+  })
+  .then(async res => {
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Erreur création facture");
+    }
+
+    return data;
+  })
+  .then(data => {
+
+    console.log(data);
+
+    alert("Facture créée");
+
+    bootstrap.Modal
+      .getInstance(
+        document.getElementById("factureModal")
+      )
+      .hide();
+
+    window.open(
+      `/api/pdf/facture/${data.facture.id}`,
+      "_blank"
+    );
+
+    facture();
+  })
+  .catch(err => {
+    console.error(err);
+    alert(err.message);
+  });
+}
+
+// Créer facture depuis liste des devis
 function facturerDepuisListe(id) {
   const frais = prompt("Frais de déplacement final ?");
 
@@ -187,9 +264,9 @@ function facturerDepuisListe(id) {
   })
   .then(res => res.json())
   .then(data => {
-    alert("Facture créée 💰");
+    alert("Facture créée");
 
-    // ouvrir PDF direct 🔥
+    // ouvrir PDF direct
     window.open(`http://localhost:3000/api/pdf/facture/${data.facture.id}`, "_blank");
 
     // refresh

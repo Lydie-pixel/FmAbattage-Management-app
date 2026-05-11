@@ -28,14 +28,14 @@ DevisItem.belongsTo(Devis, {
 });
 
 // 📄 Devis → Facture
-Devis.hasOne(Facture, {
-  foreignKey: 'devis_id',
-  as: 'facture'
+Devis.hasMany(Facture, {
+  foreignKey: "devis_id",
+  as: "factures"
 });
 
 Facture.belongsTo(Devis, {
-  foreignKey: 'devis_id',
-  as: 'devis'
+  foreignKey: "devis_id",
+  as: "devis"
 });
 
 // 👤 Client → Facture

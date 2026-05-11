@@ -29,6 +29,56 @@
                 </div>
             </div>
 
+            <div class="modal fade" id="factureModal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                            Créer une facture
+                            </h5>
+
+                            <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <select
+                            id="devisSelect"
+                            class="form-select mb-3">
+                            </select>
+
+                            <input
+                            type="number"
+                            id="fraisFinal"
+                            class="form-control"
+                            placeholder="Frais de carburant final">
+
+                        </div>
+
+                        <div class="modal-footer">
+
+                            <button
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal">
+                            Annuler
+                            </button>
+
+                            <button
+                            class="btn btn-success"
+                            onclick="createFactureFromModal()">
+                            Créer
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div id="tableFactures"></div>
         </main>
         
