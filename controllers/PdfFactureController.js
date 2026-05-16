@@ -51,13 +51,13 @@ echeance.setDate(echeance.getDate() + 20);
     html = html.replace("{{client_nom}}", facture.client.nom);
     html = html.replace("{{client_tel}}", facture.client.tel || "");
     html = html.replace("{{client_adresse}}", facture.client.adresse || "");
-html = html.replaceAll("{{client_code_postal}}", facture.client.code_postal || "");
-html = html.replaceAll("{{client_ville}}", facture.client.ville || "");
+    html = html.replaceAll("{{client_code_postal}}", facture.client.code_postal || "");
+    html = html.replaceAll("{{client_ville}}", facture.client.ville || "");
     html = html.replace("{{client_email}}", facture.client.email || "");
     html = html.replace("{{numero}}", facture.numero);
-   html = html.replaceAll("{{date_facture}}", formatDate(facture.date_facture));
+    html = html.replaceAll("{{date_facture}}", formatDate(facture.date_facture));
     html = html.replace("{{date_echeance}}", formatDate(echeance));
-html = html.replace("{{frais}}", formatPrice(facture.frais_deplacement_final));
+    html = html.replace("{{frais}}", formatPrice(facture.frais_deplacement_final));
     html = html.replaceAll("{{total}}", formatPrice(facture.montant));
 
     // 4. générer les lignes
@@ -95,7 +95,7 @@ const itemsHTML = items.map(item => `
 
     await browser.close();
 
-    // ✅ 6. réponse
+    //  6. réponse
     res.sendFile(filePath);
 
   } catch (error) {
@@ -124,30 +124,30 @@ exports.generateFacturePDFInternal = async (id) => {
 const echeance = new Date(facture.date_facture);
 echeance.setDate(echeance.getDate() + 20);
 
-    // ✅ 3. remplacer les variables
+    // 3. remplacer les variables
     html = html.replace("{{client_nom}}", facture.client.nom);
     html = html.replace("{{client_tel}}", facture.client.tel || "");
     html = html.replace("{{client_adresse}}", facture.client.adresse || "");
-html = html.replaceAll("{{client_code_postal}}", facture.client.code_postal || "");
-html = html.replaceAll("{{client_ville}}", facture.client.ville || "");
+    html = html.replaceAll("{{client_code_postal}}", facture.client.code_postal || "");
+    html = html.replaceAll("{{client_ville}}", facture.client.ville || "");
     html = html.replace("{{client_email}}", facture.client.email || "");
     html = html.replace("{{numero}}", facture.numero);
-   html = html.replaceAll("{{date_facture}}", formatDate(facture.date_facture));
+    html = html.replaceAll("{{date_facture}}", formatDate(facture.date_facture));
     html = html.replace("{{date_echeance}}", formatDate(echeance));
     html = html.replace("{{frais}}", formatPrice(facture.frais_deplacement_final));
     html = html.replaceAll("{{total}}", formatPrice(facture.montant));
 
-    // ✅ 4. générer les lignes
-const items = facture.devis?.items || [];
+    // 4. générer les lignes
+  const items = facture.devis?.items || [];
 
-const itemsHTML = items.map(item => `
-  <tr>
-    <td>${item.description}</td>
-    <td>${item.quantite}</td>
-    <td>${formatPrice(item.prix_unitaire)}</td>
-    <td>${formatPrice(item.prix_unitaire * item.quantite)}</td>
-  </tr>
-`).join("");
+  const itemsHTML = items.map(item => `
+    <tr>
+      <td>${item.description}</td>
+      <td>${item.quantite}</td>
+      <td>${formatPrice(item.prix_unitaire)}</td>
+      <td>${formatPrice(item.prix_unitaire * item.quantite)}</td>
+    </tr>
+  `).join("");
 
     html = html.replace("{{items}}", itemsHTML);
 

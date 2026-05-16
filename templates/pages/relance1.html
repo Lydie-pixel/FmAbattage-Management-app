@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../asset/css/Devis.css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div>
+        <strong>FM ABATTAGE</strong><br>
+        14 rue du Thou<br>
+        01240 Saint Paul de Varax<br>
+        Tél : 06 78 69 66 86<br>
+        Email : fmabattage@gmail.com
+      </div>
+
+      <div>
+        <img src="data:image/png;base64,{{logo}}" width="120">
+      </div>
+    </div>
+
+    <!--Client-->
+    <div class="client">
+        {{client_nom}}<br>
+        {{client_adresse}}<br>
+        {{client_code_postal}} {{client_ville}}<br>
+        {{client_tel}}
+    </div>
+
+    <!--Intitulé-->
+    <span>Objet : Lettre de première relance pour la facture n°{{numero_facture}}</span>
+    <span>Saint Paul de Varax, le {{date}} </span>
+
+
+    <!--Corps-->
+    <p>
+        Madame Monsieur,
+    <br>
+        Sauf erreur de notre part, nous n’avons à ce jour toujours pas reçu le paiement de la facture n°
+    {{numero_facture}}
+        , en date du 
+    {{date_facture}}
+        , et payable avant le 
+    {{date_echeance}}
+        . Nous vous demandons donc de nous faire parvenir le règlement de cette facture d'un montant de 
+    {{montant_facture}}    
+        immédiatement. A défaut de paiement suite à cette relance, nous serons amenés à vous facturer les intérêts de retard prévus dans mes conditions générales de vente.
+    <br>
+        Vous trouverez en pièce jointe de ce courrier une photocopie de cette facture concernée. Veuillez ne pas tenir compte de cette lettre si votre règlement nous a été adressé avant la réception de ce courrier.
+    <br>
+        Nous vous prions d'agréer, Madame Monsieur, nos salutations respectueuses.
+    </p>
+
+
+    <!--Signature-->
+    <span>Franck Meunier</span>
+
+ <!--  FOOTER -->
+    <div class="footer">
+      <div class="footer-line"></div>
+
+      <div class="footer-content">
+        <div class="footer-left">
+          <p><strong>FM ABATTAGE</strong></p>
+          <p>14 rue du Thou, 01240 Saint Paul de Varax</p>
+          <p><strong>Tél : </strong>06 78 69 66 86</p>
+        </div>
+
+        <div class="footer-right">
+          <p><strong>Email : </strong>fmabattage@gmail.com</p>
+          <p><strong>N° SIRET : </strong>914 446 364</p>
+          <p><strong>Site web : </strong>www.fmabattage.fr</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -80,7 +80,7 @@ exports.createPaiement = async (req, res) => {
       return res.status(404).json({ error: "Facture non trouvée" });
     }
 
-    // 💰 calcul déjà payé
+    //calcul déjà payé
     let totalPaye = 0;
     facture.paiements.forEach(p => {
       totalPaye += parseFloat(p.montant);
@@ -147,7 +147,7 @@ exports.updatePaiement = async (req, res) => {
     }
     await paiement.save();
 
-    // 🔄 recalcul facture
+    // recalcul facture
     const paiements = await Paiement.findAll({
       where: { facture_id: paiement.facture_id }
     });

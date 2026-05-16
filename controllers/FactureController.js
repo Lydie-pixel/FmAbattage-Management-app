@@ -33,6 +33,11 @@ exports.getFactureById = async (req, res) => {
         {
           model: Client,
           as: "client"
+        },
+
+        {
+          model: Paiement,
+          as: "paiements"
         }
       ]
     });

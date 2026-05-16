@@ -46,6 +46,11 @@ function formatStatut(niveau){
     }
 }
 
+//Ouvrir PDF
+function openPDF(id) {
+  window.open(`/api/relance/pdf/${id}`, "_blank");
+}
+
 //Tableau
 function relance() {
 
@@ -132,6 +137,11 @@ function relance() {
                 class="btn btn-sm btn-secondary">
                 Voir
               </button>
+              <button
+                class="btn btn-danger btn-sm"
+                onclick="openPDF(${relance.id})">
+                PDF
+            </button>
             </td>
           </tr>
         `;
