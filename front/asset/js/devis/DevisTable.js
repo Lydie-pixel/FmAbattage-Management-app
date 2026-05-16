@@ -72,10 +72,10 @@ function facturer(devisId) {
   .then(res => res.json())
   .then(data => {
 
-    // 👉 1. ouvrir le PDF
+    // 1. ouvrir le PDF
     window.open(`/api/pdf/facture/${data.facture.id}`, "_blank");
 
-    // 👉 2. rediriger vers la page factures
+    // 2. rediriger vers la page factures
     window.location.href = "/pages/factures.html";
   })
   .catch(err => {

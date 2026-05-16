@@ -2,12 +2,12 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../asset/css/Devis.css">
+    <link rel="stylesheet" href="../asset/css/Facture.css">
   </head>
 
   <body>
 
-    <!-- 🔝 HEADER -->
+    <!--HEADER -->
     <div class="header">
       <div>
         <strong>FM ABATTAGE</strong><br>
@@ -22,13 +22,13 @@
       </div>
     </div>
 
-    <!-- 📄 TITRE -->
+    <!--TITRE -->
     <div style="width: 50%; margin-left: auto; text-align: left;">
-      <h2 style="margin:0;">Devis</h2>
+      <h2 style="margin:0;">Facture</h2>
       <div style="border-top: 1px solid black; margin-top:5px;"></div>
     </div>
 
-    <!-- 📌 INFOS -->
+    <!--INFOS -->
     <div class="info" style="display:flex; justify-content:space-between;">
       
       <!-- gauche -->
@@ -42,20 +42,20 @@
       </div>
 
       <!-- droite -->
-      <div class="devis">
+      <div class="facture">
         <table>
-        <tbody class="tdevis">
+        <tbody class="tfacture">
           <tr>
-            <th scope="col">Numéro du devis :</th>
+            <th scope="col">Numéro de la facture :</th>
             <td>{{numero}}</td>
           </tr>
           <tr>
-            <th scope="col">Date du devis :</th>
-            <td>{{date_devis}}</td>
+            <th scope="col">Date de la facture :</th>
+            <td>{{date_facture}}</td>
           </tr>
           <tr>
             <th scope="col">Validité :</th>
-            <td>14 jours</td>
+            <td>20 jours</td>
           </tr>
           <tr>
             <th scope="col">Date d'échéance :</th>
@@ -65,13 +65,13 @@
         <tfoot>
           <tr>
             <th style="background-color: #D9D9D9; text-align: left;"><strong>Total à payer :</strong></td>
-            <td style="background-color: #D9D9D9; text-align: right;"><strong>{{total}} €</strong></td>
+            <td style="background-color: #D9D9D9; text-align: right;"><strong>{{total}}</strong></td>
           </tr>
         </table>
       </div>
     </div>
 
-    <!-- 📊 TABLEAU -->
+    <!--TABLEAU -->
     <table>
         <colgroup>
         <col style="width:50%">
@@ -96,13 +96,13 @@
       <tfoot>
         <tr>
           <td></td>
-          <th colspan="2" style="text-align: left;">Frais de carburant estimés :</th>
+          <th colspan="2" style="text-align: left;">Frais de carburant final :</th>
           <td style="background-color: #D9D9D9; text-align: right;">{{frais}}</td>
         </tr>
         <tr>
           <td></td>
           <th colspan="2" style="text-align: left;">Total HT :</th>
-          <td style="background-color: #D9D9D9; text-align: right;"><strong>{{total}} €</strong></td>
+          <td style="background-color: #D9D9D9; text-align: right;"><strong>{{total}}</strong></td>
         </tr>
       </tfoot>
     </table>
@@ -116,26 +116,16 @@
     </div>
     <div style="margin-top:20px;">
       <p>
-      Devis reçu avant l'exécution des travaux
-      <br>
-      Les prix indiqués pourront être révisés en fonction de l’évolution du coût du carburant
-      entre la date du devis et la réalisation de la prestation
-    </div>
-    <div style="margin-top:20px;">
-      <p>
       Conditions de paiement :
       <br>
       Mentions :
     </div>
     <div>
       <p><i>
-      TVA non applicable – Article 293B du Code général des impôts
-      <br>
-      RÉSERVE DE PROPRIÉTÉ : Les marchandises restent notre propriété jusqu'à complet paiement
-      </i></p>
+      TVA non applicable – Article 293B du Code général des impôts</i></p>
     </div>
 
-    <!-- 🔻 FOOTER -->
+    <!-- FOOTER -->
     <div class="footer">
       <div class="footer-line"></div>
 

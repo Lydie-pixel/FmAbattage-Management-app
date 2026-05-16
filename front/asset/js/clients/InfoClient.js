@@ -129,6 +129,20 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
     container.innerHTML = html;
   });
 
+
+//UX des modes de paiement
+function formatMode(mode_paiement) {
+  switch (mode_paiement) {
+    case "virement_A": return "Virement compte A";
+    case "virement_B": return "Virement compte B";
+    case "cb": return "Carte Bancaire";
+    case "cheque": return "Chèque";
+    case "especes": return "Espèces";
+    case "autre": return "Autre";
+    default: return mode_paiement;
+  }
+}
+
   fetch("http://localhost:3000/api/paiement")
   .then(res => res.json())
   .then(data => {
@@ -159,7 +173,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
           <td>${p.facture?.numero || "-"}</td>
           <td>${formatDateFR(p.date_paiement)}</td>
           <td>${p.montant} €</td>
-          <td>${p.mode_paiement}</td>
+          <td>${formatMode(p.mode_paiement)}</td>
         </tr>
       `;
     });

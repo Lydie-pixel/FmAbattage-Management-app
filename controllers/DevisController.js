@@ -19,7 +19,7 @@ exports.createDevis = async (req, res) => {
 
   const transaction = await sequelize.transaction();
 
-  let devis; // 🔥 IMPORTANT : déclaré ici
+  let devis;
 
   try {
     // calcul total
@@ -74,14 +74,14 @@ exports.createDevis = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 
-  // 🔥 PDF en dehors de la transaction
+  //  PDF en dehors de la transaction
   try {
     await PdfController.generateDevisPDFInternal(devis.id);
   } catch (err) {
     console.error("Erreur PDF :", err);
   }
 
-  // ✅ réponse propre JSON
+  // réponse propre JSON
   res.status(201).json({
     message: "Devis créé",
     id: devis.id,

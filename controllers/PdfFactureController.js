@@ -6,7 +6,7 @@ const { Facture, Devis, Client, DevisItem } = require("../models");
 exports.generateFacturePDF = async (req, res) => {
   try {
 
-    // ✅ 1. récupérer la facture AVANT tout
+    // 1. récupérer la facture AVANT tout
     const facture = await Facture.findByPk(req.params.id, {
     include: [
         { model: Client, as: "client" },
@@ -22,7 +22,7 @@ exports.generateFacturePDF = async (req, res) => {
       return res.status(404).json({ error: "Facture non trouvée" });
     }
 
-    // ✅ 2. charger le template
+    // 2. charger le template
     function formatDate(date) {
       const d = new Date(date);
       return d.toLocaleDateString("fr-FR");
@@ -32,21 +32,21 @@ exports.generateFacturePDF = async (req, res) => {
         minimumFractionDigits: 2
       }) + " €";
     }
-    let html = fs.readFileSync("./templates/facture.html", "utf8");
+    let html = fs.readFileSync("./templates/pages/facture.html", "utf8");
 
-    const css = fs.readFileSync("./asset/css/Facture.css", "utf8");
+    const css = fs.readFileSync("./templates/asset/css/Facture.css", "utf8");
     html = `
     <style>${css}</style>
     ${html}
     `;
 
-    const logoPath = path.join(__dirname, "../asset/img/logo.png");
+    const logoPath = path.join(__dirname, "../templates/asset/img/logo.png");
 const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
 
 const echeance = new Date(facture.date_facture);
 echeance.setDate(echeance.getDate() + 20);
 
-    // ✅ 3. remplacer les variables
+    // 3. remplacer les variables
     html = html.replace("{{logo}}", logoBase64);
     html = html.replace("{{client_nom}}", facture.client.nom);
     html = html.replace("{{client_tel}}", facture.client.tel || "");
@@ -60,7 +60,7 @@ html = html.replaceAll("{{client_ville}}", facture.client.ville || "");
 html = html.replace("{{frais}}", formatPrice(facture.frais_deplacement_final));
     html = html.replaceAll("{{total}}", formatPrice(facture.montant));
 
-    // ✅ 4. générer les lignes
+    // 4. générer les lignes
 const items = facture.devis?.items || [];
 
 const itemsHTML = items.map(item => `
@@ -74,7 +74,7 @@ const itemsHTML = items.map(item => `
 
     html = html.replace("{{items}}", itemsHTML);
 
-    // ✅ 5. Puppeteer
+    // 5. Puppeteer
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
@@ -117,9 +117,9 @@ exports.generateFacturePDFInternal = async (id) => {
     ]
     });
 
-  let html = fs.readFileSync("./templates/facture.html", "utf8");
+  let html = fs.readFileSync("./templates/pages/facture.html", "utf8");
 
-  const css = fs.readFileSync("./asset/css/Facture.css", "utf8");
+  const css = fs.readFileSync("./templates/asset/css/Facture.css", "utf8");
   html = `<style>${css}</style>${html}`;
 const echeance = new Date(facture.date_facture);
 echeance.setDate(echeance.getDate() + 20);
