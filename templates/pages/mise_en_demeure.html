@@ -2,98 +2,93 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../asset/css/Devis.css">
+    <link rel="stylesheet" href="../asset/css/Relance.css">
   </head>
 
   <body>
 
     <!-- HEADER -->
-    <div class="header">
-      <div>
-        <strong>FM ABATTAGE</strong><br>
-        14 rue du Thou<br>
-        01240 Saint Paul de Varax<br>
-        Tél : 06 78 69 66 86<br>
-        Email : fmabattage@gmail.com
-      </div>
+    <header>
+        <div>
+            <strong>FM ABATTAGE</strong><br>
+            14 rue du Thou<br>
+            01240 Saint Paul de Varax<br>
+            Tél : 06 78 69 66 86<br>
+            Email : fmabattage@gmail.com
+        </div>
 
-      <div>
-        <img src="data:image/png;base64,{{logo}}" width="120">
-      </div>
-    </div>
+        <div>
+            <img src="data:image/png;base64,{{logo}}" width="100">
+        </div>
+    </header>
 
-     <!--Intitulé-->
-    <span>Objet : MISE EN DEMEURE DE PAYER
-        <br>
-        Lettre recommandée avec accusé de réception AR n°{{ar}}</span>
-    <span>Saint Paul de Varax, le {{date}} </span>
 
+    <!--Client-->
+    <section class="client">
+            {{client_nom}}<br>
+            {{client_adresse}}<br>
+            {{client_code_postal}} {{client_ville}}<br>
+            {{client_tel}}
+    </section>
+
+        <!--Intitulé-->
+    <section class="meta">
+        <div class="objet">
+            <span>Objet : MISE EN DEMEURE DE PAYER
+                <br>
+                Lettre recommandée avec accusé de réception AR n° {{ar}}
+            </span>
+        </div>
+        <div class="date">
+            <span>Saint Paul de Varax, le {{date}} </span>
+        </div>
+    </section>
 
     <!--Corps-->
-    <p>
-        Madame Monsieur,
-    <br>
-        Par courrier daté du 
-        {{date_relance_1}}
-        , nous vous avions demandé de procéder au règlement de la facture n°
-        {{numero_facture}}
-        . Nous vous avons envoyé par la suite une deuxième relance par courrier daté du 
-        {{date_relance_2}}
-        ,ainsi qu'une troisième relance par courrier daté du
-        {{date_relance_3}}
-        , elles aussi restées sans réponse.
-    <br>
-        Sauf erreur de notre part, nous n’avons à ce jour toujours pas reçu le paiement de cette facture. Nous vous demandons donc de nous faire parvenir le règlement de la facture n°
-    {{numero_facture}} 
-        en date du 
-    {{date_facture}}
-        et d’un montant total de 
-    {{montant_facture}}.
-    <br>
-        Par la présente, nous vous mettons donc en demeure de payer la somme de 
-    {{montant}}
-        qui correspond aux 
-    {{montant_facture}}
-        de la facture n°
-    {{numero_facture}} 
-        , à laquelle nous ajoutons le montant des pénalités de retard s’élevant à ce jour à 
-    {{penalite}}
-        , en vertu de l’application de nos conditions générales de vente et de l’article L 441-6 du Code de commerce.
-    <br>
-        Si le paiement n’intervient pas sous 
-    {{delai_avant_poursuite}} 
-        jours, nous serons contraints de recourir à une action judiciaire afin d’obtenir le règlement des sommes dues et dommages et intérêts inhérents pour le préjudice causé.
-    <br>
-        Vous trouverez en pièce jointe de ce courrier une photocopie de la facture concernée et des deux premières lettres de relances.
-    <br>
-        Veuillez ne pas tenir compte de cette lettre si votre règlement nous a été adressé avant la réception de ce courrier.
-    <br>
-        Nous restons à votre disposition dans l’hypothèse d’éventuelles questions. Nous vous prions d'agréer, Madame / Monsieur, nos salutations respectueuses.
-    </p>
+    <section class="corps">
+        <p>
+            Madame, Monsieur,
+        </p>
+        <p>
+            Par courrier daté du {{date_relance_1}}, nous vous avions demandé de procéder au règlement de la facture n°
+            {{numero_facture}}. Nous vous avons envoyé par la suite une deuxième relance par courrier daté du {{date_relance_2}}, ainsi qu'une troisième relance par courrier daté du
+            {{date_relance_3}}, elles aussi restées sans réponse.
+        </p>
+        <p>
+            Sauf erreur de notre part, nous n’avons à ce jour toujours pas reçu le paiement de cette facture. Nous vous demandons donc de nous faire parvenir le règlement de la facture n°
+        {{numero_facture}} 
+            en date du 
+        {{date_facture}}
+            et d’un montant total de 
+        {{montant_facture}}.
+        </p>
+        <p>
+            Par la présente, nous vous mettons donc en demeure de payer la somme de 
+        {{montant}} qui correspond aux 
+        {{montant_facture}} de la facture n° {{numero_facture}}, à laquelle nous ajoutons le montant des pénalités de retard s’élevant à ce jour à {{penalite}}, en vertu de l’application de nos conditions générales de vente et de l’article L 441-6 du Code de commerce.
+        </p>
+        <p>
+            Si le paiement n’intervient pas sous {{delai_avant_poursuite}} jours, nous serons contraints de recourir à une action judiciaire afin d’obtenir le règlement des sommes dues et dommages et intérêts inhérents pour le préjudice causé.
+        </p>
+        <p>
+            Vous trouverez en pièce jointe de ce courrier une photocopie de la facture concernée et des deux premières lettres de relances.
+        </p>
+        <p>
+            Veuillez ne pas tenir compte de cette lettre si votre règlement nous a été adressé avant la réception de ce courrier.
+        </p>
+        <p>
+            Nous restons à votre disposition dans l’hypothèse d’éventuelles questions. Nous vous prions d'agréer, Madame Monsieur, nos salutations respectueuses.
+        </p>
+    </section>
 
 
     <!--Signature-->
-    <span>Franck Meunier</span>
+    <section class="signature">
+        <p>
+            Franck Meunier<br>
+            Dirigeant de FM Abattage
+        </p>
+    </section>
 
-
-
- <!--  FOOTER -->
-    <div class="footer">
-      <div class="footer-line"></div>
-
-      <div class="footer-content">
-        <div class="footer-left">
-          <p><strong>FM ABATTAGE</strong></p>
-          <p>14 rue du Thou, 01240 Saint Paul de Varax</p>
-          <p><strong>Tél : </strong>06 78 69 66 86</p>
-        </div>
-
-        <div class="footer-right">
-          <p><strong>Email : </strong>fmabattage@gmail.com</p>
-          <p><strong>N° SIRET : </strong>914 446 364</p>
-          <p><strong>Site web : </strong>www.fmabattage.fr</p>
-        </div>
-      </div>
-    </div>
   </body>
 </html>

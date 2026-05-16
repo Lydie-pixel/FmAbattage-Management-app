@@ -6,6 +6,6 @@ const RelancePdfController = require("../controllers/RelancePdfController")
 
 router.get("/devis/:id", PdfController.generateDevisPDF);
 router.get("/facture/:id", PdfFactureController.generateFacturePDF);
-router.get("/relance/:id", RelancePdfController.generatePDF);
+router.get("/relance/:id", RelancePdfController.generateRelancePDF);
 
 module.exports = router;

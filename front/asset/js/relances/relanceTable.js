@@ -46,11 +46,6 @@ function formatStatut(niveau){
     }
 }
 
-//Ouvrir PDF
-function openPDF(id) {
-  window.open(`/api/relance/pdf/${id}`, "_blank");
-}
-
 //Tableau
 function relance() {
 
@@ -133,15 +128,17 @@ function relance() {
             </td>
 
             <td>
-              <button
-                class="btn btn-sm btn-secondary">
-                Voir
-              </button>
-              <button
-                class="btn btn-danger btn-sm"
-                onclick="openPDF(${relance.id})">
-                PDF
-            </button>
+                <button
+                    class="btn btn-sm btn-secondary">
+                    Voir
+                </button>
+                <button
+                    class="btn btn-sm btn-outline-danger"
+                    onclick="generateRelancePDF(${relance.id})">
+
+                    <i class="bi bi-file-earmark-pdf"></i>
+                    PDF
+                </button>
             </td>
           </tr>
         `;
@@ -166,3 +163,20 @@ function relance() {
 window.onload = () => {
   relance();
 };
+
+//Ouvrir PDF
+function openPDF(id) {
+  window.open(`/api/relance/pdf/${id}`, "_blank");
+}
+
+function generateRelancePDF(id) {
+
+    window.open(
+        `/api/pdf/relance/${id}`,
+        "_blank"
+    );
+
+}
+
+window.generateRelancePDF =
+    generateRelancePDF;

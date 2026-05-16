@@ -44,7 +44,7 @@ exports.generateFacturePDF = async (req, res) => {
 const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
 
 const echeance = new Date(facture.date_facture);
-echeance.setDate(echeance.getDate() + 20);
+echeance.setDate(echeance.getDate() + 30);
 
     // 3. remplacer les variables
     html = html.replace("{{logo}}", logoBase64);

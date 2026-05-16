@@ -6,7 +6,7 @@
   .header {
     display: flex;
     justify-content: space-between;
-    text-decoration-color: gray;
+    color: #555;
   }
 
   .client {
@@ -95,7 +95,7 @@
     text-align: center;
     margin-top: 40px;
     font-size: 10px;
-    text-decoration-color: gray;
+    color: #555;
   }
 
   .footer-content {

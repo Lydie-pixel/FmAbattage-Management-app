@@ -1,0 +1,64 @@
+* {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #222;
+    padding-bottom: 120px;
+    line-height: 1.6;
+}
+
+/* HEADER */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    color: #555;
+}
+
+/* CLIENT */
+
+.client {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+/* OBJET + DATE */
+
+.meta {
+    margin-bottom: 20px;
+}
+
+.objet {
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.date {
+    text-align: right;
+}
+
+/* CORPS */
+
+.corps {
+    text-align: left;
+    margin-bottom: 30px;
+}
+
+.corps p {
+    margin-bottom: 20px;
+}
+
+/* SIGNATURE */
+
+.signature {
+    text-align: right;
+    margin-top: 20px;
+}

@@ -11,8 +11,18 @@ exports.generateRelancePDF = async (req, res) => {
           model: Facture,
           as: "facture",
           include: [
-            { model: Client, as: "client" },
-            { model: Paiement, as: "paiements" }
+            { 
+                model: Client, 
+                as: "client" 
+            },
+            { 
+                model: Paiement, 
+                as: "paiements" 
+            },
+            {
+                model: Relance,
+                as: "relances"
+            }
           ]
         }
       ]
@@ -24,6 +34,18 @@ exports.generateRelancePDF = async (req, res) => {
 
     const facture = relance.facture;
 
+    const relance1 = facture.relances?.find(
+        r => r.niveau === "relance_1"
+        );
+
+        const relance2 = facture.relances?.find(
+        r => r.niveau === "relance_2"
+        );
+
+        const relance3 = facture.relances?.find(
+        r => r.niveau === "relance_3"
+    );
+
     // Calcul paiements
     let totalPaye = 0;
     facture.paiements?.forEach(p => {
@@ -31,6 +53,17 @@ exports.generateRelancePDF = async (req, res) => {
     });
 
     const reste = Number(facture.montant) - totalPaye;
+
+    // Calule échéance de la facture
+    const dateFacture =
+    new Date(relance.facture.date_facture);
+
+    const dateEcheance =
+    new Date(dateFacture);
+
+    dateEcheance.setDate(
+    dateEcheance.getDate() + 30
+    );
 
     // Charger template selon niveau
     let templatePath = "";
@@ -52,6 +85,15 @@ exports.generateRelancePDF = async (req, res) => {
 
     let html = fs.readFileSync(templatePath, "utf8");
 
+    const css = fs.readFileSync("./templates/asset/css/Relance.css", "utf8");
+    html = `
+    <style>${css}</style>
+    ${html}
+    `;
+    
+    const logoPath = path.join(__dirname, "../templates/asset/img/logo.png");
+    const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
+
     // Helpers
     const formatDate = (d) =>
       d ? new Date(d).toLocaleDateString("fr-FR") : "";
@@ -63,16 +105,21 @@ exports.generateRelancePDF = async (req, res) => {
 
     // Remplacer les variables
     html = html
+      .replace("{{logo}}",logoBase64)
       .replaceAll("{{client_nom}}", facture.client?.nom || "")
       .replaceAll("{{client_tel}}", facture.client?.tel || "")
       .replaceAll("{{client_adresse}}", facture.client?.adresse || "")
       .replaceAll("{{client_code_postal}}", facture.client?.code_postal || "")
       .replaceAll("{{client_ville}}", facture.client?.ville || "")
+      .replaceAll("{{date}}", formatDate(relance.date_relance))
+      .replaceAll("{{date_echeance}}", formatDate(dateEcheance))
       .replaceAll("{{numero_facture}}", facture.numero || "")
       .replaceAll("{{date_facture}}", formatDate(facture.date_facture))
       .replaceAll("{{montant_facture}}", formatPrice(facture.montant))
-      .replaceAll("{{date_relance}}", formatDate(relance.date_relance))
-      .replaceAll("{{penalites}}", formatPrice(relance.penalites))
+      .replaceAll("{{date_relance_1}}",formatDate(relance1?.date_relance))
+      .replaceAll("{{date_relance_2}}",formatDate(relance2?.date_relance))
+      .replaceAll("{{date_relance_3}}",formatDate(relance3?.date_relance))
+      .replaceAll("{{penalite}}", formatPrice(relance.penalites))
       .replaceAll("{{ar}}", relance.numero_ar || "")
       .replaceAll("{{delai_avant_poursuite}}", relance.delai_avant_poursuite || "")
       .replaceAll("{{reste_du}}", formatPrice(reste));
