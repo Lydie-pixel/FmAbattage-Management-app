@@ -43,6 +43,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
         <thead>
           <tr>
             <th>Numéro</th>
+            <th>Date</th>
             <th>Montant</th>
             <th>Statut</th>
           </tr>
@@ -54,6 +55,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
       html += `
         <tr>
           <td>${d.numero}</td>
+          <td>${d.date_devis}</td>
           <td>${d.montant} €</td>
           <td>${d.statut}</td>
         </tr>
@@ -77,6 +79,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
         <thead>
           <tr>
             <th>Numéro</th>
+            <th>Date</th>
             <th>Montant</th>
             <th>Statut</th>
           </tr>
@@ -88,6 +91,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
       html += `
         <tr>
           <td>${f.numero}</td>
+          <td>${f.date_facture}</td>
           <td>${f.montant} €</td>
           <td>${f.statut}</td>
         </tr>
@@ -115,8 +119,9 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
         <thead>
           <tr>
             <th>Facture</th>
-            <th>Montant</th>
             <th>Date</th>
+            <th>Montant</th>
+            <th>Mode de paiement</th>
           </tr>
         </thead>
         <tbody>
@@ -126,8 +131,9 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
       html += `
         <tr>
           <td>${p.facture?.numero || "-"}</td>
-          <td>${p.montant} €</td>
           <td>${formatDateFR(p.date_paiement)}</td>
+          <td>${p.montant} €</td>
+          <td>${p.mode_paiement}</td>
         </tr>
       `;
     });
