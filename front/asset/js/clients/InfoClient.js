@@ -13,6 +13,14 @@ function formatDateFR(dateString) {
   return `${jour}/${mois}/${annee}`;
 }
 
+  // PDF
+function generatePDF(id) {
+  window.open(`/api/pdf/devis/${id}`, "_blank");
+}
+function generateFacturePDF(id) {
+  window.open(`http://localhost:3000/api/pdf/facture/${id}`, "_blank");
+}
+
 fetch(`http://localhost:3000/api/client/${clientId}`)
   .then(res => res.json())
   .then(client => {
@@ -46,6 +54,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
             <th>Date</th>
             <th>Montant</th>
             <th>Statut</th>
+            <th>PDF</th>
           </tr>
         </thead>
         <tbody>
@@ -58,6 +67,14 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
           <td>${d.date_devis}</td>
           <td>${d.montant} €</td>
           <td>${d.statut}</td>
+          <td>
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary btn-sm"
+              onclick="generatePDF(${d.id})"
+              <i class="bi bi-file-earmark-pdf"></i> PDF
+            </button>
+          </td>
         </tr>
       `;
     });
@@ -82,6 +99,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
             <th>Date</th>
             <th>Montant</th>
             <th>Statut</th>
+            <th>PDF</th>
           </tr>
         </thead>
         <tbody>
@@ -94,6 +112,14 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
           <td>${f.date_facture}</td>
           <td>${f.montant} €</td>
           <td>${f.statut}</td>
+          <td>
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary btn-sm"
+              onclick="generateFacturePDF(${f.id})"
+              <i class="bi bi-file-earmark-pdf"></i> PDF
+            </button>
+          </td>
         </tr>
       `;
     });
@@ -142,3 +168,8 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
 
     container.innerHTML = html;
   });
+
+
+  //Rendre les PDF ouvrable
+  window.generateFacturePDF = generateFacturePDF;
+  window.generatePDF = generatePDF;
