@@ -182,8 +182,7 @@ function createRelance(e) {
       document.getElementById("niveau").value,
     date_relance:
       document.getElementById("date_relance").value,
-    statut:
-      document.getElementById("statut").value,
+    statut: "envoyee",
     commentaire:
       document.getElementById("commentaire").value,
     penalites:
@@ -218,6 +217,12 @@ function createRelance(e) {
   .then(result => {
     alert("Relance créée");
     console.log(result);
+
+    // ouvrir PDF direct
+    window.open(`/api/pdf/relance/${result.id}`, "_blank");
+
+    // refresh
+    window.location.href = "/pages/relance.html";
   })
 
     .catch(error => {

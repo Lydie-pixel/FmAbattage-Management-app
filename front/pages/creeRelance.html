@@ -8,6 +8,7 @@
         <link href="../asset/img/favicon/favicon.png" rel="icon">
         <link href="../asset/css/style.css" rel="stylesheet">
         <link href="../asset/css/table.css" rel="stylesheet">
+        <link href="../asset/css/relance.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     
@@ -17,152 +18,137 @@
         <div id="header"></div>
 
         <main>
-            <div class="container mt-4">
 
             <h2>Nouvelle relance</h2>
 
-            <!-- Sélection facture -->
-            <div class="mb-3">
-                <label class="form-label">
-                Facture
-                </label>
-
-                <select
-                id="facture_id"
-                class="form-select">
-                <option value="">
-                    Sélectionner une facture
-                </option>
-                </select>
-            </div>
-
-            <!-- Infos facture/client -->
-            <div id="factureInfos"></div>
-
-            <!-- Historique -->
-            <div id="historiqueRelances"></div>
-
-            <!-- Formulaire -->
             <form id="relanceForm">
+            <div class="relance-layout">
 
                 <div class="mb-3">
-                <label class="form-label">
-                    Niveau de la relance
-                </label>
+                    <label class="form-label">
+                        Facture
+                    </label>
 
-                <select
-                    id="niveau"
-                    class="form-select">
-
-                    <option value="relance_1">
-                    Première relance
-                    </option>
-
-                    <option value="relance_2">
-                    Deuxième relance
-                    </option>
-
-                    <option value="relance_3">
-                    Troisième relance
-                    </option>
-
-                    <option value="mise_en_demeure">
-                    Mise en demeure
-                    </option>
-
-                </select>
+                    <select
+                        id="facture_id"
+                        class="form-select">
+                        <option value="">
+                            Sélectionner une facture
+                        </option>
+                    </select>
                 </div>
 
-                <div class="mb-3">
-                <label class="form-label">
-                    Date de relance
-                </label>
+                <!-- Ligne du haut -->
+                <div class="top-grid">
 
-                <input
-                    type="date"
-                    id="date_relance"
-                    class="form-control">
-                </div>
+                    <div class="content-card info-card">
+                        <h5>Infos facture</h5>
+                        <div id="factureInfos"></div>
+                    </div>
 
-                <div class="mb-3">
-                <label class="form-label">
-                    Statut
-                </label>
+                    <div class="content-card historique-card">
+                        <h5>Historique des relances</h5>
+                        <div id="historiqueRelances"></div>
+                    </div>
 
-                <select
-                    id="statut"
-                    class="form-select">
+                    <div class="content-card actions-card">
+                        <button 
+                            type="button"
+                            class="btn btn-danger w-100 mb-2"
+                            onclick="window.location.href='/pages/relance.html'">
+                            Retour
+                        </button>
 
-                    <option value="envoyee">
-                    Envoyée
-                    </option>
-
-                    <option value="payee">
-                    Payée
-                    </option>
-
-                    <option value="procedure">
-                    En procédure
-                    </option>
-
-                    <option value="annulee">
-                    Annulée
-                    </option>
-
-                </select>
-                </div>
-
-                <div class="mb-3">
-                <label class="form-label">
-                    Commentaire
-                </label>
-
-                <textarea
-                    id="commentaire"
-                    class="form-control"></textarea>
-                </div>
-
-                <!-- Champs mise en demeure -->
-                <div id="miseEnDemeureFields">
-
-                <div class="mb-3">
-                    <label>Pénalités</label>
-
-                    <input
-                    type="number"
-                    id="penalites"
-                    class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label>Délai avant poursuite</label>
-
-                    <input
-                    type="number"
-                    id="delai_avant_poursuite"
-                    class="form-control">
-                </div>
-
-                <div class="mb-3">
-                    <label>Numéro AR</label>
-
-                    <input
-                    type="text"
-                    id="numero_ar"
-                    class="form-control">
-                </div>
+                        <button
+                            type="submit" form="relanceForm"
+                            class="btn btn-success w-100">
+                            Créer la relance
+                        </button>
+                    </div>
 
                 </div>
 
-                <button
-                type="submit"
-                class="btn btn-danger">
-                Créer la relance
-                </button>
+                <!-- Champs -->
+                
+                    <div class="form-grid">
 
+                        <div class="content-card">
+                            <label class="form-label">
+                                Niveau de la relance
+                            </label>
+
+                            <select id="niveau" class="form-select">
+                                <option value="relance_1">Première relance</option>
+                                <option value="relance_2">Deuxième relance</option>
+                                <option value="relance_3">Troisième relance</option>
+                                <option value="mise_en_demeure">Mise en demeure</option>
+                            </select>
+                        </div>
+
+                        <div class="content-card">
+                            <label class="form-label">
+                                Date de relance
+                            </label>
+
+                            <input
+                                type="date"
+                                id="date_relance"
+                                class="form-control">
+                        </div>
+
+                        <div id="miseEnDemeureFields" class="full-width">
+                            
+                            <div class="mise-grid">
+
+                                <div class="content-card">
+                                    <label class="form-label">
+                                        Pénalités
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="penalites"
+                                        class="form-control">
+                                </div>
+
+                                <div class="content-card">
+                                    <label class="form-label">
+                                        Délai avant poursuite
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="delai_avant_poursuite"
+                                        class="form-control">
+                                </div>
+
+                                <div class="content-card ar-field">
+                                    <label class="form-label">
+                                        Numéro AR
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="numero_ar"
+                                        class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-card full-width">
+                            <label class="form-label">
+                                Commentaire
+                            </label>
+
+                            <textarea
+                                id="commentaire"
+                                class="form-control"
+                                rows="5">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
             </form>
-
-            </div>
         </main>
 
         <div id="footer"></div>
