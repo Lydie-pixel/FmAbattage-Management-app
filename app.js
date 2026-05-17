@@ -32,4 +32,7 @@ app.use("/api/depense", depenseRoutes);
 const statsRoutes = require("./routes/StatsRoutes");
 app.use("/api/stats", statsRoutes);
 
+const relanceRoutes = require("./routes/RelanceRoutes");
+app.use("/api/relance", relanceRoutes);
+
 module.exports = app;

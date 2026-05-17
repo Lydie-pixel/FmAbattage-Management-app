@@ -34,7 +34,11 @@ CREATE TABLE devis (
     date_echeance DATE,
     frais_deplacement DECIMAL(10,2) DEFAULT 0,
     montant DECIMAL(10, 2) NOT NULL,
-    statut ENUM('en_attente', 'accepte', 'refuse') DEFAULT 'en_attente',
+    statut ENUM(
+        'en_attente',
+        'accepte',
+        'refuse'
+    ) DEFAULT 'en_attente',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
@@ -69,7 +73,11 @@ CREATE TABLE factures (
     date_facture DATE NOT NULL,
     frais_deplacement_final DECIMAL(10,2) DEFAULT 0,
     montant DECIMAL(10, 2) NOT NULL,
-    statut ENUM('en_attente', 'payee', 'partielle') DEFAULT 'en_attente',
+    statut ENUM(
+        'en_attente',
+        'payee',
+        'partielle'
+    ) DEFAULT 'en_attente',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (devis_id) REFERENCES devis(id) ON DELETE CASCADE,
@@ -85,7 +93,14 @@ CREATE TABLE paiements (
     facture_id INT NOT NULL,
     montant DECIMAL(10, 2) NOT NULL,
     date_paiement DATE NOT NULL,
-    mode_paiement ENUM('especes', 'cheque', 'virement', 'autre') NOT NULL,
+    mode_paiement ENUM(
+        'especes',
+        'cheque',
+        'virement_A',
+        'virement_B',
+        'cb',
+        'autre'
+    ) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY (facture_id) REFERENCES factures(id) ON DELETE CASCADE
@@ -99,7 +114,41 @@ CREATE TABLE depenses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     date_depenses DATE NOT NULL,
     montant DECIMAL(10, 2) NOT NULL,
-    type ENUM("frais_carburant", "frais_materiel", "charges", "autre") NOT NULL,
+    type ENUM(
+        "frais_carburant",
+        "frais_materiel",
+        "charges",
+        "autre"
+    ) NOT NULL,
     description VARCHAR(250),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 )
+
+-- =========================
+-- Table Relances
+-- =========================
+
+CREATE TABLE relances (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+
+    facture_id INT NOT NULL,
+    niveau ENUM(
+        'relance_1',
+        'relance_2',
+        'relance_3',
+        'mise_en_demeure'
+    ) NOT NULL,
+    date_relance DATE NOT NULL,
+    penalites DECIMAL(10,2) DEFAULT 0,
+    delai_avant_poursuite INT DEFAULT 0,
+    numero_ar VARCHAR(50),
+    statut ENUM(
+        'envoyee',
+        'payee',
+        'procedure',
+        'annulee'
+    ) DEFAULT 'envoyee',
+    commentaire VARCHAR(600),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (facture_id) REFERENCES factures(id) ON DELETE CASCADE
+);

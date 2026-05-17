@@ -11,7 +11,7 @@ function formatDate(date) {
 exports.generateDevisPDF = async (req, res) => {
   try {
 
-    // ✅ 1. récupérer le devis AVANT tout
+    // 1. récupérer le devis AVANT tout
     const devis = await Devis.findByPk(req.params.id, {
       include: [
         { model: Client, as: "client" },
@@ -23,7 +23,7 @@ exports.generateDevisPDF = async (req, res) => {
       return res.status(404).json({ error: "Devis non trouvé" });
     }
 
-    // ✅ 2. charger le template
+    // 2. charger le template
     function formatDate(date) {
       const d = new Date(date);
       return d.toLocaleDateString("fr-FR");
@@ -33,18 +33,18 @@ exports.generateDevisPDF = async (req, res) => {
         minimumFractionDigits: 2
       }) + " €";
     }
-    let html = fs.readFileSync("./templates/devis.html", "utf8");
+    let html = fs.readFileSync("./templates/pages/devis.html", "utf8");
 
-    const css = fs.readFileSync("./asset/css/Devis.css", "utf8");
+    const css = fs.readFileSync("./templates/asset/css/Devis.css", "utf8");
     html = `
     <style>${css}</style>
     ${html}
     `;
 
-    const logoPath = path.join(__dirname, "../asset/img/logo.png");
+    const logoPath = path.join(__dirname, "../templates/asset/img/logo.png");
 const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
 
-    // ✅ 3. remplacer les variables
+    // 3. remplacer les variables
     html = html.replace("{{logo}}", logoBase64);
     html = html.replace("{{client_nom}}", devis.client.nom);
     html = html.replace("{{client_tel}}", devis.client.tel || "");
@@ -58,7 +58,7 @@ html = html.replaceAll("{{client_ville}}", devis.client.ville || "");
     html = html.replace("{{frais}}", devis.frais_deplacement + " €");
     html = html.replaceAll("{{total}}", devis.montant);
 
-    // ✅ 4. générer les lignes
+    //4. générer les lignes
     const itemsHTML = devis.items.map(item => `
       <tr>
         <td>${item.description}</td>
@@ -70,7 +70,7 @@ html = html.replaceAll("{{client_ville}}", devis.client.ville || "");
 
     html = html.replace("{{items}}", itemsHTML);
 
-    // ✅ 5. Puppeteer
+    // 5. Puppeteer
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
@@ -109,12 +109,12 @@ exports.generateDevisPDFInternal = async (id) => {
     ]
   });
 
-  let html = fs.readFileSync("./templates/devis.html", "utf8");
+  let html = fs.readFileSync("./templates/pages/devis.html", "utf8");
 
-  const css = fs.readFileSync("./asset/css/Devis.css", "utf8");
+  const css = fs.readFileSync("./templates/asset/css/Devis.css", "utf8");
   html = `<style>${css}</style>${html}`;
 
-    // ✅ 3. remplacer les variables
+    // 3. remplacer les variables
     html = html.replace("{{client_nom}}", devis.client.nom);
     html = html.replace("{{client_tel}}", devis.client.tel || "");
     html = html.replace("{{client_adresse}}", devis.client.adresse || "");
@@ -127,7 +127,7 @@ html = html.replaceAll("{{client_ville}}", devis.client.ville || "");
     html = html.replace("{{frais}}", devis.frais_deplacement + " €");
     html = html.replaceAll("{{total}}", devis.montant);
 
-    // ✅ 4. générer les lignes
+    // 4. générer les lignes
     const itemsHTML = devis.items.map(item => `
       <tr>
         <td>${item.description}</td>

@@ -13,6 +13,14 @@ function formatDateFR(dateString) {
   return `${jour}/${mois}/${annee}`;
 }
 
+  // PDF
+function generatePDF(id) {
+  window.open(`/api/pdf/devis/${id}`, "_blank");
+}
+function generateFacturePDF(id) {
+  window.open(`http://localhost:3000/api/pdf/facture/${id}`, "_blank");
+}
+
 fetch(`http://localhost:3000/api/client/${clientId}`)
   .then(res => res.json())
   .then(client => {
@@ -43,8 +51,10 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
         <thead>
           <tr>
             <th>Numéro</th>
+            <th>Date</th>
             <th>Montant</th>
             <th>Statut</th>
+            <th>PDF</th>
           </tr>
         </thead>
         <tbody>
@@ -54,8 +64,17 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
       html += `
         <tr>
           <td>${d.numero}</td>
+          <td>${d.date_devis}</td>
           <td>${d.montant} €</td>
           <td>${d.statut}</td>
+          <td>
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary btn-sm"
+              onclick="generatePDF(${d.id})"
+              <i class="bi bi-file-earmark-pdf"></i> PDF
+            </button>
+          </td>
         </tr>
       `;
     });
@@ -77,8 +96,10 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
         <thead>
           <tr>
             <th>Numéro</th>
+            <th>Date</th>
             <th>Montant</th>
             <th>Statut</th>
+            <th>PDF</th>
           </tr>
         </thead>
         <tbody>
@@ -88,8 +109,17 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
       html += `
         <tr>
           <td>${f.numero}</td>
+          <td>${f.date_facture}</td>
           <td>${f.montant} €</td>
           <td>${f.statut}</td>
+          <td>
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary btn-sm"
+              onclick="generateFacturePDF(${f.id})"
+              <i class="bi bi-file-earmark-pdf"></i> PDF
+            </button>
+          </td>
         </tr>
       `;
     });
@@ -98,6 +128,20 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
 
     container.innerHTML = html;
   });
+
+
+//UX des modes de paiement
+function formatMode(mode_paiement) {
+  switch (mode_paiement) {
+    case "virement_A": return "Virement compte A";
+    case "virement_B": return "Virement compte B";
+    case "cb": return "Carte Bancaire";
+    case "cheque": return "Chèque";
+    case "especes": return "Espèces";
+    case "autre": return "Autre";
+    default: return mode_paiement;
+  }
+}
 
   fetch("http://localhost:3000/api/paiement")
   .then(res => res.json())
@@ -115,8 +159,9 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
         <thead>
           <tr>
             <th>Facture</th>
-            <th>Montant</th>
             <th>Date</th>
+            <th>Montant</th>
+            <th>Mode de paiement</th>
           </tr>
         </thead>
         <tbody>
@@ -126,8 +171,9 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
       html += `
         <tr>
           <td>${p.facture?.numero || "-"}</td>
-          <td>${p.montant} €</td>
           <td>${formatDateFR(p.date_paiement)}</td>
+          <td>${p.montant} €</td>
+          <td>${formatMode(p.mode_paiement)}</td>
         </tr>
       `;
     });
@@ -136,3 +182,8 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
 
     container.innerHTML = html;
   });
+
+
+  //Rendre les PDF ouvrable
+  window.generateFacturePDF = generateFacturePDF;
+  window.generatePDF = generatePDF;

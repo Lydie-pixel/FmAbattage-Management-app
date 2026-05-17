@@ -23,6 +23,7 @@ function formatMode(mode_paiement) {
   switch (mode_paiement) {
     case "virement_A": return "Virement compte A";
     case "virement_B": return "Virement compte B";
+    case "cb": return "Carte Bancaire";
     case "cheque": return "Chèque";
     case "especes": return "Espèces";
     case "autre": return "Autre";
@@ -150,7 +151,7 @@ function loadFactures() {
 
       select.innerHTML = "";
 
-      // 🔥 garder uniquement les factures non payées
+      // garder uniquement les factures non payées
       const facturesFiltrees = data.filter(f =>
         f.statut !== "payee"
       );

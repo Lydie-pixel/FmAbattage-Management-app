@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../asset/css/Relance.css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <header>
+        <div>
+            <strong>FM ABATTAGE</strong><br>
+            14 rue du Thou<br>
+            01240 Saint Paul de Varax<br>
+            Tél : 06 78 69 66 86<br>
+            Email : fmabattage@gmail.com
+        </div>
+
+        <div>
+            <img src="data:image/png;base64,{{logo}}" width="100">
+        </div>
+    </header>
+
+
+    <!--Client-->
+    <section class="client">
+            {{client_nom}}<br>
+            {{client_adresse}}<br>
+            {{client_code_postal}} {{client_ville}}<br>
+            {{client_tel}}
+    </section>
+
+        <!--Intitulé-->
+    <section class="meta">
+        <div class="objet">
+            <span>Objet : Mise en demeure de payer
+                <br>
+                Lettre recommandée avec accusé de réception
+                <br>
+                AR n° {{ar}}
+            </span>
+        </div>
+        <div class="date">
+            <span>Saint Paul de Varax, le {{date}} </span>
+        </div>
+    </section>
+
+    <!--Corps-->
+    <section class="corps">
+        <p>
+            Madame, Monsieur,
+        </p>
+        <p>
+            Malgré nos précédentes relances restées sans réponse en date des
+            {{date_relance_1}}, {{date_relance_2}} et {{date_relance_3}},
+            la facture n° {{numero_facture}}, émise le {{date_facture}} et arrivée
+            à échéance le {{date_echeance}}, demeure impayée à ce jour.
+        </p>
+            {{paiement_partiel_demeure}}
+        <p>
+            Par la présente, nous vous mettons en demeure de régler la somme totale de
+            {{total_avec_penalites}}, correspondant :
+        </p>
+
+        <ul>
+            <li>
+                {{reste_du}} au montant principal de la facture ;
+            </li>
+
+            <li>
+                {{penalite}} de pénalités de retard applicables conformément à nos conditions générales de vente et à l’article L441-10 du Code de commerce.
+            </li>
+        </ul>
+        <p>
+            Nous vous demandons de procéder au règlement sous un délai de {{delai_avant_poursuite}} jours à compter de la réception du présent courrier.
+        </p>
+        <p>
+            À défaut de paiement dans ce délai, nous serons contraints d’engager une procédure de recouvrement contentieuse afin d’obtenir le règlement des sommes dues, ainsi que l’indemnisation du préjudice subi.
+        </p>
+        <p>
+            Vous trouverez ci-joint une copie de la facture concernée ainsi que des précédents courriers de relance.
+        </p>
+        <p>
+            Si votre règlement a été effectué avant réception de ce courrier, nous vous remercions de ne pas tenir compte de la présente mise en demeure.
+        </p>
+        <p>
+            Veuillez agréer, Madame, Monsieur, l’expression de nos salutations distinguées.
+        </p>
+    </section>
+
+
+    <!--Signature-->
+    <section class="signature">
+        <p>
+            Franck Meunier<br>
+            Dirigeant de FM Abattage
+        </p>
+    </section>
+
+  </body>
+</html>

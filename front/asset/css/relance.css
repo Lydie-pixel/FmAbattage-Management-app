@@ -1,0 +1,95 @@
+.relance-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* ===== TOP ===== */
+
+.top-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 220px;
+    gap: 20px;
+    align-items: stretch;
+}
+
+/* ===== FORM ===== */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* ===== CARDS ===== */
+
+.content-card h5 {
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* ===== ACTIONS ===== */
+
+.actions-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* ===== HISTORIQUE ===== */
+
+.historique-card {
+    min-height: 180px;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.mise-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.ar-field {
+    grid-column: 1 / -1;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 900px) {
+
+    .top-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .actions-card {
+        flex-direction: row;
+        gap: 10px;
+    }
+}
+
+.readonly-field {
+    background-color: #f8f9fa;
+    pointer-events: none;
+}
+
+.textarea-like {
+    min-height: 120px;
+    white-space: pre-wrap;
+}

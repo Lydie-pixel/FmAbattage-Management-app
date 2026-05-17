@@ -23,6 +23,7 @@ const Paiement = sequelize.define("Paiement", {
   type: DataTypes.ENUM(
     'virement_A',
     'virement_B',
+    'cb',
     'cheque',
     'especes',
     'autre'

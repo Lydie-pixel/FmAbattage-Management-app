@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../asset/css/Relance.css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <header>
+        <div>
+            <strong>FM ABATTAGE</strong><br>
+            14 rue du Thou<br>
+            01240 Saint Paul de Varax<br>
+            Tél : 06 78 69 66 86<br>
+            Email : fmabattage@gmail.com
+        </div>
+
+        <div>
+            <img src="data:image/png;base64,{{logo}}" width="100">
+        </div>
+    </header>
+
+
+    <!--Client-->
+    <section class="client">
+            {{client_nom}}<br>
+            {{client_adresse}}<br>
+            {{client_code_postal}} {{client_ville}}<br>
+            {{client_tel}}
+    </section>
+
+        <!--Intitulé-->
+    <section class="meta">
+        <div class="objet">
+            <span>Objet : Lettre de deuxième relance de paiement – Facture  n° {{numero_facture}}</span>
+        </div>
+        <div class="date">
+            <span>Saint Paul de Varax, le {{date}} </span>
+        </div>
+    </section>
+
+    <!--Corps-->
+    <section class="corps">
+        <p>
+            Madame, Monsieur,
+        </p>
+        <p>
+            Malgré notre précédente relance en date du {{date_relance_1}}, nous constatons que la facture n° {{numero_facture}} d'un montant de {{montant_facture}}, émise le {{date_facture}} et arrivée à échéance le {{date_echeance}}, demeure impayée à ce jour.
+        </p>
+            {{paiement_partiel}}
+        <p>
+            Nous vous remercions de bien vouloir régulariser votre situation dans les meilleurs délais afin d’éviter l’application de pénalités de retard prévues par nos conditions générales de vente.
+        </p>
+        <p>
+            Vous trouverez ci-joint une copie de la facture concernée ainsi qu’une copie de notre précédent courrier de relance.
+        </p>
+        <p>
+            Si votre règlement nous a été adressé entre-temps, nous vous remercions de ne pas tenir compte de ce courrier.
+        </p>
+        <p>
+            Nous restons à votre disposition pour toute information complémentaire et vous prions d’agréer, Madame, Monsieur, l’expression de nos salutations distinguées.
+        </p>
+    </section>
+
+
+    <!--Signature-->
+    <section class="signature">
+        <p>
+            Franck Meunier<br>
+            Dirigeant de FM Abattage
+        </p>
+    </section>
+
+  </body>
+</html>

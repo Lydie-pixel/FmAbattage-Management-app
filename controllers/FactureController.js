@@ -33,6 +33,11 @@ exports.getFactureById = async (req, res) => {
         {
           model: Client,
           as: "client"
+        },
+
+        {
+          model: Paiement,
+          as: "paiements"
         }
       ]
     });
@@ -68,7 +73,7 @@ exports.createFactureFromDevis = async (req, res) => {
       return res.status(400).json({ error: "Le devis doit être accepté" });
     }
 
-    // 🔢 génération numéro facture
+    // génération numéro facture
     const year = new Date().getFullYear();
 
     const lastFacture = await Facture.findOne({
@@ -84,7 +89,7 @@ exports.createFactureFromDevis = async (req, res) => {
 
     const numero = `F-${year}-${String(nextNumber).padStart(3, '0')}`;
 
-    // 💰 calcul montant
+    // calcul montant
     let total = 0;
 
     devis.items.forEach(item => {
@@ -94,7 +99,7 @@ exports.createFactureFromDevis = async (req, res) => {
     const frais = parseFloat(frais_deplacement_final) || 0;
       total += frais;
 
-    // 🧾 création facture
+    // création facture
     const facture = await Facture.create({
       numero,
       devis_id: devis.id,

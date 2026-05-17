@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Nouvelle relance</title>
+
+        <link href="../asset/img/favicon/favicon.png" rel="icon">
+        <link href="../asset/css/style.css" rel="stylesheet">
+        <link href="../asset/css/table.css" rel="stylesheet">
+        <link href="../asset/css/relance.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    
+    </head>
+
+    <body>
+        <div id="header"></div>
+
+        <main>
+
+            <h2>Nouvelle relance</h2>
+
+            <form id="relanceForm">
+            <div class="relance-layout">
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Facture
+                    </label>
+
+                    <select
+                        id="facture_id"
+                        class="form-select">
+                        <option value="">
+                            Sélectionner une facture
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Ligne du haut -->
+                <div class="top-grid">
+
+                    <div class="content-card info-card">
+                        <h5>Infos facture</h5>
+                        <div id="factureInfos"></div>
+                    </div>
+
+                    <div class="content-card historique-card">
+                        <h5>Historique des relances</h5>
+                        <div id="historiqueRelances"></div>
+                    </div>
+
+                    <div class="content-card actions-card">
+                        <button 
+                            type="button"
+                            class="btn btn-danger w-100 mb-2"
+                            onclick="window.location.href='/pages/relance.html'">
+                            Retour
+                        </button>
+
+                        <button
+                            type="submit" form="relanceForm"
+                            class="btn btn-success w-100">
+                            Créer la relance
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Champs -->
+                
+                    <div class="form-grid">
+
+                        <div class="content-card">
+                            <label class="form-label">
+                                Niveau de la relance
+                            </label>
+
+                            <select id="niveau" class="form-select">
+                                <option value="relance_1">Première relance</option>
+                                <option value="relance_2">Deuxième relance</option>
+                                <option value="relance_3">Troisième relance</option>
+                                <option value="mise_en_demeure">Mise en demeure</option>
+                            </select>
+                        </div>
+
+                        <div class="content-card">
+                            <label class="form-label">
+                                Date de relance
+                            </label>
+
+                            <input
+                                type="date"
+                                id="date_relance"
+                                class="form-control">
+                        </div>
+
+                        <div id="miseEnDemeureFields" class="full-width">
+                            
+                            <div class="mise-grid">
+
+                                <div class="content-card">
+                                    <label class="form-label">
+                                        Pénalités
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="penalites"
+                                        class="form-control">
+                                </div>
+
+                                <div class="content-card">
+                                    <label class="form-label">
+                                        Délai avant poursuite
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="delai_avant_poursuite"
+                                        class="form-control">
+                                </div>
+
+                                <div class="content-card ar-field">
+                                    <label class="form-label">
+                                        Numéro AR
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        id="numero_ar"
+                                        class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="content-card full-width">
+                            <label class="form-label">
+                                Commentaire
+                            </label>
+
+                            <textarea
+                                id="commentaire"
+                                class="form-control"
+                                rows="5">
+                            </textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </main>
+
+        <div id="footer"></div>
+    </body>
+
+    <script src="/asset/js/relances/relanceCree.js"></script>
+    <script src="/asset/js/componement.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</html>

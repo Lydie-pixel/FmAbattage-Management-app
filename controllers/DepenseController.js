@@ -70,7 +70,7 @@ exports.getDepensesStats = async (req, res) => {
 
   let where = {};
 
-  // 📅 filtre date
+  // filtre date
   if (year) {
     const start = month
       ? new Date(year, month - 1, 1)
@@ -87,7 +87,7 @@ exports.getDepensesStats = async (req, res) => {
 
   try {
 
-    // 🔹 total global
+    // total global
     const totalResult = await Depense.findAll({
       attributes: [
         [fn("SUM", col("montant")), "total"]
@@ -98,7 +98,7 @@ exports.getDepensesStats = async (req, res) => {
 
     const total = parseFloat(totalResult[0].total) || 0;
 
-    // 🔹 total par type
+    // total par type
     const parType = await Depense.findAll({
       attributes: [
         "type",
