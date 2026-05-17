@@ -8,8 +8,12 @@ body {
     font-family: Arial, sans-serif;
     font-size: 14px;
     color: #222;
-    padding-bottom: 120px;
-    line-height: 1.6;
+    padding: 35px;
+    line-height: 1.4;
+}
+
+section {
+    page-break-inside: avoid;
 }
 
 /* HEADER */
@@ -49,11 +53,21 @@ header {
 
 .corps {
     text-align: left;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+}
+
+ul {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 5px;
 }
 
 .corps p {
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 /* SIGNATURE */
@@ -61,4 +75,5 @@ header {
 .signature {
     text-align: right;
     margin-top: 20px;
+    page-break-inside: avoid;
 }

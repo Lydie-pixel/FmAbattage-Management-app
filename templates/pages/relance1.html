@@ -35,7 +35,7 @@
     <!--Intitulé-->
     <section class="meta">
         <div class="objet">
-            <span>Objet : Lettre de première relance pour la facture n° {{numero_facture}}</span>
+            <span>Objet : Lettre de première relance amiable – Facture n° {{numero_facture}}</span>
         </div>
         <div class="date">
             <span>Saint Paul de Varax, le {{date}} </span>
@@ -49,14 +49,20 @@
             Madame, Monsieur,
         </p>
         <p>
-            Sauf erreur de notre part, nous n’avons à ce jour toujours pas reçu le paiement de la facture n° {{numero_facture}}, en date du {{date_facture}}, et payable avant le {{date_echeance}}. Nous vous demandons donc de nous faire parvenir le règlement de cette facture d'un montant de {{montant_facture}}    
-            immédiatement. A défaut de paiement suite à cette relance, nous serons amenés à vous facturer les intérêts de retard prévus dans nos conditions générales de vente.
+            Sauf erreur ou omission de notre part, le règlement de la facture n° {{numero_facture}} d'un montant de {{montant_facture}}, émise le {{date_facture}} et arrivée à échéance le {{date_echeance}}, ne nous est pas encore parvenu à ce jour.
+        </p>
+        {{paiement_partiel}}
+        <p>
+            Nous vous remercions de bien vouloir procéder à son règlement dans les meilleurs délais.
         </p>
         <p>
-            Vous trouverez en pièce jointe de ce courrier une photocopie de la facture concernée. Veuillez ne pas tenir compte de cette lettre si votre règlement nous a été adressé avant la réception de ce courrier.
+            Vous trouverez ci-joint une copie de la facture concernée afin de faciliter vos démarches. Si votre paiement a été effectué entre-temps, nous vous remercions de ne pas tenir compte de la présente relance.
         </p>
         <p>
-            Nous vous prions d'agréer, Madame Monsieur, nos salutations respectueuses.
+            À défaut de régularisation, des pénalités de retard prévues par nos conditions générales de vente pourront être appliquées.
+        </p>
+        <p>
+            Restant à votre disposition pour toute information complémentaire, nous vous prions d’agréer, Madame, Monsieur, l’expression de nos salutations distinguées.
         </p>
     </section>
 
@@ -68,6 +74,5 @@
             Dirigeant de FM Abattage
         </p>
     </section>
-    
   </body>
 </html>

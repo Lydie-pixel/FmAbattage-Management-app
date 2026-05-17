@@ -46,6 +46,16 @@ exports.generateRelancePDF = async (req, res) => {
         r => r.niveau === "relance_3"
     );
 
+    // Helpers
+    const formatDate = (d) =>
+      d ? new Date(d).toLocaleDateString("fr-FR") : "";
+
+    const formatPrice = (v) =>
+      Number(v || 0).toLocaleString("fr-FR", {
+        minimumFractionDigits: 2,
+      }) + " €";
+
+
     // Calcul paiements
     let totalPaye = 0;
     facture.paiements?.forEach(p => {
@@ -53,6 +63,36 @@ exports.generateRelancePDF = async (req, res) => {
     });
 
     const reste = Number(facture.montant) - totalPaye;
+
+    const hasPaiementPartiel =
+      totalPaye > 0 && reste > 0;
+      let paiementPartielTexte = "";
+        if (hasPaiementPartiel) {
+          paiementPartielTexte = `
+            <p>
+              Nous avons bien pris en compte un règlement partiel
+              d’un montant de ${formatPrice(totalPaye)}.
+            </p>
+
+            <p>
+              Toutefois, un solde restant dû de
+              ${formatPrice(reste)}
+              demeure impayé au titre cette facture.
+            </p>
+          `;
+        }
+
+      let paiementPartielTexteDemeure = "";
+      if (hasPaiementPartiel) {
+        paiementPartielTexteDemeure = `
+          <p>
+            Et malgré un règlement partiel pris en compte par nos
+            services d’un montant de ${formatPrice(totalPaye)},
+            un solde de ${formatPrice(reste)} reste dû concernant cette facture,
+            d’un montant total de ${formatPrice(facture.montant)}.
+          </p>
+        `;
+      }
 
     // Calule échéance de la facture
     const dateFacture =
@@ -64,6 +104,10 @@ exports.generateRelancePDF = async (req, res) => {
     dateEcheance.setDate(
     dateEcheance.getDate() + 30
     );
+
+    // Calcule des pénalité
+    const totalAvecPenalites =
+    reste + Number(relance.penalites || 0);
 
     // Charger template selon niveau
     let templatePath = "";
@@ -94,15 +138,6 @@ exports.generateRelancePDF = async (req, res) => {
     const logoPath = path.join(__dirname, "../templates/asset/img/logo.png");
     const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
 
-    // Helpers
-    const formatDate = (d) =>
-      d ? new Date(d).toLocaleDateString("fr-FR") : "";
-
-    const formatPrice = (v) =>
-      Number(v || 0).toLocaleString("fr-FR", {
-        minimumFractionDigits: 2,
-      }) + " €";
-
     // Remplacer les variables
     html = html
       .replace("{{logo}}",logoBase64)
@@ -122,7 +157,10 @@ exports.generateRelancePDF = async (req, res) => {
       .replaceAll("{{penalite}}", formatPrice(relance.penalites))
       .replaceAll("{{ar}}", relance.numero_ar || "")
       .replaceAll("{{delai_avant_poursuite}}", relance.delai_avant_poursuite || "")
-      .replaceAll("{{reste_du}}", formatPrice(reste));
+      .replaceAll("{{reste_du}}", formatPrice(reste))
+      .replaceAll("{{total_avec_penalites}}",formatPrice(totalAvecPenalites))
+      .replaceAll("{{paiement_partiel}}", paiementPartielTexte)
+      .replaceAll("{{paiement_partiel_demeure}}", paiementPartielTexteDemeure);
 
     // PDF
     const browser = await puppeteer.launch();
@@ -141,10 +179,11 @@ exports.generateRelancePDF = async (req, res) => {
       format: "A4",
       printBackground: true,
       margin: {
-        top: "15mm",
+        top: "8mm",
         left: "10mm",
         right: "10mm",
-      },
+        bottom: "8mm"
+      }
     });
 
     await browser.close();
