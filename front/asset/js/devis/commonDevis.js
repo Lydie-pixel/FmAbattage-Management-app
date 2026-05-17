@@ -1,16 +1,3 @@
-// Mettre les dates au format FR
-function formatDateFR(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-
-  const jour = String(date.getDate()).padStart(2, "0");
-  const mois = String(date.getMonth() + 1).padStart(2, "0");
-  const annee = date.getFullYear();
-
-  return `${jour}/${mois}/${annee}`;
-}
-
 //Charger les clients
 fetch("http://localhost:3000/api/client")
   .then(res => res.json())
@@ -20,7 +7,8 @@ fetch("http://localhost:3000/api/client")
     data.forEach(c => {
       select.innerHTML += `<option value="${c.id}">${c.nom}</option>`;
     });
-  });
+  }
+);
 
 // Met à jour les totaux à chaque changement de quantité ou de prix
 function updateTotals() {

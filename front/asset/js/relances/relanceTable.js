@@ -1,50 +1,12 @@
-// Mettre les dates au format FR
-function formatDateFR(dateString) {
-  if (!dateString) return "";
+import {
+    formatDateFR,
+    formatPrice,
+    formatNiveau,
+    formatStatut
+} from "../helpers/format.js";
 
-  const date = new Date(dateString);
-
-  const jour = String(date.getDate()).padStart(2, "0");
-  const mois = String(date.getMonth() + 1).padStart(2, "0");
-  const annee = date.getFullYear();
-
-  return `${jour}/${mois}/${annee}`;
-}
 
 let editingId = null;
-
-//Mettre les prix au format €
-function formatPrice(value) {
-  return Number(value).toLocaleString(
-    "fr-FR",
-    {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }
-    ) + " €";
-}
-
-//UX des niveau de relance
-function formatNiveau(niveau){
-    switch (niveau){
-        case "relance_1": return "Première relance";
-        case "relance_2": return "Deuxième relance";
-        case "relance_3": return "Troisième relance";
-        case "mise_en_demeure": return "Mise en demeure";
-        default: return niveau;
-    }
-}
-
-//UX des statut
-function formatStatut(niveau){
-    switch (niveau){
-        case "envoyee": return "Envoyée";
-        case "payee": return "Payée";
-        case "procedure": return "En procédure";
-        case "annulee": return "Annulée";
-        default: return niveau;
-    }
-}
 
 // Changement de statut
 document.addEventListener("change", async (e) => {

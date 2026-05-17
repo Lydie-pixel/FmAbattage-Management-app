@@ -1,3 +1,6 @@
+
+
+
 // Ouverture du modal de création d'un client
 function openCreateModal() {
   document.getElementById("modalTitle").innerText = "Nouveau client";
@@ -68,9 +71,9 @@ window.addEventListener("DOMContentLoaded", () => {
   // date devis = aujourd'hui
   document.getElementById("date_devis").value = formatDate(today);
 
-  // échéance = +14 jours
+  // échéance = +15 jours
   const echeance = new Date();
-  echeance.setDate(today.getDate() + 14);
+  echeance.setDate(today.getDate() + 15);
 
   document.getElementById("date_echeance").value = formatDate(echeance);
 });
@@ -108,16 +111,16 @@ document.getElementById("devisForm").addEventListener("submit", function(e) {
     })
   })
 
-  .then(res => res.json()) // 🔥 on revient au JSON
+  .then(res => res.json())
   .then(data => {
     console.log("DATA :", data);
 
   const url = `http://localhost:3000/api/pdf/devis/${data.id}`;
 
-  // 👉 ouvre le PDF
+  // ouvre le PDF
   window.open(url, "_blank");
 
-  // 👉 redirige vers la liste
+  // redirige vers la liste
   window.location.href = "/pages/devis.html";
 })
   .catch(err => {

@@ -1,15 +1,6 @@
-// Format date FR
-function formatDateFR(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-
-  const jour = String(date.getDate()).padStart(2, "0");
-  const mois = String(date.getMonth() + 1).padStart(2, "0");
-  const annee = date.getFullYear();
-
-  return `${jour}/${mois}/${annee}`;
-}
+import {
+    formatDateFR
+} from "../helpers/format.js";
 
 const statutLabel = {
   en_attente: "En attente",

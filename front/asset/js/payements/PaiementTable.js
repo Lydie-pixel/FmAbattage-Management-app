@@ -1,35 +1,10 @@
-// Mettre les dates au format FR
-function formatDateFR(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-
-  const jour = String(date.getDate()).padStart(2, "0");
-  const mois = String(date.getMonth() + 1).padStart(2, "0");
-  const annee = date.getFullYear();
-
-  return `${jour}/${mois}/${annee}`;
-}
+import {
+    formatDateFR,
+    formatPrice,
+    formatMode
+} from "../helpers/format.js";
 
 let editingId = null;
-
-//Mettre les prix au format €
-function formatPrice(value) {
-  return Number(value).toLocaleString("fr-FR") + " €";
-}
-
-//UX des modes de paiement
-function formatMode(mode_paiement) {
-  switch (mode_paiement) {
-    case "virement_A": return "Virement compte A";
-    case "virement_B": return "Virement compte B";
-    case "cb": return "Carte Bancaire";
-    case "cheque": return "Chèque";
-    case "especes": return "Espèces";
-    case "autre": return "Autre";
-    default: return mode_paiement;
-  }
-}
 
 // Trier par année
 function initYearFilter() {
@@ -62,7 +37,7 @@ function loadPaie () {
         return year == selectedYear;
       });
 
-      // 🔥 Calcul total payé par facture
+      // Calcul total payé par facture
       const paiementsParFacture = {};
 
       data.forEach(p => {

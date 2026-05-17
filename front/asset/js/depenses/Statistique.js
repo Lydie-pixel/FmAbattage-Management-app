@@ -1,33 +1,9 @@
-function formatType(type) {
-  switch (type) {
-    case "frais_carburant": return "Carburant";
-    case "frais_materiel": return "Matériel";
-    case "charges": return "Charges";
-    case "autre": return "Autre";
-    default: return type;
-  }
-}
-
-function getDepenseIcon(type) {
-
-  switch(type){
-
-    case "frais_carburant":
-      return "bi-fuel-pump-fill";
-
-    case "frais_materiel":
-      return "bi-tools";
-
-    case "charges":
-      return "bi-bank";
-
-    case "autre":
-      return "bi-wallet2";
-
-    default:
-      return "bi-cash";
-  }
-}
+import {
+    formatDateFR,
+    formatPrice,
+    getDepenseIcon,
+    formatType
+} from "../helpers/format.js";
 
 function loadStats() {
   const year = document.getElementById("year").value;
@@ -37,20 +13,16 @@ function loadStats() {
     ? `/api/stats/month/${year}/${month}`
     : `/api/stats/year/${year}`;
 
-  function formatPrice(value) {
-    return Number(value || 0).toLocaleString("fr-FR") + " €";
-  }
-
   fetch(url)
     .then(res => res.json())
     .then(data => {
 
-      // 👉 CAS MENSUEL (simple)
+      // CAS MENSUEL (simple)
       if (month) {
         updateUI(data);
       }
 
-      // 👉 CAS ANNUEL (on additionne)
+      // CAS ANNUEL (on additionne)
       else {
         let global = {
           ca: 0,
@@ -76,9 +48,6 @@ function loadStats() {
 }
 
 function updateUI(data) {
-  function formatPrice(value) {
-    return Number(value || 0).toLocaleString("fr-FR") + " €";
-  }
 
   const ca = data.ca || 0;
   const paye = data.paye || 0;
@@ -94,7 +63,7 @@ function updateUI(data) {
   const benefEl = document.getElementById("benefice");
   benefEl.innerText = formatPrice(benef);
 
-  // 🎨 couleur dynamique
+  // couleur dynamique
   benefEl.style.color = benef >= 0 ? "green" : "red";
 }
 
