@@ -24,6 +24,26 @@ function loadFactures() {
     });
 }
 
+// UX Niveau
+function formatNiveau(niveau) {
+    switch (niveau) {
+        case "relance_1":
+            return "Première relance";
+
+        case "relance_2":
+            return "Deuxième relance";
+
+        case "relance_3":
+            return "Troisième relance";
+
+        case "mise_en_demeure":
+            return "Mise en demeure";
+
+        default:
+            return niveau;
+    }
+}
+
 //Afficher les infos réccupérer
 document
   .getElementById("facture_id")
@@ -53,8 +73,6 @@ document
         .innerHTML = `
 
         <div class="card p-3 mb-3">
-
-          <h5>Informations facture</h5>
 
           <p>
             <strong>Facture :</strong>
@@ -97,7 +115,6 @@ fetch("/api/relance")
 
     let htmlHistorique = `
       <div class="card p-3 mb-3">
-        <h5>Historique des relances</h5>
     `;
 
     if (historique.length === 0) {
@@ -114,7 +131,6 @@ fetch("/api/relance")
             <tr>
               <th>Niveau</th>
               <th>Date</th>
-              <th>Statut</th>
             </tr>
           </thead>
           <tbody>
@@ -124,9 +140,8 @@ fetch("/api/relance")
 
         htmlHistorique += `
           <tr>
-            <td>${r.niveau}</td>
+            <td>${formatNiveau(r.niveau)}</td>
             <td>${r.date_relance}</td>
-            <td>${r.statut}</td>
           </tr>
         `;
 

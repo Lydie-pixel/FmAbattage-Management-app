@@ -46,6 +46,36 @@ function formatStatut(niveau){
     }
 }
 
+// Changement de statut
+document.addEventListener("change", async (e) => {
+    if (!e.target.classList.contains("statut-select")) {
+        return;
+    }
+
+    const id = e.target.dataset.id;
+    const statut = e.target.value;
+
+    try {
+        const res = await fetch(`/api/relance/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ statut })
+        });
+
+        if (!res.ok) {
+            throw new Error("Erreur modification statut");
+        }
+
+        alert("Statut mis à jour");
+    } catch (error) {
+        console.error(error);
+        alert(error.message);
+    }
+
+});
+
 //Tableau
 function relance() {
 
@@ -70,6 +100,7 @@ function relance() {
               <th>Montant restant</th>
               <th>Pénalités</th>
               <th>Numéro AR</th>
+              <th>Commentaire</th>
               <th>Statut</th>
               <th>Actions</th>
             </tr>
@@ -124,12 +155,39 @@ function relance() {
             </td>
 
             <td>
-              ${formatStatut(relance.statut || "-")}
+              ${relance.commentaire || "-"}
+            </td>
+
+            <td>
+              <select class="form-select statut-select"
+                  data-id="${relance.id}">
+                    
+                <option value="envoyee"
+                    ${relance.statut === "envoyee" ? "selected" : ""}>
+                    Envoyée
+                </option>
+
+                <option value="payee"
+                    ${relance.statut === "payee" ? "selected" : ""}>
+                    Payée
+                </option>
+
+                <option value="procedure"
+                    ${relance.statut === "procedure" ? "selected" : ""}>
+                    En procédure
+                </option>
+
+                <option value="annulee"
+                    ${relance.statut === "annulee" ? "selected" : ""}>
+                    Annulée
+                </option>
+            </select>
             </td>
 
             <td>
                 <button
-                    class="btn btn-sm btn-secondary">
+                    class="btn btn-sm btn-secondary"
+                    onclick="viewRelance(${relance.id})">
                     Voir
                 </button>
                 <button
@@ -175,6 +233,14 @@ function generateRelancePDF(id) {
         `/api/pdf/relance/${id}`,
         "_blank"
     );
+
+}
+
+//Voir la page relance
+function viewRelance(id) {
+
+    window.location.href =
+        `/pages/relanceVoir.html?id=${id}`;
 
 }
 

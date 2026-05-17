@@ -83,3 +83,13 @@
         gap: 10px;
     }
 }
+
+.readonly-field {
+    background-color: #f8f9fa;
+    pointer-events: none;
+}
+
+.textarea-like {
+    min-height: 120px;
+    white-space: pre-wrap;
+}

@@ -136,7 +136,30 @@ exports.createRelance = async (req, res) => {
 
 exports.getRelanceById = async (req, res) => {
   try {
-    const relance = await Relance.findByPk(req.params.id);
+    const relance = await Relance.findByPk(req.params.id,
+      {
+          include: [
+              {
+                  model: Facture,
+                  as: "facture",
+                  include: [
+                      {
+                          model: Client,
+                          as: "client"
+                      },
+                      {
+                          model: Paiement,
+                          as: "paiements"
+                      },
+                      {
+                          model: Relance,
+                          as: "relances"
+                      }
+                  ]
+              }
+          ]
+      }
+    );
 
     if (!relance) {
       return res.status(404).json({ error: "Relance non trouvée" });
