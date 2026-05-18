@@ -23,7 +23,7 @@
                     <h1>Tableau de payement</h1>
                 </div>
                 <div class="card-cell">
-                    <button class="btn btn-primary mb-3" onclick="openCreateModal()">
+                    <button class="btn btn-primary mb-3" onclick="openCreatePaiementModal()">
                     Nouveau Paiement
                     </button>
                     <select 
@@ -52,7 +52,7 @@
 
                                 <input 
                                     type="number"
-                                    id="montant"
+                                    id="paiement_montant"
                                     class="form-control mb-3"
                                     placeholder="Montant">
 
@@ -69,25 +69,12 @@
                                     <option value="especes">Espèces</option>
                                     <option value="autre">Autre</option>
                                 </select>
-
                             </form>
-
                         </div>
 
                         <div class="modal-footer">
-                            <button 
-                                type="button"
-                                class="btn btn-danger"
-                                data-bs-dismiss="modal">
-                                Annuler
-                            </button>
-
-                            <button 
-                                type="button"
-                                class="btn btn-success"
-                                onclick="addPaie()">
-                                Valider
-                            </button>
+                            <button type="button"class="btn btn-danger"data-bs-dismiss="modal">Annuler</button>
+                            <button type="button" class="btn btn-success"onclick="savePaiement()">Valider</button>
                         </div>
                     </div>
                 </div>
@@ -96,6 +83,7 @@
         
         <div id="footer"></div>
     </body>
+    <script src="/asset/js/helpers/modals.js"></script>
     <script type="module" src="/asset/js/payements/PaiementTable.js"></script>
     <script src="/asset/js/componement.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

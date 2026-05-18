@@ -137,71 +137,6 @@ function loadFactures() {
     });
 }
 
-// Ajouter un paiement
-function addPaie() {
-
-  const data = {
-    facture_id: document.getElementById("facture_id").value,
-    montant: document.getElementById("montant").value,
-    date_paiement: document.getElementById("date_paiement").value,
-    mode_paiement: document.getElementById("mode_paiement").value
-  };
-
-  const method = editingId ? "PUT" : "POST";
-  const url = editingId
-    ? `/api/paiement/${editingId}`
-    : "/api/paiement";
-
-  fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-  .then(async res => {
-
-    const result = await res.json();
-
-    if (!res.ok) {
-      throw new Error(result.error || "Erreur serveur");
-    }
-
-    return result;
-  })
-  .then(result => {
-
-    console.log("Paiement ajouté :", result);
-
-    editingId = null;
-
-    loadPaie();
-
-    bootstrap.Modal
-      .getInstance(document.getElementById("paieModal"))
-      .hide();
-
-    document.getElementById("paieForm").reset();
-  })
-  .catch(error => {
-    console.error(error);
-
-    alert(error.message);
-  });
-}
-
-//Ouviri la modal
-function openCreateModal() {
-
-  editingId = null;
-  document.getElementById("paieForm").reset();
-
-  const modal = new bootstrap.Modal(
-    document.getElementById('paieModal')
-  );
-  modal.show();
-}
-
 //Ouvrir une modale selon l'id
 function openEditModal(id) {
   fetch(`/api/paiement/${id}`)
@@ -226,8 +161,6 @@ window.onload = () => {
 };
 
 window.initYearFilter = initYearFilter
-window.openCreateModal = openCreateModal;
 window.openEditModal = openEditModal;
 window.deletePaiement = deletePaiement;
-window.addPaie = addPaie;
 window. loadPaie = loadPaie

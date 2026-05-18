@@ -22,7 +22,6 @@ fetch("http://localhost:3000/api/facture")
       <tr>
         <th>Numéro</th>
         <th>Client</th>
-        <th>Téléphone</th>
         <th>Montant</th>
         <th>Statut</th>
       </tr>
@@ -39,7 +38,6 @@ factures.forEach(f => {
     <tr>
       <td>${f.numero}</td>
       <td>${f.client?.nom || "-"}</td>
-      <td>${f.client?.tel || "-"}</td>
       <td>${f.montant} €</td>
       <td><span class="badge ${statutBadge(f.statut)}">${statutLabels(f.statut)}</span></td>
     </tr>

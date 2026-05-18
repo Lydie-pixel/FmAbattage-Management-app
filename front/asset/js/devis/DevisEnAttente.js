@@ -32,8 +32,8 @@ function loadDevisAccueil() {
           <tr>
             <th>Numéro du devis</th>
             <th>Client</th>
-            <th>Téléphone</th>
             <th>Date échéance</th>
+            <th>Statut</th>
           </tr>
         </thead>
         <tbody>
@@ -48,8 +48,8 @@ function loadDevisAccueil() {
         <tr>
           <td>${d.numero}</td>
           <td>${d.client?.nom || "-"}</td>
-          <td>${d.client?.tel || "-"}</td>
           <td>${new Date(d.date_echeance).toLocaleDateString("fr-FR")}</td>
+          <td></td>
         </tr>
       `;
     });

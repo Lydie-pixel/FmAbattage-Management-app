@@ -63,30 +63,6 @@ function loadDepenses() {
     });
 }
 
-//Ajouter une dépense
-function addDepense() {
-  const data = {
-    date: document.getElementById("date").value,
-    type: document.getElementById("type").value,
-    description: document.getElementById("description").value,
-    montant: document.getElementById("montant").value
-  };
-
-  fetch("/api/depense", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  })
-.then(() => {
-  loadDepenses();
-  bootstrap.Modal.getInstance(document.getElementById('depenseModal')).hide();
-
-  document.getElementById("date").value = "";
-  document.getElementById("description").value = "";
-  document.getElementById("montant").value = "";
-});
-}
-
 // Supprimer une dépense
 function deleteDepense(id) {
   if (!confirm("Supprimer cette dépense ?")) return;
