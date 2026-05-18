@@ -1,6 +1,3 @@
-
-
-
 // Ouverture du modal de création d'un client
 function openCreateModal() {
   document.getElementById("modalTitle").innerText = "Nouveau client";

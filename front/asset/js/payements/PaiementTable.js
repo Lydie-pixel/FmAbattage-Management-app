@@ -4,22 +4,11 @@ import {
     formatMode
 } from "../helpers/format.js";
 
+import {
+  initYearFilter
+} from "../helpers/dates.js"
+
 let editingId = null;
-
-// Trier par année
-function initYearFilter() {
-  const select = document.getElementById("yearFilter");
-  const currentYear = new Date().getFullYear();
-
-  for (let i = currentYear; i >= currentYear - 5; i--) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    select.appendChild(option);
-  }
-
-  select.value = currentYear;
-}
 
 //Tableau de paiement
 function loadPaie () {
@@ -231,7 +220,14 @@ function openEditModal(id) {
 }
 
 window.onload = () => {
-  initYearFilter();
+  initYearFilter("yearFilter");
   loadPaie();
   loadFactures();
 };
+
+window.initYearFilter = initYearFilter
+window.openCreateModal = openCreateModal;
+window.openEditModal = openEditModal;
+window.deletePaiement = deletePaiement;
+window.addPaie = addPaie;
+window. loadPaie = loadPaie

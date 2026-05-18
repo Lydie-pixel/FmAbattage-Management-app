@@ -38,15 +38,21 @@ document.addEventListener("change", async (e) => {
 
 });
 
+//Voir la page relance
+function viewRelance(id) {
+    window.location.href =
+        `/pages/relanceVoir.html?id=${id}`;
+}
+
+window.viewRelance = viewRelance;
+
 //Tableau
 function relance() {
 
   fetch("/api/relance")
 
     .then(res => res.json())
-
     .then(data => {
-
       const container =
         document.getElementById("tableRelance");
 
@@ -125,22 +131,22 @@ function relance() {
                   data-id="${relance.id}">
                     
                 <option value="envoyee"
-                    ${relance.statut === "envoyee" ? "selected" : ""}>
+                    ${formatStatut(relance.statut === "envoyee" ? "selected" : "")}>
                     Envoyée
                 </option>
 
                 <option value="payee"
-                    ${relance.statut === "payee" ? "selected" : ""}>
+                    ${formatStatut(relance.statut === "payee" ? "selected" : "")}>
                     Payée
                 </option>
 
                 <option value="procedure"
-                    ${relance.statut === "procedure" ? "selected" : ""}>
+                    ${formatStatut(relance.statut === "procedure" ? "selected" : "")}>
                     En procédure
                 </option>
 
                 <option value="annulee"
-                    ${relance.statut === "annulee" ? "selected" : ""}>
+                    ${formatStatut(relance.statut === "annulee" ? "selected" : "")}>
                     Annulée
                 </option>
             </select>
@@ -177,7 +183,6 @@ function relance() {
     .catch(error => {
       console.error(error);
     });
-
 }
 
 window.onload = () => {
@@ -190,20 +195,10 @@ function openPDF(id) {
 }
 
 function generateRelancePDF(id) {
-
     window.open(
         `/api/pdf/relance/${id}`,
         "_blank"
     );
-
-}
-
-//Voir la page relance
-function viewRelance(id) {
-
-    window.location.href =
-        `/pages/relanceVoir.html?id=${id}`;
-
 }
 
 window.generateRelancePDF =

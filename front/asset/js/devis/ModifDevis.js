@@ -39,10 +39,8 @@ fetch(`http://localhost:3000/api/devis/${devisId}`)
         <button class="btn btn-danger" onclick="this.closest('.item').remove(); updateTotals()">❌</button>
       </div>
     `;
-
     container.appendChild(div);
   });
-
   updateTotals();
 }
 

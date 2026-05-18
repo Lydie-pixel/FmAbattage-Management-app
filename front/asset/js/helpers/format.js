@@ -1,5 +1,5 @@
 // ===== DATE =====
-function formatDateFR(dateString) {
+export function formatDateFR(dateString) {
   if (!dateString) return "";
 
   const date = new Date(dateString);
@@ -36,7 +36,7 @@ export function formatNiveau(niveau) {
 }
 
 // ===== MODE DE PAIEMENT =====
-function formatMode(mode_paiement) {
+export function formatMode(mode_paiement) {
     switch (mode_paiement) {
         case "virement_A": return "Virement compte A";
         case "virement_B": return "Virement compte B";
@@ -49,7 +49,7 @@ function formatMode(mode_paiement) {
 }
 
 // ===== TYPES DE DEPENSES =====
-function formatType(type) {
+export function formatType(type) {
   switch (type) {
     case "frais_carburant": return "Carburant";
     case "frais_materiel": return "Matériel";
@@ -60,7 +60,7 @@ function formatType(type) {
 }
 
 // ===== STATUT DES RELANCES =====
-function formatStatut(niveau){
+export function formatStatut(niveau){
     switch (niveau){
         case "envoyee": return "Envoyée";
         case "payee": return "Payée";
@@ -72,7 +72,7 @@ function formatStatut(niveau){
 
 // ===== ICONE DE DEPENSE =====
 
-function getDepenseIcon(type) {
+export function getDepenseIcon(type) {
   switch(type){
     case "frais_carburant": return "bi-fuel-pump-fill";
     case "frais_materiel": return "bi-tools";

@@ -5,6 +5,10 @@ import {
     formatType
 } from "../helpers/format.js";
 
+import {
+  initYearFilter
+} from "../helpers/dates.js";
+
 function loadStats() {
   const year = document.getElementById("year").value;
   const month = document.getElementById("month").value;
@@ -67,24 +71,10 @@ function updateUI(data) {
   benefEl.style.color = benef >= 0 ? "green" : "red";
 }
 
-
-function initYearSelect() {
-  const select = document.getElementById("year");
-  const currentYear = new Date().getFullYear();
-
-  for (let i = currentYear; i >= currentYear - 5; i--) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    select.appendChild(option);
-  }
-
-  // sélection automatique de l'année actuelle
-  select.value = currentYear;
-}
+window.reloadAll = reloadAll;
 
 window.onload = () => {
-  initYearSelect();
+  initYearFilter("year");
   reloadAll();
   paiement();
 };
@@ -164,8 +154,8 @@ factures.forEach(f => {
     <tr>
       <td>${f.numero}</td>
       <td>${f.client?.nom || "-"}</td>
-      <td>${f.montant} €</td>
-      <th>${f.date_facture}</th>
+      <td>${formatPrice(f.montant)}</td>
+      <td>${formatDateFR(f.date_facture)}</td>
     </tr>
   `;
 });
