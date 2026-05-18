@@ -1,36 +1,14 @@
-// Format date FR
-function formatDateFR(dateString) {
-  if (!dateString) return "";
+import {
+    formatDateFR
+} from "../helpers/format.js";
+  
+import {
+  initYearFilter
+} from "../helpers/dates.js"
 
-  const date = new Date(dateString);
-
-  const jour = String(date.getDate()).padStart(2, "0");
-  const mois = String(date.getMonth() + 1).padStart(2, "0");
-  const annee = date.getFullYear();
-
-  return `${jour}/${mois}/${annee}`;
-}
-
-const statutLabel = {
-  en_attente: "En attente",
-  partielle: "Paiement partiel",
-  payee: "Payée"
-};
-
-// Trier par année
-function initYearFilter() {
-  const select = document.getElementById("yearFilter");
-  const currentYear = new Date().getFullYear();
-
-  for (let i = currentYear; i >= currentYear - 5; i--) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    select.appendChild(option);
-  }
-
-  select.value = currentYear;
-}
+import {
+  statutLabels
+} from "../helpers/badges.js"
 
 // Charger les factures
 function facture(){
@@ -118,7 +96,7 @@ function changeStatutFacture(id, statut) {
     body: JSON.stringify({ statut })
   })
   .then(() => {
-    alert("Statut mis à jour 💫");
+    alert("Statut mis à jour");
   })
   .catch(err => console.error(err));
 }
@@ -146,6 +124,9 @@ function generateFacturePDF(id) {
 window.changeStatutFacture = changeStatutFacture;
 window.deleteFacture = deleteFacture;
 window.generateFacturePDF = generateFacturePDF;
+window. facture = facture;
+window.ouvrirCreationFacture = ouvrirCreationFacture;
+window.createFactureFromModal = createFactureFromModal;
 
 // Créer une facture depuis un devis
 function ouvrirCreationFacture() {
@@ -275,6 +256,6 @@ function facturerDepuisListe(id) {
 }
 
 window.onload = () => {
-  initYearFilter();
+  initYearFilter("yearFilter");
   facture();
 };

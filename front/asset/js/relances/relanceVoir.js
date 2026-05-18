@@ -1,42 +1,10 @@
-// ===== FORMAT DATE =====
-function formatDateFR(dateString) {
-    if (!dateString) return "-";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("fr-FR");
-}
+import {
+    formatDateFR,
+    formatPrice,
+    formatNiveau
+} from "../helpers/format.js";
 
-// ===== FORMAT PRIX =====
-function formatPrice(value) {
-    return Number(value || 0).toLocaleString(
-        "fr-FR",
-        {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }
-    ) + " €";
-}
-
-// ===== UX NIVEAU =====
-function formatNiveau(niveau) {
-    switch (niveau) {
-        case "relance_1":
-            return "Première relance";
-
-        case "relance_2":
-            return "Deuxième relance";
-
-        case "relance_3":
-            return "Troisième relance";
-
-        case "mise_en_demeure":
-            return "Mise en demeure";
-
-        default:
-            return niveau;
-    }
-}
-
-// ===== CHARGER RELANCE =====
+// Charger la relance
 async function loadRelance() {
 
     // récupérer id URL

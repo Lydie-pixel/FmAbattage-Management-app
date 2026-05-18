@@ -1,17 +1,11 @@
 const params = new URLSearchParams(window.location.search);
 const clientId = params.get("id");
 
-function formatDateFR(dateString) {
-  if (!dateString) return "";
-
-  const date = new Date(dateString);
-
-  const jour = String(date.getDate()).padStart(2, "0");
-  const mois = String(date.getMonth() + 1).padStart(2, "0");
-  const annee = date.getFullYear();
-
-  return `${jour}/${mois}/${annee}`;
-}
+import {
+    formatDateFR,
+    formatPrice,
+    formatMode
+} from "../helpers/format.js";
 
   // PDF
 function generatePDF(id) {
@@ -128,20 +122,6 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
 
     container.innerHTML = html;
   });
-
-
-//UX des modes de paiement
-function formatMode(mode_paiement) {
-  switch (mode_paiement) {
-    case "virement_A": return "Virement compte A";
-    case "virement_B": return "Virement compte B";
-    case "cb": return "Carte Bancaire";
-    case "cheque": return "Chèque";
-    case "especes": return "Espèces";
-    case "autre": return "Autre";
-    default: return mode_paiement;
-  }
-}
 
   fetch("http://localhost:3000/api/paiement")
   .then(res => res.json())

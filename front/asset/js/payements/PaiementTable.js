@@ -1,50 +1,14 @@
-// Mettre les dates au format FR
-function formatDateFR(dateString) {
-  if (!dateString) return "";
+import {
+    formatDateFR,
+    formatPrice,
+    formatMode
+} from "../helpers/format.js";
 
-  const date = new Date(dateString);
-
-  const jour = String(date.getDate()).padStart(2, "0");
-  const mois = String(date.getMonth() + 1).padStart(2, "0");
-  const annee = date.getFullYear();
-
-  return `${jour}/${mois}/${annee}`;
-}
+import {
+  initYearFilter
+} from "../helpers/dates.js"
 
 let editingId = null;
-
-//Mettre les prix au format €
-function formatPrice(value) {
-  return Number(value).toLocaleString("fr-FR") + " €";
-}
-
-//UX des modes de paiement
-function formatMode(mode_paiement) {
-  switch (mode_paiement) {
-    case "virement_A": return "Virement compte A";
-    case "virement_B": return "Virement compte B";
-    case "cb": return "Carte Bancaire";
-    case "cheque": return "Chèque";
-    case "especes": return "Espèces";
-    case "autre": return "Autre";
-    default: return mode_paiement;
-  }
-}
-
-// Trier par année
-function initYearFilter() {
-  const select = document.getElementById("yearFilter");
-  const currentYear = new Date().getFullYear();
-
-  for (let i = currentYear; i >= currentYear - 5; i--) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    select.appendChild(option);
-  }
-
-  select.value = currentYear;
-}
 
 //Tableau de paiement
 function loadPaie () {
@@ -62,7 +26,7 @@ function loadPaie () {
         return year == selectedYear;
       });
 
-      // 🔥 Calcul total payé par facture
+      // Calcul total payé par facture
       const paiementsParFacture = {};
 
       data.forEach(p => {
@@ -256,7 +220,14 @@ function openEditModal(id) {
 }
 
 window.onload = () => {
-  initYearFilter();
+  initYearFilter("yearFilter");
   loadPaie();
   loadFactures();
 };
+
+window.initYearFilter = initYearFilter
+window.openCreateModal = openCreateModal;
+window.openEditModal = openEditModal;
+window.deletePaiement = deletePaiement;
+window.addPaie = addPaie;
+window. loadPaie = loadPaie

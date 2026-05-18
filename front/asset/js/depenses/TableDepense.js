@@ -1,12 +1,12 @@
-function formatType(type) {
-  switch (type) {
-    case "frais_carburant": return "Carburant";
-    case "frais_materiel": return "Matériel";
-    case "charges": return "Charges";
-    case "autre": return "Autre";
-    default: return type;
-  }
-}
+import {
+    formatDateFR,
+    formatPrice,
+    formatType
+} from "../helpers/format.js";
+
+import {
+  initYearFilter
+} from "../helpers/dates.js"
 
 // Table des dépenses
 function loadDepenses() {
@@ -98,21 +98,9 @@ function deleteDepense(id) {
 }
 
 window.onload = () => {
-  initYearFilter();
+  initYearFilter("yearFilter");
   loadDepenses();
 };
 
-// Trier par année
-function initYearFilter() {
-  const select = document.getElementById("yearFilter");
-  const currentYear = new Date().getFullYear();
-
-  for (let i = currentYear; i >= currentYear - 5; i--) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    select.appendChild(option);
-  }
-
-  select.value = currentYear;
-}
+window.initYearFilter = initYearFilter
+window.loadDepenses = loadDepenses

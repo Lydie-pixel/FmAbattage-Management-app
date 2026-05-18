@@ -1,3 +1,8 @@
+import {
+  statutLabels,
+  statutBadge
+} from "../helpers/badges.js"
+
 fetch("http://localhost:3000/api/facture")
   .then(res => res.json())
   .then(data => {
@@ -29,13 +34,6 @@ factures.forEach(f => {
 
   let badge = "bg-warning";
   if (f.statut === "partielle") badge = "bg-info";
-
-        const statutLabels = {
-    en_attente: "En attente de payement",
-    payee: "Facture payée",
-    partielle: "Paiement partiel",
-    archive: "Archivé"
-  };
   
   html += `
     <tr>
@@ -43,7 +41,7 @@ factures.forEach(f => {
       <td>${f.client?.nom || "-"}</td>
       <td>${f.client?.tel || "-"}</td>
       <td>${f.montant} €</td>
-      <td><span class="badge ${badge}">${statutLabels[f.statut] || d.statut}</span></td>
+      <td><span class="badge ${statutBadge(f.statut)}">${statutLabels(f.statut)}</span></td>
     </tr>
   `;
 });

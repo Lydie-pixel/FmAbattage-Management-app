@@ -1,3 +1,9 @@
+import {
+    formatNiveau,
+    formatPrice
+} from "../helpers/format.js";
+
+
 // Charger les factures
 function loadFactures() {
 
@@ -24,25 +30,6 @@ function loadFactures() {
     });
 }
 
-// UX Niveau
-function formatNiveau(niveau) {
-    switch (niveau) {
-        case "relance_1":
-            return "Première relance";
-
-        case "relance_2":
-            return "Deuxième relance";
-
-        case "relance_3":
-            return "Troisième relance";
-
-        case "mise_en_demeure":
-            return "Mise en demeure";
-
-        default:
-            return niveau;
-    }
-}
 
 //Afficher les infos réccupérer
 document

@@ -1,17 +1,11 @@
-// Trier par année
-function initYearFilter() {
-  const select = document.getElementById("yearFilter");
-  const currentYear = new Date().getFullYear();
+import {
+    formatDateFR,
+    formatPrice
+} from "../helpers/format.js";
 
-  for (let i = currentYear; i >= currentYear - 5; i--) {
-    const option = document.createElement("option");
-    option.value = i;
-    option.textContent = i;
-    select.appendChild(option);
-  }
-
-  select.value = currentYear;
-}
+import {
+    initYearFilter
+} from "../helpers/dates.js";
 
 // Action sur un devis
 document.addEventListener("click", function(e) {
@@ -168,7 +162,7 @@ actions += `
         <td>${devis.client?.nom || "-"}</td>
         <td>${devis.client?.tel || "-"}</td>
         <td>${formatDateFR(devis.date_echeance)}</td>
-        <td>${devis.montant} €</td>
+        <td>${formatPrice(devis.montant)} €</td>
         <td>
           <select onchange="changeStatut(${devis.id}, this.value)" class="form-select form-select-sm">
             <option value="en_attente" ${devis.statut === "en_attente" ? "selected" : ""}>En attente</option>
@@ -199,8 +193,9 @@ actions += `
 window.facturer = facturer;
 window.changeStatut = changeStatut;
 window.generatePDF = generatePDF;
+window.devis = devis;
 
 window.onload = () => {
-  initYearFilter();
+  initYearFilter("yearFilter");
   devis();
 };
