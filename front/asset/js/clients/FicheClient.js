@@ -44,8 +44,8 @@ function openEditModal(id) {
   modal.show();
 }
 
-//Sauvegarde du client (création ou modification)
-function saveClient() {
+// Ouverture modale
+function openCreateClientModal() {
   const id = document.getElementById("clientId").value;
   document.getElementById("email").value = "";
   document.getElementById("adresse").value = "";
@@ -86,3 +86,6 @@ function saveClient() {
     location.reload();
   });
 }
+
+window.openCreateClientModal = openCreateClientModal;
+window.saveClient = saveClient;
