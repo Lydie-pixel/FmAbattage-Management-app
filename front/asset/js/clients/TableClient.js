@@ -91,3 +91,35 @@ document
   });
 
 loadClients();
+
+// Suppression d'un client
+function deleteClient(id) {
+
+  if (!confirm("Supprimer ce client ?")) return;
+
+  fetch(`http://localhost:3000/api/client/${id}`, {
+    method: "DELETE"
+  })
+  .then(async res => {
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Erreur suppression");
+    }
+
+    return data;
+  })
+  .then(() => {
+
+    alert("Client supprimé");
+    location.reload();
+  })
+  .catch(err => {
+
+    console.error(err);
+    alert(err.message);
+  });
+}
+
+window.deleteClient = deleteClient

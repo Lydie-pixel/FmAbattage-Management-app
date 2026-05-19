@@ -80,3 +80,4 @@ window.onload = () => {
 
 window.initYearFilter = initYearFilter
 window.loadDepenses = loadDepenses
+window.deleteDepense = deleteDepense

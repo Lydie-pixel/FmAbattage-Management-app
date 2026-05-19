@@ -156,3 +156,5 @@ window.onload = () => {
   initYearFilter("yearFilter");
   facture();
 };
+
+window.deleteFacture = deleteFacture
