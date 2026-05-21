@@ -1,3 +1,7 @@
+import {
+  showToast
+} from "../helpers/format.js"
+
 let allClients = [];
 
 function loadClients() {
@@ -94,7 +98,6 @@ loadClients();
 
 // Suppression d'un client
 function deleteClient(id) {
-
   if (!confirm("Supprimer ce client ?")) return;
 
   fetch(`http://localhost:3000/api/client/${id}`, {
@@ -103,22 +106,19 @@ function deleteClient(id) {
   .then(async res => {
 
     const data = await res.json();
-
     if (!res.ok) {
       throw new Error(data.error || "Erreur suppression");
     }
-
     return data;
   })
   .then(() => {
+    showToast("Client supprimé", "success");
 
-    alert("Client supprimé");
-    location.reload();
+    loadClients();
   })
   .catch(err => {
-
-    console.error(err);
-    alert(err.message);
+    console.error("CATCH", err);
+    showToast("Erreur de suppression", "danger");
   });
 }
 
