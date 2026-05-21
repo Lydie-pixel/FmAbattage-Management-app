@@ -81,3 +81,13 @@ export function getDepenseIcon(type) {
     default: return "bi-cash";
   }
 }
+
+export function getDepenseColor(type) {
+  switch(type){
+    case "frais_carburant": return "icon-carburant";
+    case "frais_materiel": return "icon-materiel";
+    case "charges": return "icon-charges";
+    case "autre": return "icon-autre";
+    default: return "icon-default";
+  }
+}

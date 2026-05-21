@@ -2,7 +2,8 @@ import {
     formatDateFR,
     formatPrice,
     getDepenseIcon,
-    formatType
+    formatType,
+    getDepenseColor
 } from "../helpers/format.js";
 
 import {
@@ -112,7 +113,10 @@ function loadDepensesByType() {
     <div class="depense-card">
           <div class="stats-header">
             <h6>${formatType(d.type)}</h6>
-            <i class="bi ${getDepenseIcon(d.type)}"></i>
+
+            <div class="icon-box ${getDepenseColor(d.type)}">
+              <i class="bi ${getDepenseIcon(d.type)}"></i>
+            </div>
           </div>
         <strong>${Number(d.total).toFixed(2)} €</strong>
     </div>
