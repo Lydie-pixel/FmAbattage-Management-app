@@ -1,5 +1,6 @@
 import {
-    formatDateFR
+    formatDateFR,
+    showToast
 } from "../helpers/format.js";
   
 import {
@@ -88,7 +89,7 @@ fetch("/api/facture")
 
   // Changer statut
 function changeStatutFacture(id, statut) {
-  fetch(`http://localhost:3000/api/facture/${id}/statut`, {
+  fetch(`/api/facture/${id}/statut`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -96,7 +97,7 @@ function changeStatutFacture(id, statut) {
     body: JSON.stringify({ statut })
   })
   .then(() => {
-    alert("Statut mis à jour");
+    showToast("Statut mis à jour", "success");
   })
   .catch(err => console.error(err));
 }
@@ -105,19 +106,18 @@ function changeStatutFacture(id, statut) {
 function deleteFacture(id) {
   if (!confirm("Supprimer cette facture ?")) return;
 
-  fetch(`http://localhost:3000/api/facture/${id}`, {
+  fetch(`/api/facture/${id}`, {
     method: "DELETE"
   })
   .then(() => {
-    alert("Facture supprimée");
-    location.reload();
+    showToast("Facture supprimé", "success");
   })
   .catch(err => console.error(err));
 }
 
 // PDF
 function generateFacturePDF(id) {
-  window.open(`http://localhost:3000/api/pdf/facture/${id}`, "_blank");
+  window.open(`/api/pdf/facture/${id}`, "_blank");
 }
 
 // rendre accessibles
@@ -125,116 +125,13 @@ window.changeStatutFacture = changeStatutFacture;
 window.deleteFacture = deleteFacture;
 window.generateFacturePDF = generateFacturePDF;
 window. facture = facture;
-window.ouvrirCreationFacture = ouvrirCreationFacture;
-window.createFactureFromModal = createFactureFromModal;
 
-// Créer une facture depuis un devis
-function ouvrirCreationFacture() {
-
-  fetch("/api/devis")
-    .then(res => res.json())
-    .then(devis => {
-
-      const maintenant = new Date();
-
-      const devisDisponibles = devis.filter(d => {
-
-        if (d.statut !== "accepte") return false;
-
-        const dateDevis = new Date(d.date_devis);
-
-        const diffJours =
-          (maintenant - dateDevis)
-          / (1000 * 60 * 60 * 24);
-
-        return diffJours <= 400;
-      });
-
-      const select =
-        document.getElementById("devisSelect");
-
-      select.innerHTML = "";
-
-      devisDisponibles.forEach(d => {
-
-        const nbFactures =
-          d.factures?.length || 0;
-
-        select.innerHTML += `
-          <option value="${d.id}">
-            ${d.numero}
-            | ${d.client?.nom || "Sans client"}
-            | ${d.montant} €
-            | ${nbFactures} facture(s)
-          </option>
-        `;
-      });
-
-      const modal = new bootstrap.Modal(
-        document.getElementById("factureModal")
-      );
-
-      modal.show();
-    });
-}
-
-function createFactureFromModal() {
-
-  const id =
-    document.getElementById("devisSelect").value;
-
-  const frais =
-    document.getElementById("fraisFinal").value || 0;
-
-  fetch(`/api/facture/from-devis/${id}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      frais_deplacement_final: frais
-    })
-  })
-  .then(async res => {
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.error || "Erreur création facture");
-    }
-
-    return data;
-  })
-  .then(data => {
-
-    console.log(data);
-
-    alert("Facture créée");
-
-    bootstrap.Modal
-      .getInstance(
-        document.getElementById("factureModal")
-      )
-      .hide();
-
-    window.open(
-      `/api/pdf/facture/${data.facture.id}`,
-      "_blank"
-    );
-
-    facture();
-  })
-  .catch(err => {
-    console.error(err);
-    alert(err.message);
-  });
-}
 
 // Créer facture depuis liste des devis
 function facturerDepuisListe(id) {
   const frais = prompt("Frais de déplacement final ?");
 
-  fetch(`http://localhost:3000/api/facture/from-devis/${id}`, {
+  fetch(`/api/facture/from-devis/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -245,7 +142,6 @@ function facturerDepuisListe(id) {
   })
   .then(res => res.json())
   .then(data => {
-    alert("Facture créée");
 
     // ouvrir PDF direct
     window.open(`http://localhost:3000/api/pdf/facture/${data.facture.id}`, "_blank");
@@ -259,3 +155,5 @@ window.onload = () => {
   initYearFilter("yearFilter");
   facture();
 };
+
+window.deleteFacture = deleteFacture

@@ -58,12 +58,46 @@ window.openCreateClientModal = openCreateClientModal;
 window.saveClient = saveClient;
 
 // ========= PAIEMENT =========
+//Charger les factures
+function loadFactures() {
+
+  fetch("/api/facture")
+    .then(res => res.json())
+    .then(data => {
+
+      const select = document.getElementById("facture_id");
+
+      select.innerHTML = "";
+
+      // garder uniquement les factures non payées
+      const facturesFiltrees = data.filter(f =>
+        f.statut !== "payee"
+      );
+
+      if (facturesFiltrees.length === 0) {
+        select.innerHTML =
+          `<option>Aucune facture à payer</option>`;
+        return;
+      }
+
+      facturesFiltrees.forEach(f => {
+
+        select.innerHTML += `
+          <option value="${f.id}">
+            ${f.numero}
+          </option>
+        `;
+      });
+    });
+}
 // Ouvrir modale création paiement
 function openCreatePaiementModal() {
 
   editingId = null;
 
   document.getElementById("paieForm").reset();
+
+  loadFactures();
 
   const modal = new bootstrap.Modal(
     document.getElementById("paieModal")
@@ -77,7 +111,7 @@ function savePaiement() {
 
   const data = {
     facture_id: document.getElementById("facture_id").value,
-    montant: document.getElementById("montant").value,
+    montant: document.getElementById("paiement_montant").value,
     date_paiement: document.getElementById("date_paiement").value,
     mode_paiement: document.getElementById("mode_paiement").value
   };
@@ -134,7 +168,7 @@ function openCreateDepenseModal() {
   document.getElementById("date").value = "";
   document.getElementById("type").value = "";
   document.getElementById("description").value = "";
-  document.getElementById("montant").value = "";
+  document.getElementById("depense_montant").value = "";
 
   const modal = new bootstrap.Modal(
     document.getElementById("depenseModal")
@@ -150,7 +184,7 @@ function saveDepense() {
     date: document.getElementById("date").value,
     type: document.getElementById("type").value,
     description: document.getElementById("description").value,
-    montant: document.getElementById("montant").value
+    montant: document.getElementById("depense_montant").value
   };
 
   fetch("/api/depense", {
@@ -160,9 +194,7 @@ function saveDepense() {
     },
     body: JSON.stringify(data)
   })
-  .then(() => {
-
-    loadDepenses();
+ .then(async res => {
 
     bootstrap.Modal
       .getInstance(document.getElementById("depenseModal"))

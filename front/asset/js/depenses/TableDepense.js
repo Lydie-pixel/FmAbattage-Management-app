@@ -5,6 +5,10 @@ import {
 } from "../helpers/format.js";
 
 import {
+  showToast
+} from "../helpers/format.js"
+
+import {
   initYearFilter
 } from "../helpers/dates.js"
 
@@ -63,30 +67,6 @@ function loadDepenses() {
     });
 }
 
-//Ajouter une dépense
-function addDepense() {
-  const data = {
-    date: document.getElementById("date").value,
-    type: document.getElementById("type").value,
-    description: document.getElementById("description").value,
-    montant: document.getElementById("montant").value
-  };
-
-  fetch("/api/depense", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  })
-.then(() => {
-  loadDepenses();
-  bootstrap.Modal.getInstance(document.getElementById('depenseModal')).hide();
-
-  document.getElementById("date").value = "";
-  document.getElementById("description").value = "";
-  document.getElementById("montant").value = "";
-});
-}
-
 // Supprimer une dépense
 function deleteDepense(id) {
   if (!confirm("Supprimer cette dépense ?")) return;
@@ -94,7 +74,22 @@ function deleteDepense(id) {
   fetch(`/api/depense/${id}`, {
     method: "DELETE"
   })
-  .then(() => loadDepenses());
+.then(async res => {
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || "Erreur suppression");
+    }
+    return data;
+  })
+  .then(() => {
+    showToast("Dépense supprimé", "success");
+
+    loadDepenses();
+  })
+  .catch(err => {
+    showToast("Erreur de suppression", "danger");
+  });
 }
 
 window.onload = () => {
@@ -104,3 +99,4 @@ window.onload = () => {
 
 window.initYearFilter = initYearFilter
 window.loadDepenses = loadDepenses
+window.deleteDepense = deleteDepense

@@ -1,78 +1,39 @@
-// Ouverture du modal de création d'un client
-function openCreateModal() {
-  document.getElementById("modalTitle").innerText = "Nouveau client";
+import {
+  getDevisExpiration,
+  formatDateInput
+} from "../helpers/dates.js";
 
-  document.getElementById("clientId").value = "";
-  document.getElementById("nom").value = "";
-  document.getElementById("tel").value = "";
-  document.getElementById("email").value = "";
-  document.getElementById("adresse").value = "";
-  document.getElementById("ville").value = "";
-  document.getElementById("code_postal").value = "";
-
-  const modal = new bootstrap.Modal(document.getElementById("clientModal"));
-  modal.show();
-}
-
-//Sauvegarde du client (création ou modification)
-function saveClient() {
-  const id = document.getElementById("clientId").value;
-  document.getElementById("email").value = "";
-  document.getElementById("adresse").value = "";
-  document.getElementById("ville").value = "";
-  document.getElementById("code_postal").value = "";
-
-  const modal = new bootstrap.Modal(document.getElementById("clientModal"));
-  modal.show();
-}
-
-//Sauvegarde du client (création ou modification)
-function saveClient() {
-  const id = document.getElementById("clientId").value;
-
-  const client = {
-    nom: document.getElementById("nom").value,
-    tel: document.getElementById("tel").value,
-    email: document.getElementById("email").value,
-    adresse: document.getElementById("adresse").value,
-    ville: document.getElementById("ville").value,
-    code_postal: document.getElementById("code_postal").value
-  };
-
-  const url = id
-    ? `http://localhost:3000/api/client/${id}`
-    : `http://localhost:3000/api/client`;
-
-  const method = id ? "PUT" : "POST";
-
-  fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(client)
-  })
-  .then(() => {
-    location.reload();
-  });
-}
-
-//Chargement des dates
+// Chargement des dates
 window.addEventListener("DOMContentLoaded", () => {
+
+  const dateDevisInput =
+    document.getElementById("date_devis");
+
+  const dateEcheanceInput =
+    document.getElementById("date_echeance");
+
+  // Date du jour
   const today = new Date();
 
-  const formatDate = (date) => {
-    return date.toISOString().split("T")[0];
-  };
+  dateDevisInput.value =
+    formatDateInput(today);
 
-  // date devis = aujourd'hui
-  document.getElementById("date_devis").value = formatDate(today);
+  dateEcheanceInput.value =
+    formatDateInput(
+      getDevisExpiration(today)
+    );
 
-  // échéance = +15 jours
-  const echeance = new Date();
-  echeance.setDate(today.getDate() + 15);
+  // Recalcul automatique si la date change
+  dateDevisInput.addEventListener("change", () => {
 
-  document.getElementById("date_echeance").value = formatDate(echeance);
+    dateEcheanceInput.value =
+      formatDateInput(
+        getDevisExpiration(
+          dateDevisInput.value
+        )
+      );
+  });
+
 });
 
 //Envoi du formulaire

@@ -20,7 +20,7 @@
             <div class="page-header">
                     <h1>Tableau de factures</h1>
                 <div class="card-cell">
-                    <button onclick="ouvrirCreationFacture()" class="btn btn-primary">
+                    <button onclick="openCreateFactureModal()" class="btn btn-primary">
                         Créer une facture
                     </button>
                     <select 
@@ -57,34 +57,48 @@
                             id="fraisFinal"
                             class="form-control"
                             placeholder="Frais de carburant final">
-
                         </div>
 
                         <div class="modal-footer">
-
-                            <button
-                            class="btn btn-secondary"
-                            data-bs-dismiss="modal">
-                            Annuler
-                            </button>
-
-                            <button
-                            class="btn btn-success"
-                            onclick="createFactureFromModal()">
-                            Créer
-                            </button>
-
+                            <button class="btn btn-secondary"data-bs-dismiss="modal">Annuler</button>
+                            <button class="btn btn-success" onclick="saveFacture()">Créer</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div id="tableFactures"></div>
+
+            <!-- Toast Bootstrap -->
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+
+                <div
+                    id="successToast"
+                    class="toast align-items-center text-bg-success border-0"
+                    role="alert"
+                    aria-live="assertive"
+                    aria-atomic="true">
+
+                    <div class="d-flex">
+                    <div class="toast-body" id="toastMessage">
+                        Message
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast">
+                    </button>
+
+                    </div>
+                </div>
+            </div>
         </main>
         
         <div id="footer"></div>
     </body>
-    <script src="/asset/js/componement.js"></script>
+    <script src="/asset/js/helpers/modals.js" defer></script>
+    <script src="/asset/js/componement.js" defer></script>
     <script type="module" src="/asset/js/factures/factures.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>

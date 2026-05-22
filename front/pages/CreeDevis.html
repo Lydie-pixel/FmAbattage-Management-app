@@ -24,7 +24,7 @@
                 <div class="devis-form-card">
                     <h2>Créer un devis</h2>
 
-                    <button type="button" class="btn btn-secondary mb-3" onclick="openCreateModal()">
+                    <button type="button" class="btn btn-secondary mb-3" onclick="openCreateClientModal()">
                         + Nouveau client
                     </button>
 
@@ -78,7 +78,6 @@
                                     <button class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                                     <button class="btn btn-primary" onclick="saveClient()">Enregistrer</button>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -147,8 +146,9 @@
         <div id="footer"></div>
 
     </body>
-    <script src="/asset/js/componement.js"></script>
-    <script src="/asset/js/devis/commonDevis.js"></script>
+    <script src="/asset/js/helpers/modals.js" defer></script>
+    <script src="/asset/js/componement.js" defer></script>
+    <script src="/asset/js/devis/commonDevis.js" defer></script>
     <script type="module" src="/asset/js/devis/CreeDevis.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>
