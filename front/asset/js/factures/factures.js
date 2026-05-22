@@ -1,5 +1,6 @@
 import {
-    formatDateFR
+    formatDateFR,
+    showToast
 } from "../helpers/format.js";
   
 import {
@@ -88,7 +89,7 @@ fetch("/api/facture")
 
   // Changer statut
 function changeStatutFacture(id, statut) {
-  fetch(`http://localhost:3000/api/facture/${id}/statut`, {
+  fetch(`/api/facture/${id}/statut`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -96,7 +97,7 @@ function changeStatutFacture(id, statut) {
     body: JSON.stringify({ statut })
   })
   .then(() => {
-    alert("Statut mis à jour");
+    showToast("Statut mis à jour", "success");
   })
   .catch(err => console.error(err));
 }
@@ -105,19 +106,18 @@ function changeStatutFacture(id, statut) {
 function deleteFacture(id) {
   if (!confirm("Supprimer cette facture ?")) return;
 
-  fetch(`http://localhost:3000/api/facture/${id}`, {
+  fetch(`/api/facture/${id}`, {
     method: "DELETE"
   })
   .then(() => {
-    alert("Facture supprimée");
-    location.reload();
+    showToast("Facture supprimé", "success");
   })
   .catch(err => console.error(err));
 }
 
 // PDF
 function generateFacturePDF(id) {
-  window.open(`http://localhost:3000/api/pdf/facture/${id}`, "_blank");
+  window.open(`/api/pdf/facture/${id}`, "_blank");
 }
 
 // rendre accessibles
@@ -131,7 +131,7 @@ window. facture = facture;
 function facturerDepuisListe(id) {
   const frais = prompt("Frais de déplacement final ?");
 
-  fetch(`http://localhost:3000/api/facture/from-devis/${id}`, {
+  fetch(`/api/facture/from-devis/${id}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -142,7 +142,6 @@ function facturerDepuisListe(id) {
   })
   .then(res => res.json())
   .then(data => {
-    alert("Facture créée");
 
     // ouvrir PDF direct
     window.open(`http://localhost:3000/api/pdf/facture/${data.facture.id}`, "_blank");

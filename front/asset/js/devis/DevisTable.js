@@ -15,7 +15,7 @@ document.addEventListener("click", function(e) {
 
     if (!confirm("Supprimer ce devis ?")) return;
 
-    fetch(`/api/devis/${id}`, {
+    fetch(`http://localhost:3000/api/devis/${id}`, {
       method: "DELETE"
     })
     .then(res => res.json())
@@ -38,7 +38,7 @@ if (e.target.classList.contains("btn-facturer")) {
 
 //Changer de statut
 function changeStatut(id, statut) {
-  fetch(`/api/devis/${id}/statut`, {
+  fetch(`http://localhost:3000/api/devis/${id}/statut`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
@@ -54,7 +54,7 @@ function changeStatut(id, statut) {
 function facturer(devisId) {
   const frais = prompt("Frais de déplacement final ?");
 
-  fetch(`/api/facture/from-devis/${devisId}`, {
+  fetch(`http://localhost:3000/api/facture/from-devis/${devisId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -67,14 +67,13 @@ function facturer(devisId) {
   .then(data => {
 
     // 1. ouvrir le PDF
-    window.open(`/api/pdf/facture/${data.facture.id}`, "_blank");
+    window.open(`http://localhost:3000/api/pdf/facture/${data.facture.id}`, "_blank");
 
     // 2. rediriger vers la page factures
     window.location.href = "/pages/factures.html";
   })
   .catch(err => {
-    console.error(err);
-    alert("Erreur lors de la facturation");
+    showToast("Erreur lors de la facturation", "danger");
   });
 }
 

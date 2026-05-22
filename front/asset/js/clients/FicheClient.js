@@ -1,13 +1,3 @@
-// Suppression d'un client
-function deleteClient(id) {
-  if (!confirm("Supprimer ce client ?")) return;
-
-  fetch(`http://localhost:3000/api/client/${id}`, {
-    method: "DELETE"
-  })
-  .then(() => location.reload());
-}
-
 //Modification d'un client
 function openEditModal(id) {
   document.getElementById("modalTitle").innerText = "Modifier le client";

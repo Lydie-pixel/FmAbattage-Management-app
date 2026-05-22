@@ -1,3 +1,7 @@
+import {
+  showToast
+} from "../helpers/format.js"
+
 const params = new URLSearchParams(window.location.search);
 const devisId = params.get("id");
 
@@ -72,9 +76,20 @@ document.getElementById("devisForm").addEventListener("submit", function(e) {
     })
   })
   .then(res => res.json())
+  .then(async res => {
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error);
+    }
+
+    return data;
+  })
   .then(() => {
-    alert("Devis modifié ✨");
+    showToast("Devis modifié", "success");
     window.location.href = "/pages/devis.html";
   })
-  .catch(err => console.error(err));
+  .catch(err => {
+    showToast(err.message, "danger");
+  });
 });

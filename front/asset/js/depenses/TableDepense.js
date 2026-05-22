@@ -5,6 +5,10 @@ import {
 } from "../helpers/format.js";
 
 import {
+  showToast
+} from "../helpers/format.js"
+
+import {
   initYearFilter
 } from "../helpers/dates.js"
 
@@ -70,7 +74,22 @@ function deleteDepense(id) {
   fetch(`/api/depense/${id}`, {
     method: "DELETE"
   })
-  .then(() => loadDepenses());
+.then(async res => {
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || "Erreur suppression");
+    }
+    return data;
+  })
+  .then(() => {
+    showToast("Dépense supprimé", "success");
+
+    loadDepenses();
+  })
+  .catch(err => {
+    showToast("Erreur de suppression", "danger");
+  });
 }
 
 window.onload = () => {

@@ -14,6 +14,12 @@ export function getFactureExpiration(date) {
     return addDays(date, 30);
 }
 
+export function formatDateInput(date) {
+    return new Date(date)
+        .toISOString()
+        .split("T")[0];
+}
+
 // Trier par année
 export function initYearFilter(
     selectId,

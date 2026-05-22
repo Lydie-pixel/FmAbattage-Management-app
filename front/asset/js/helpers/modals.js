@@ -194,7 +194,7 @@ function saveDepense() {
     },
     body: JSON.stringify(data)
   })
-  .then(() => {
+ .then(async res => {
 
     bootstrap.Modal
       .getInstance(document.getElementById("depenseModal"))

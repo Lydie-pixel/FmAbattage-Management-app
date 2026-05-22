@@ -1,7 +1,8 @@
 import {
     formatDateFR,
     formatPrice,
-    formatMode
+    formatMode,
+    showToast
 } from "../helpers/format.js";
 
 import {
@@ -101,7 +102,10 @@ function deletePaiement(id) {
   fetch(`/api/paiement/${id}`, {
     method: "DELETE"
   })
-  .then(() => loadPaie());
+  .then(() => {
+    showToast("Paiement supprimé", "success");
+  })
+  .catch(err => console.error(err));
 }
 
 //Charger les factures

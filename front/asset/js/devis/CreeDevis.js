@@ -1,20 +1,39 @@
+import {
+  getDevisExpiration,
+  formatDateInput
+} from "../helpers/dates.js";
 
-//Chargement des dates
+// Chargement des dates
 window.addEventListener("DOMContentLoaded", () => {
+
+  const dateDevisInput =
+    document.getElementById("date_devis");
+
+  const dateEcheanceInput =
+    document.getElementById("date_echeance");
+
+  // Date du jour
   const today = new Date();
 
-  const formatDate = (date) => {
-    return date.toISOString().split("T")[0];
-  };
+  dateDevisInput.value =
+    formatDateInput(today);
 
-  // date devis = aujourd'hui
-  document.getElementById("date_devis").value = formatDate(today);
+  dateEcheanceInput.value =
+    formatDateInput(
+      getDevisExpiration(today)
+    );
 
-  // échéance = +15 jours
-  const echeance = new Date();
-  echeance.setDate(today.getDate() + 15);
+  // Recalcul automatique si la date change
+  dateDevisInput.addEventListener("change", () => {
 
-  document.getElementById("date_echeance").value = formatDate(echeance);
+    dateEcheanceInput.value =
+      formatDateInput(
+        getDevisExpiration(
+          dateDevisInput.value
+        )
+      );
+  });
+
 });
 
 //Envoi du formulaire

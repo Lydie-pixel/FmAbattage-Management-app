@@ -81,7 +81,7 @@ exports.createDevis = async (req, res) => {
     console.error("Erreur PDF :", err);
   }
 
-  // réponse propre JSON
+  // réponse JSON
   res.status(201).json({
     message: "Devis créé",
     id: devis.id,
@@ -163,6 +163,7 @@ exports.getDevisAccueil = async (req, res) => {
 
 exports.updateDevisStatut = async (req, res) => {
   const { statut } = req.body; 
+  console.log(req.body);
   try {
     const devis = await Devis.findByPk(req.params.id);
     if (!devis) {
@@ -178,8 +179,12 @@ exports.updateDevisStatut = async (req, res) => {
     await devis.save();
     res.json({ message: "Statut du devis mis à jour", devis });
   } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  console.error(error);
+
+  res.status(500).json({
+    error: error.message
+  });
+}
 };
 
 exports.deleteDevis = async (req, res) => {
@@ -235,6 +240,7 @@ exports.getArchivedDevis = async (req, res) => {
 
 // Modifier un devis
 exports.updateDevis = async (req, res) => {
+  const transaction = await sequelize.transaction();
   try {
 
     const devis = await Devis.findByPk(req.params.id);
@@ -269,13 +275,14 @@ exports.updateDevis = async (req, res) => {
       date_echeance,
       frais_deplacement,
       montant
-    });
+    }, { transaction });
 
     // supprimer anciens items
     await DevisItem.destroy({
       where: {
         devis_id: devis.id
-      }
+      },
+      transaction
     });
 
     // recréer items
@@ -284,15 +291,21 @@ exports.updateDevis = async (req, res) => {
         devis_id: devis.id,
         description: item.description,
         quantite: item.quantite,
-        prix_unitaire: item.prix_unitaire
-      });
+        prix_unitaire: item.prix_unitaire,
+        total_ligne:
+          Number(item.quantite) *
+          Number(item.prix_unitaire)
+      }, { transaction });
     }
+
+    await transaction.commit();
 
     res.json({
       message: "Devis modifié avec succès"
     });
 
   } catch (error) {
+    await transaction.rollback();
     res.status(500).json({
       error: error.message
     });

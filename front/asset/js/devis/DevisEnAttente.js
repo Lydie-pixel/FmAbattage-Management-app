@@ -1,3 +1,8 @@
+import {
+  statutDevis,
+  texteDevis
+} from "../helpers/badges.js"
+
 function loadDevisAccueil() {
   fetch("http://localhost:3000/api/devis/accueil")
     .then(res => res.json())
@@ -17,7 +22,7 @@ function loadDevisAccueil() {
       const devisProches = data.filter(d => {
         const echeance = new Date(d.date_echeance);
         const diff = (echeance - today) / (1000 * 60 * 60 * 24);
-        return diff <= 7;
+        return diff >= 0 && diff <= 15;
       });
 
       if (devisProches.length === 0) {
@@ -49,7 +54,7 @@ function loadDevisAccueil() {
           <td>${d.numero}</td>
           <td>${d.client?.nom || "-"}</td>
           <td>${new Date(d.date_echeance).toLocaleDateString("fr-FR")}</td>
-          <td></td>
+          <td><span class="badge ${statutDevis(d.date_echeance)}">${texteDevis(d)}</span></td>
         </tr>
       `;
     });

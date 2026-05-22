@@ -28,3 +28,43 @@ export function statutBadge(statut) {
     default: return "bg-light text-dark";
   }
 }
+
+// ===== BADGES DEVIS =====
+export function statutDevis(dateEcheance) {
+
+  const joursRestants = Math.ceil(
+    (new Date(dateEcheance) - new Date()) /
+    (1000 * 60 * 60 * 24)
+  );
+
+  if (joursRestants <= 3)
+    return "bg-danger-subtle text-danger-emphasis";
+
+  if (joursRestants <= 5)
+    return "bg-warning-subtle text-warning-emphasis";
+
+  if (joursRestants <= 10)
+    return "bg-primary-subtle text-primary-emphasis";
+
+  return "bg-success-subtle text-success-emphasis";
+}
+
+export function texteDevis(devis) {
+
+  const joursRestants =
+    Math.ceil(
+      (new Date(devis.date_echeance) - new Date()) /
+      (1000 * 60 * 60 * 24)
+    );
+
+  if (joursRestants < 0)
+    return "Expiré";
+
+  if (joursRestants === 0)
+    return "Expire aujourd'hui";
+
+  if (joursRestants === 1)
+    return "Expire demain";
+
+  return `Expire dans ${joursRestants} jours`;
+}
