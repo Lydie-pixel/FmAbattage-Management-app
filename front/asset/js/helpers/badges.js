@@ -22,7 +22,7 @@ export function statutLabels (statut) {
 export function statutBadge(statut) {
   switch (statut) {
     case "en_attente": return "bg-warning-subtle text-warning-emphasis";
-    case "partielle": return "bg-info-subtle text-info-emphasis";
+    case "partielle": return "badge-partielle";
     case "payee": return "bg-success-subtle text-success-emphasis";
     case "archive": return "bg-secondary-subtle text-secondary-emphasis";
     default: return "bg-light text-dark";

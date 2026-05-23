@@ -8,8 +8,9 @@ import {
 } from "../helpers/dates.js"
 
 import {
-  statutLabels
-} from "../helpers/badges.js"
+  statutLabels,
+  statutBadge
+} from "../helpers/badges.js";
 
 // Charger les factures
 function facture(){
@@ -57,14 +58,10 @@ fetch("/api/facture")
           <td>${totalPaye.toFixed(2)} €</td>
           <td>${reste.toFixed(2)} €</td>
           <td>
-            <select onchange="changeStatutFacture(${facture.id}, this.value)" 
-                    class="form-select form-select-sm mt-1">
-
-                <option value="en_attente" ${facture.statut === "en_attente" ? "selected" : ""}>En attente</option>
-                <option value="partielle" ${facture.statut === "partielle" ? "selected" : ""}>Partielle</option>
-                <option value="payee" ${facture.statut === "payee" ? "selected" : ""}>Payée</option>
-            </select>
-            </td>
+            <span class="badge ${statutBadge(facture.statut)}">
+              ${statutLabels(facture.statut)}
+            </span>
+          </td>
           <td class="actions-cell">
             <button 
               type="button" 
