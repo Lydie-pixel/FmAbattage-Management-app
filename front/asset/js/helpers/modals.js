@@ -1,3 +1,5 @@
+let editingId = null;
+
 //========= CLIENT =========
 // Ouvrir la modale création client
 function openCreateClientModal() {
@@ -59,19 +61,21 @@ window.saveClient = saveClient;
 
 // ========= PAIEMENT =========
 //Charger les factures
-function loadFactures() {
+async function loadFactures(factureCourante = null) {
 
-  fetch("/api/facture")
-    .then(res => res.json())
-    .then(data => {
+  const res = await fetch("/api/facture");
+  const data = await res.json();
 
-      const select = document.getElementById("facture_id");
+  const select =
+    document.getElementById("facture_id");
 
+      select.disabled = false;
       select.innerHTML = "";
 
-      // garder uniquement les factures non payées
+      // garder uniquement les factures non payées pour la création
       const facturesFiltrees = data.filter(f =>
-        f.statut !== "payee"
+        f.statut !== "payee" ||
+        f.id == factureCourante
       );
 
       if (facturesFiltrees.length === 0) {
@@ -88,14 +92,14 @@ function loadFactures() {
           </option>
         `;
       });
-    });
 }
 // Ouvrir modale création paiement
 function openCreatePaiementModal() {
 
-  editingId = null;
+  delete document.getElementById("paieForm").dataset.id;
 
   document.getElementById("paieForm").reset();
+  document.getElementById("facture_id").disabled = false;
 
   loadFactures();
 
@@ -115,6 +119,9 @@ function savePaiement() {
     date_paiement: document.getElementById("date_paiement").value,
     mode_paiement: document.getElementById("mode_paiement").value
   };
+
+  const editingId =
+  document.getElementById("paieForm").dataset.id;
 
   const method = editingId ? "PUT" : "POST";
 
@@ -141,7 +148,7 @@ function savePaiement() {
   })
   .then(() => {
 
-    editingId = null;
+    delete document.getElementById("paieForm").dataset.id;
 
     loadPaie();
 

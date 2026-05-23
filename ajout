@@ -1,19 +1,129 @@
 node server.js
 
-- Mettre en place les impayée
-  -> Base de donnée ( n° de lettre, date, id-facture, facture-client, facture-montant)
-  -> Crée les modèle PDF des impayées
-  -> Mettre dans les paiememnts les impayées 
-- Crée des facture d'accomptes
-- Mettre la date d'échéance des facture à +30j
-- Passer les devis de +15j en refuser automatiquement
+Promise.all([
+    fetch("/api/devis").then(r => r.json()),
+    fetch("/api/facture").then(r => r.json()),
+    fetch("/api/paiement").then(r => r.json()),
+    fetch("/api/relance").then(r => r.json())
+]).then(([devis, factures, paiements, relances]) => {
 
-UX:
-- Mettre des couleurs pour l'index sur les devis à venir
-  (vert:15j; bleu:10j; jaune:5j; rouge:3j)
-- Mettre des raccourcis sur l'index pour les ajouts 
-- Mettre des couleurs sur la page des stats
-- Mettre les dépenses sur 2 lignes
+    // calculs des stats 
+  const devisClient =
+    data.filter(d => d.client_id == clientId);
+
+  const nbDevis = devisClient.length;
+
+  const dernierDevis = devisClient
+    .sort((a, b) =>
+        new Date(b.date_devis) -
+        new Date(a.date_devis)
+    )[0];
+
+  const dateDernierDevis =
+    dernierDevis
+        ? formatDateFR(dernierDevis.date_devis)
+        : "-";
+
+  const facturesClient =
+    factures.filter(f =>
+        f.client_id == clientId
+    );
+
+  const nbFactures =
+      facturesClient.length;
+
+  const montantFacture =
+    facturesClient.reduce(
+        (total, facture) =>
+            total + Number(facture.montant),
+        0
+    );
+
+  const derniereFacture =
+    facturesClient
+        .sort((a, b) =>
+            new Date(b.date_facture) -
+            new Date(a.date_facture)
+        )[0];
+
+  const derniereFacture =
+    facturesClient
+        .sort((a, b) =>
+            new Date(b.date_facture) -
+            new Date(a.date_facture)
+        )[0];
+
+  const nbPaiements =
+    paiements.length;
+
+  const dernierPaiement =
+    paiements
+        .sort((a, b) =>
+            new Date(b.date_paiement) -
+            new Date(a.date_paiement)
+        )[0];
+
+  const nbRelances =
+    relances.length;
+
+  const resteDu =
+    facturesClient
+        .filter(f =>
+            f.statut !== "payee"
+        )
+        .reduce(
+            (total, facture) =>
+                total + Number(facture.montant),
+            0
+        );
+  
+
+  document.getElementById("clientStats").innerHTML = `
+    <div class="stats-grid">
+
+        <div>
+            <strong>Client depuis</strong><br>
+            ${formatDateFR(client.created_at)}
+        </div>
+
+        <div>
+            <strong>Dernier devis</strong><br>
+            15/05/2026
+        </div>
+
+        <div>
+            <strong>Dernier paiement</strong><br>
+            20/05/2026
+        </div>
+
+        <div>
+            <strong>Montant facturé</strong><br>
+            4 520 €
+        </div>
+
+        <div>
+            <strong>Nombre de devis</strong><br>
+            12
+        </div>
+
+        <div>
+            <strong>Nombre de factures</strong><br>
+            9
+        </div>
+
+        <div>
+            <strong>Nombre de relances</strong><br>
+            1
+        </div>
+
+        <div>
+            <strong>Reste dû</strong><br>
+            350 €
+        </div>
+
+    </div>
+`;
+});
 
 Sécurité:
 - Mettre en place toute la sécurité du site

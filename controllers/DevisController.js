@@ -138,8 +138,9 @@ exports.getAllDevis = async (req, res) => {
 };
 
 exports.getDevisAccueil = async (req, res) => {
-    const devis = await Devis.findAll({
-      include: [
+
+  const devis = await Devis.findAll({
+    include: [
       {
         model: Client,
         as: "client"
@@ -150,15 +151,24 @@ exports.getDevisAccueil = async (req, res) => {
       }
     ],
     where: {
-      statut: "en_attente",
-      date_echeance: {
-        [Op.gte]: new Date()
-      }
-    },
-    order: [["date_echeance", "ASC"]]
+      statut: "en_attente"
+    }
   });
 
-  res.json(devis);
+  const aujourdHui = new Date();
+  aujourdHui.setHours(0, 0, 0, 0);
+  for (const d of devis) {
+    if (new Date(d.date_echeance) < aujourdHui) {
+
+      d.statut = "refuse";
+      await d.save();
+    }
+  }
+
+  const devisActifs = devis.filter(d =>
+    d.statut === "en_attente"
+  );
+  res.json(devisActifs);
 };
 
 exports.updateDevisStatut = async (req, res) => {
@@ -206,6 +216,11 @@ exports.deleteDevis = async (req, res) => {
 exports.archiveDevis = async (req, res) => {
   try {
     const devis = await Devis.findByPk(req.params.id);
+    if (devis.statut === "accepte") {
+      return res.status(400).json({
+        error: "Impossible de modifier un devis accepté"
+      });
+    }
     if (!devis) {
       return res.status(404).json({ error: "Devis non trouvé" });
     } 

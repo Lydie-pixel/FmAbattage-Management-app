@@ -6,14 +6,6 @@ export function addDays(date, days) {
     return result;
 }
 
-export function getDevisExpiration(date) {
-    return addDays(date, 15);
-}
-
-export function getFactureExpiration(date) {
-    return addDays(date, 30);
-}
-
 export function formatDateInput(date) {
     return new Date(date)
         .toISOString()
@@ -45,4 +37,13 @@ export function initYearFilter(
         select.appendChild(option);
     }
     select.value = currentYear;
+}
+
+// Calcul d'expriration
+export function getDevisExpiration(date) {
+    return addDays(date, 15);
+}
+
+export function getFactureExpiration(date) {
+    return addDays(date, 30);
 }

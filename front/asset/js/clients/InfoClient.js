@@ -4,7 +4,8 @@ const clientId = params.get("id");
 import {
     formatDateFR,
     formatPrice,
-    formatMode
+    formatMode,
+    formatNiveau
 } from "../helpers/format.js";
 
   // PDF
@@ -14,6 +15,24 @@ function generatePDF(id) {
 function generateFacturePDF(id) {
   window.open(`http://localhost:3000/api/pdf/facture/${id}`, "_blank");
 }
+function relancePDF(id){
+  window.open(`http://localhost:3000/api/pdf/relance/${id}`, "_blank");
+}
+
+fetch(`http://localhost:3000/api/client/${clientId}`)
+  .then(res => res.json())
+  .then(client => {
+
+    document.getElementById("clientTitle")
+      .textContent = client.nom;
+
+    const div = document.getElementById("clientInfo");
+
+    div.innerHTML = `
+      ...
+    `;
+});
+
 
 fetch(`http://localhost:3000/api/client/${clientId}`)
   .then(res => res.json())
@@ -23,7 +42,6 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
 
     div.innerHTML = `
       <div>
-        <h4>${client.nom}</h4>
         <span><strong>Téléphone :</strong> ${client.tel || "-"}</span><br>
         <span><strong>Email :</strong> ${client.email}</span><br>
         <span><strong>Adresse :</strong> ${client.adresse || "-"}</span><br>
@@ -58,14 +76,14 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
       html += `
         <tr>
           <td>${d.numero}</td>
-          <td>${d.date_devis}</td>
+          <td>${formatDateFR(d.date_devis)}</td>
           <td>${d.montant} €</td>
           <td>${d.statut}</td>
           <td>
             <button 
               type="button" 
               class="btn btn-outline-secondary btn-sm"
-              onclick="generatePDF(${d.id})"
+              onclick="generatePDF(${d.id})">
               <i class="bi bi-file-earmark-pdf"></i> PDF
             </button>
           </td>
@@ -103,14 +121,14 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
       html += `
         <tr>
           <td>${f.numero}</td>
-          <td>${f.date_facture}</td>
+          <td>${formatDateFR(f.date_facture)}</td>
           <td>${f.montant} €</td>
           <td>${f.statut}</td>
           <td>
             <button 
               type="button" 
               class="btn btn-outline-secondary btn-sm"
-              onclick="generateFacturePDF(${f.id})"
+              onclick="generateFacturePDF(${f.id})">
               <i class="bi bi-file-earmark-pdf"></i> PDF
             </button>
           </td>
@@ -164,6 +182,54 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
   });
 
 
+  fetch("http://localhost:3000/api/relance")
+  .then(res => res.json())
+  .then(data => {
+
+    const container = document.getElementById("clientRelance");
+
+    
+    const relance = data.filter(r => {
+      return r.facture?.client_id == clientId;
+    });
+
+    let html = `
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Facture</th>
+            <th>Niveau de relance</th>
+            <th>Date de relance</th>
+            <th>PDF</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    relance.forEach(r => {
+      html += `
+        <tr>
+          <td>${r.facture?.numero || "-"}</td>
+          <td>${formatNiveau(r.niveau)}</td>
+          <td>${formatDateFR(r.date_relance)}</td>
+          <td>
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary btn-sm"
+              onclick="relancePDF(${r.id})">
+              <i class="bi bi-file-earmark-pdf"></i> PDF
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+
+    html += `</tbody></table>`;
+
+    container.innerHTML = html;
+  });
+
   //Rendre les PDF ouvrable
   window.generateFacturePDF = generateFacturePDF;
   window.generatePDF = generatePDF;
+  window.relancePDF = relancePDF;
