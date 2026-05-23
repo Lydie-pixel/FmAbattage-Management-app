@@ -19,17 +19,13 @@
 
 .actions-cell{
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px;
     flex-wrap: wrap;
 }
 
-table th{
+table th, table td{
     text-align: center;
-    vertical-align: middle;
-}
-
-table td{
     vertical-align: middle;
 }
 
@@ -73,4 +69,8 @@ table{
     gap: 15px;
 
     min-width: 220px;
+}
+
+.numero-devis{
+    font-weight:700;
 }

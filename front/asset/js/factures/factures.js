@@ -70,7 +70,7 @@ fetch("/api/facture")
               <i class="bi bi-file-earmark-pdf"></i> PDF
             </button>
             <button 
-              class="btn btn-danger btn-sm btn-supprimer"  
+              class="btn btn-outline-danger btn-sm btn-supprimer"  
               onclick="deleteFacture(${facture.id})">
               Supprimer
             </button>

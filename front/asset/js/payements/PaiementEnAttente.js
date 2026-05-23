@@ -38,7 +38,7 @@ factures.forEach(f => {
     <tr>
       <td>${f.numero}</td>
       <td>${f.client?.nom || "-"}</td>
-      <td>${f.montant} €</td>
+      <td>${f.montant}€</td>
       <td><span class="badge ${statutBadge(f.statut)}">${statutLabels(f.statut)}</span></td>
     </tr>
   `;

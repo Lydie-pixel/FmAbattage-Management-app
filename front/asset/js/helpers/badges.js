@@ -25,10 +25,23 @@ export function statutBadge(statut) {
     case "partielle": return "badge-partielle";
     case "payee": return "bg-success-subtle text-success-emphasis";
     case "archive": return "bg-secondary-subtle text-secondary-emphasis";
+    case "accepte": return "bg-success-subtle text-success-emphasis";
+    case "refuse": return "bg-danger-subtle text-danger-emphasis";
     default: return "bg-light text-dark";
   }
 }
 
+
+// ===== STATUT DEVIS =====
+export function statutDevisLabel(statut) {
+  switch (statut) {
+    case "en_attente": return "En attente";
+    case "accepte": return "Accepté";
+    case "refuse": return "Refusé";
+    case "archive": return "Archivé";
+    default: return statut;
+  }
+}
 // ===== BADGES DEVIS =====
 export function statutDevis(dateEcheance) {
 

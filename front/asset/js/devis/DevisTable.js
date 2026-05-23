@@ -7,6 +7,11 @@ import {
     initYearFilter
 } from "../helpers/dates.js";
 
+import {
+  statutDevisLabel,
+  statutBadge
+} from "../helpers/badges.js";
+
 // Action sur un devis
 document.addEventListener("click", function(e) {
   if (e.target.classList.contains("btn-supprimer")) {
@@ -116,59 +121,111 @@ function devis(){
         `;
 
     data.forEach(devis => {    
-    const statutLabels = {
-        en_attente: "En attente ",
-        accepte: "Accepté ",
-        refuse: "Refusé ",
-        archive: "Archivé "
-      };
-
       let factureBtn = "";
 
 let actions = "";
 
-// Bouton modifier seulement si PAS accepté
-if (devis.statut !== "accepte") {
- actions += `
-  <button 
-    class="btn btn-warning btn-sm btn-modifier me-2" 
-    data-id="${devis.id}">
-    Modifier
-  </button>`;
-}
+if (devis.statut === "en_attente") {
 
-// Bouton facturer uniquement si accepté
-if (devis.statut === "accepte") {
   actions += `
-  <button 
-    class="btn btn-success btn-sm btn-facturer me-2" 
-    data-id="${devis.id}">
-    Facturer
-  </button>`;
+    <button
+      class="btn btn-warning btn-sm btn-modifier me-2"
+      data-id="${devis.id}">
+      Modifier
+    </button>
+
+    <button
+      class="btn btn-danger btn-sm btn-supprimer"
+      data-id="${devis.id}">
+      Supprimer
+    </button>
+  `;
 }
 
-// Toujours afficher supprimer (ou à adapter selon ton besoin)
-actions += `
-<button 
-  class="btn btn-danger btn-sm btn-supprimer" 
-  data-id="${devis.id}">
-  Supprimer
-</button>`;
+else if (devis.statut === "accepte") {
+
+  actions += `
+    <button
+      class="btn btn-success btn-sm btn-facturer"
+      data-id="${devis.id}">
+      Facturer
+    </button>
+  `;
+}
+
+else if (devis.statut === "refuse") {
+
+  actions += `
+    <button
+      class="btn btn-warning btn-sm btn-modifier me-2"
+      data-id="${devis.id}">
+      Modifier
+    </button>
+
+    <button
+      class="btn btn-danger btn-sm btn-supprimer"
+      data-id="${devis.id}">
+      Supprimer
+    </button>
+  `;
+}
+
+else if (devis.statut === "archive") {
+
+}
 
     html += `
       <tr>
-        <td>${devis.numero}</td>
+        <td>
+          <span class="numero-devis">
+            ${devis.numero}
+          </span>
+        </td>
         <td>${devis.client?.nom || "-"}</td>
         <td>${devis.client?.tel || "-"}</td>
         <td>${formatDateFR(devis.date_echeance)}</td>
         <td>${formatPrice(devis.montant)} €</td>
         <td>
-          <select onchange="changeStatut(${devis.id}, this.value)" class="form-select form-select-sm">
-            <option value="en_attente" ${devis.statut === "en_attente" ? "selected" : ""}>En attente</option>
-            <option value="accepte" ${devis.statut === "accepte" ? "selected" : ""}>Accepté</option>
-            <option value="refuse" ${devis.statut === "refuse" ? "selected" : ""}>Refusé</option>
-            <option value="archive" ${devis.statut === "archive" ? "selected" : ""}>Archivé</option>
-          </select>
+          <div class="dropdown">
+
+            <button
+              class="badge border-0 dropdown-toggle ${statutBadge(devis.statut)}"
+              data-bs-toggle="dropdown">
+
+              ${statutDevisLabel(devis.statut)}
+            </button>
+
+            <ul class="dropdown-menu">
+
+              <li>
+                <a class="dropdown-item"
+                  onclick="changeStatut(${devis.id}, 'en_attente')">
+                  En attente
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item"
+                  onclick="changeStatut(${devis.id}, 'accepte')">
+                  Accepté
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item"
+                  onclick="changeStatut(${devis.id}, 'refuse')">
+                  Refusé
+                </a>
+              </li>
+
+              <li>
+                <a class="dropdown-item"
+                  onclick="changeStatut(${devis.id}, 'archive')">
+                  Archivé
+                </a>
+              </li>
+            </ul>
+          </div>
         </td>
         <td class="actions-cell">
           <button 

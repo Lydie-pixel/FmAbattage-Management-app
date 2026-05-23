@@ -49,7 +49,7 @@ function loadDepenses() {
             <td>${Number(d.montant).toFixed(2)} €</td>
             <td class="actions-cell">
               <button 
-                class="btn btn-danger btn-sm" 
+                class="btn btn-outline-danger btn-sm" 
                 onclick="deleteDepense(${d.id})">
                 Supprimer
               </button>
