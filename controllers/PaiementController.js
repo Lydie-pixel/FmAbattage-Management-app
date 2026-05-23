@@ -127,37 +127,75 @@ exports.createPaiement = async (req, res) => {
 
 exports.updatePaiement = async (req, res) => {
   try {
+
     const paiement = await Paiement.findByPk(req.params.id);
 
     if (!paiement) {
-      return res.status(404).json({ error: "Paiement non trouvé" });
+      return res.status(404).json({
+        error: "Paiement non trouvé"
+      });
     }
 
     const { montant, mode_paiement, date_paiement } = req.body;
+
     const montantNumber = parseFloat(montant);
 
+    // Sauvegarde de l'ancien montant
+    const ancienMontant =
+      parseFloat(paiement.montant);
+
+    const facture = await Facture.findByPk(
+      paiement.facture_id,
+      {
+        include: [{
+          model: Paiement,
+          as: "paiements"
+        }]
+      }
+    );
+
+    let totalPaye = 0;
+
+    facture.paiements.forEach(p => {
+      totalPaye += parseFloat(p.montant);
+    });
+
+    const nouveauTotal =
+      totalPaye - ancienMontant + montantNumber;
+
+    if (nouveauTotal > facture.montant) {
+      return res.status(400).json({
+        error: "Montant supérieur au reste à payer"
+      });
+    }
+
+    // Modification seulement après validation
     if (montant !== undefined) {
       paiement.montant = montantNumber;
     }
+
     if (mode_paiement !== undefined) {
       paiement.mode_paiement = mode_paiement;
     }
+
     if (date_paiement !== undefined) {
       paiement.date_paiement = date_paiement;
     }
+
     await paiement.save();
 
-    // recalcul facture
+    // Recalcul du total payé
     const paiements = await Paiement.findAll({
-      where: { facture_id: paiement.facture_id }
+      where: {
+        facture_id: paiement.facture_id
+      }
     });
 
     let total = 0;
+
     paiements.forEach(p => {
       total += parseFloat(p.montant);
     });
-
-    const facture = await Facture.findByPk(paiement.facture_id);
 
     if (Math.abs(total - facture.montant) < 0.01) {
       facture.statut = "payee";
@@ -169,10 +207,15 @@ exports.updatePaiement = async (req, res) => {
 
     await facture.save();
 
-    res.json({ message: "Paiement modifié", paiement });
+    res.json({
+      message: "Paiement modifié",
+      paiement
+    });
 
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message
+    });
   }
 };
 
@@ -188,7 +231,7 @@ exports.deletePaiement = async (req, res) => {
 
     await paiement.destroy();
 
-    // 🔄 recalcul facture
+    // recalcul facture
     const paiements = await Paiement.findAll({
       where: { facture_id: factureId }
     });

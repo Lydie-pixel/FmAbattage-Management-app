@@ -104,64 +104,40 @@ function deletePaiement(id) {
   })
   .then(() => {
     showToast("Paiement supprimé", "success");
+    loadPaie();
   })
   .catch(err => console.error(err));
 }
 
-//Charger les factures
-function loadFactures() {
+//Ouvrir une modale selon l'id pour la modifier
+async function openEditModal(id) {
 
-  fetch("/api/facture")
-    .then(res => res.json())
-    .then(data => {
+  const res = await fetch(`/api/paiement/${id}`);
+  const p = await res.json();
+  document.getElementById("paieForm").dataset.id = id;
 
-      const select = document.getElementById("facture_id");
+  await loadFactures(p.facture_id);
 
-      select.innerHTML = "";
+  const select =
+    document.getElementById("facture_id");
 
-      // garder uniquement les factures non payées
-      const facturesFiltrees = data.filter(f =>
-        f.statut !== "payee"
-      );
+  select.value = p.facture_id;
+  select.disabled = true;
 
-      if (facturesFiltrees.length === 0) {
-        select.innerHTML =
-          `<option>Aucune facture à payer</option>`;
-        return;
-      }
+  document.getElementById("paiement_montant").value = p.montant;
+  document.getElementById("date_paiement").value = p.date_paiement.split("T")[0];
+  document.getElementById("mode_paiement").value = p.mode_paiement;
 
-      facturesFiltrees.forEach(f => {
+  const modal = new bootstrap.Modal(
+    document.getElementById("paieModal")
+  );
 
-        select.innerHTML += `
-          <option value="${f.id}">
-            ${f.numero}
-          </option>
-        `;
-      });
-    });
-}
-
-//Ouvrir une modale selon l'id
-function openEditModal(id) {
-  fetch(`/api/paiement/${id}`)
-    .then(res => res.json())
-    .then(p => {
-      editingId = id;
-
-      document.getElementById("facture_id").value = p.facture_id;
-      document.getElementById("montant").value = p.montant;
-      document.getElementById("date_paiement").value = p.date_paiement;
-      document.getElementById("mode_paiement").value = p.mode_paiement;
-
-      const modal = new bootstrap.Modal(document.getElementById('paieModal'));
-      modal.show();
-    });
+  modal.show();
 }
 
 window.onload = () => {
   initYearFilter("yearFilter");
   loadPaie();
-  loadFactures();
 };
 
 window.initYearFilter = initYearFilter
