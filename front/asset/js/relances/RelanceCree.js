@@ -1,6 +1,7 @@
 import {
     formatNiveau,
-    formatPrice
+    formatPrice,
+    showToast
 } from "../helpers/format.js";
 
 
@@ -217,18 +218,18 @@ function createRelance(e) {
     })
 
   .then(result => {
-    alert("Relance créée");
-    console.log(result);
+    showToast("Relance créée", "success");
+
 
     // ouvrir PDF direct
-    window.open(`/api/pdf/relance/${result.id}`, "_blank");
+    window.open(`http://localhost:3000/api/pdf/relance/${result.id}`, "_blank");
 
     // refresh
     window.location.href = "/pages/relance.html";
   })
 
     .catch(error => {
-        alert(error.message);
+        showToast("Erreur lors de la création de la relance", "danger");
         console.error(error);
     });
 }

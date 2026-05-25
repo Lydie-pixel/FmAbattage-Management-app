@@ -3,6 +3,13 @@ const fs = require("fs");
 const path = require("path");
 const { Facture, Devis, Client, DevisItem } = require("../models");
 
+function getDelaiPaiement(dateFacture, dateEcheance) {
+  const d1 = new Date(dateFacture);
+  const d2 = new Date(dateEcheance);
+  const diffTime = Math.abs(d2 - d1);
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
+
 exports.generateFacturePDF = async (req, res) => {
   try {
 
@@ -59,7 +66,7 @@ echeance.setDate(echeance.getDate() + 30);
     html = html.replace("{{date_echeance}}", formatDate(echeance));
     html = html.replace("{{frais}}", formatPrice(facture.frais_deplacement_final));
     html = html.replaceAll("{{total}}", formatPrice(facture.montant));
-
+    html = html.replace("{{delai_paiement}}", getDelaiPaiement(facture.date_facture, echeance) + " jours");
     // 4. générer les lignes
 const items = facture.devis?.items || [];
 

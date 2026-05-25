@@ -57,6 +57,7 @@
     font-size: 2.8rem;
     font-weight: 700;
     margin-top: 20px;
+    padding: 20px;
 }
 
 .stats-card p{
@@ -70,7 +71,6 @@
 .stats-card h5{
     font-size: 1.4rem;
     font-weight: bold;
-
     margin-bottom: 20px;
 }
 
@@ -116,20 +116,20 @@
     min-width: 220px;
 }
 
-.depense-card h6{
+.depense-card h5{
     font-size: 0.9rem;
     color: #6c757d;
     font-weight: 600;
 }
 
-.depense-card strong{
-    font-size: 1.4rem;
+.facture-card strong{
+    font-size: 2rem;
     font-weight: 700;
 }
 
 .stats-header{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     margin-bottom: 20px;
 }
