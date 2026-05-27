@@ -57,6 +57,7 @@
     font-size: 2.8rem;
     font-weight: 700;
     margin-top: 20px;
+    padding: 20px;
 }
 
 .stats-card p{
@@ -66,11 +67,14 @@
     width: 90%;
     margin: 0 auto 12px;
 }
+.stats-card p strong{
+    font-size: 1.3rem;
+    font-weight: 700;
+}
 
 .stats-card h5{
     font-size: 1.4rem;
     font-weight: bold;
-
     margin-bottom: 20px;
 }
 
@@ -93,7 +97,7 @@
 .card-cell{
     background-color: white;
     border-radius: 16px;
-    padding: 20px;
+    padding: 40px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
@@ -116,20 +120,20 @@
     min-width: 220px;
 }
 
-.depense-card h6{
+.depense-card h5{
     font-size: 0.9rem;
     color: #6c757d;
     font-weight: 600;
 }
 
-.depense-card strong{
-    font-size: 1.4rem;
+.facture-card strong{
+    font-size: 2rem;
     font-weight: 700;
 }
 
 .stats-header{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     margin-bottom: 20px;
 }

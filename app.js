@@ -3,14 +3,31 @@ const app = express();
 
 const cors = require("cors");
 app.use(express.json());
+
+const session = require("express-session");
+
+app.use(session({
+    secret: "un-secret-tres-long",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000
+    }
+}));
+
+
 app.use(cors());
 
 const path = require("path");
 
+// Login
+const authRoutes = require("./routes/authRoutes");
+app.use("/api/auth", authRoutes);
+
+// Front
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Routes
-
 const devisRoutes = require("./routes/DevisRoutes");
 app.use("/api/devis", devisRoutes);
 

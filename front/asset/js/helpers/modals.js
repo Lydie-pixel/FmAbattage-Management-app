@@ -150,8 +150,6 @@ function savePaiement() {
 
     delete document.getElementById("paieForm").dataset.id;
 
-    loadPaie();
-
     bootstrap.Modal
       .getInstance(document.getElementById("paieModal"))
       .hide();

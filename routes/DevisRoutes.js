@@ -1,6 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const devisController = require("../controllers/DevisController");
+const isAuthenticated = require("../middlewares/authMiddleware");
+
+
+router.use(isAuthenticated);
+
 
 router.post("/", devisController.createDevis);
 

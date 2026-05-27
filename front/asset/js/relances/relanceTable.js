@@ -2,7 +2,8 @@ import {
     formatDateFR,
     formatPrice,
     formatNiveau,
-    formatStatut
+    formatStatut,
+    showToast
 } from "../helpers/format.js";
 
 
@@ -17,25 +18,27 @@ document.addEventListener("change", async (e) => {
     const id = e.target.dataset.id;
     const statut = e.target.value;
 
-    try {
-        const res = await fetch(`/api/relance/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ statut })
-        });
+  try {
+    const res = await fetch(`/api/relance/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ statut })
+    });
 
-        if (!res.ok) {
-            throw new Error("Erreur modification statut");
-        }
+    const data = await res.json();
 
-        alert("Statut mis à jour");
-    } catch (error) {
-        console.error(error);
-        alert(error.message);
+    if (!res.ok) {
+        throw new Error(data.error || "Erreur modification statut");
     }
 
+    showToast("Statut mis à jour", "success");
+    relance();
+
+  } catch (error) {
+      showToast(error.message, "danger");
+  }
 });
 
 //Voir la page relance

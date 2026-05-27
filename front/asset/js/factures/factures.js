@@ -108,6 +108,7 @@ function deleteFacture(id) {
   })
   .then(() => {
     showToast("Facture supprimé", "success");
+    factures();
   })
   .catch(err => console.error(err));
 }

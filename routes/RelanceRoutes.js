@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const RelanceController = require("../controllers/RelanceController")
+const isAuthenticated = require("../middlewares/authMiddleware");
+
+router.use(isAuthenticated);
 
 // créer une relance
 router.post("/", RelanceController.createRelance);

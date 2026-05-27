@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const depenseController = require("../controllers/DepenseController");
+const isAuthenticated = require("../middlewares/authMiddleware");
+
+router.use(isAuthenticated);
 
 router.post("/", depenseController.createDepense);;
 

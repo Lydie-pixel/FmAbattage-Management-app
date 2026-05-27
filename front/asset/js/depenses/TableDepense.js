@@ -1,12 +1,10 @@
 import {
     formatDateFR,
     formatPrice,
-    formatType
+    formatType,
+    formatMode,
+    showToast
 } from "../helpers/format.js";
-
-import {
-  showToast
-} from "../helpers/format.js"
 
 import {
   initYearFilter

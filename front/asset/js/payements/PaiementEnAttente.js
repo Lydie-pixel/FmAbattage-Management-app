@@ -12,8 +12,6 @@ fetch("http://localhost:3000/api/facture")
     const factures = data.filter(f =>
       f.statut === "en_attente" || f.statut === "partielle"
     );
-    console.log(data);
-    console.log(factures);
 
       let html = `
   <h3>Paiements à recevoir</h3>

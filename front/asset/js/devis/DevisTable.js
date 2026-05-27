@@ -1,6 +1,7 @@
 import {
     formatDateFR,
-    formatPrice
+    formatPrice,
+    showToast
 } from "../helpers/format.js";
 
 import {
@@ -25,34 +26,54 @@ document.addEventListener("click", function(e) {
     })
     .then(res => res.json())
     .then(() => {
-      alert("Devis supprimé");
-      location.reload(); // refresh liste
+      showToast("Devis supprimé", "success");
+      devis();
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      showToast("Erreur lors de la suppression du devis", "danger");
+      console.error(err);
+    });
   }
 
-  if (e.target.classList.contains("btn-modifier")) {
+    if (e.target.classList.contains("btn-modifier")) {
   const id = e.target.dataset.id;
   window.location.href = `/pages/ModifDevis.html?id=${id}`;
-}
-if (e.target.classList.contains("btn-facturer")) {
-  const id = e.target.dataset.id;
-  facturer(id);
-}
+  }
+  if (e.target.classList.contains("btn-facturer")) {
+    const id = e.target.dataset.id;
+    facturer(id);
+  }
 });
 
 //Changer de statut
 function changeStatut(id, statut) {
-  fetch(`http://localhost:3000/api/devis/${id}/statut`, {
+
+  fetch(`/api/devis/${id}/statut`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ statut })
   })
+
+  .then(async res => {
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error);
+    }
+
+    return data;
+  })
+
   .then(() => {
-    alert("Statut mis à jour");
-    location.reload();
+    showToast("Statut mis à jour");
+    devis();
+  })
+
+  .catch(error => {
+    showToast(error.message, "danger");
   });
 }
 
@@ -184,7 +205,7 @@ else if (devis.statut === "archive") {
         <td>${devis.client?.nom || "-"}</td>
         <td>${devis.client?.tel || "-"}</td>
         <td>${formatDateFR(devis.date_echeance)}</td>
-        <td>${formatPrice(devis.montant)} €</td>
+        <td>${formatPrice(devis.montant)}</td>
         <td>
           <div class="dropdown">
 
