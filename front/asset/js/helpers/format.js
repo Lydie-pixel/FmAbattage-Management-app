@@ -53,7 +53,7 @@ export function formatType(type) {
   switch (type) {
     case "frais_carburant": return "Carburant";
     case "frais_materiel": return "Matériel";
-    case "charges": return "Charges";
+    case "charge": return "Charges";
     case "autre": return "Autre";
     default: return type;
   }
