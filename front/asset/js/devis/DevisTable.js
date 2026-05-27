@@ -1,6 +1,7 @@
 import {
     formatDateFR,
-    formatPrice
+    formatPrice,
+    showToast
 } from "../helpers/format.js";
 
 import {
@@ -25,20 +26,23 @@ document.addEventListener("click", function(e) {
     })
     .then(res => res.json())
     .then(() => {
-      alert("Devis supprimé");
+      showToast("Devis supprimé", "success");
       location.reload(); // refresh liste
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      showToast("Erreur lors de la suppression du devis", "danger");
+      console.error(err);
+    });
   }
 
-  if (e.target.classList.contains("btn-modifier")) {
+    if (e.target.classList.contains("btn-modifier")) {
   const id = e.target.dataset.id;
   window.location.href = `/pages/ModifDevis.html?id=${id}`;
-}
-if (e.target.classList.contains("btn-facturer")) {
-  const id = e.target.dataset.id;
-  facturer(id);
-}
+  }
+  if (e.target.classList.contains("btn-facturer")) {
+    const id = e.target.dataset.id;
+    facturer(id);
+  }
 });
 
 //Changer de statut
@@ -51,7 +55,7 @@ function changeStatut(id, statut) {
     body: JSON.stringify({ statut })
   })
   .then(() => {
-    alert("Statut mis à jour");
+    showToast("Statut mis à jour", "success");
     location.reload();
   });
 }
@@ -184,7 +188,7 @@ else if (devis.statut === "archive") {
         <td>${devis.client?.nom || "-"}</td>
         <td>${devis.client?.tel || "-"}</td>
         <td>${formatDateFR(devis.date_echeance)}</td>
-        <td>${formatPrice(devis.montant)} €</td>
+        <td>${formatPrice(devis.montant)}</td>
         <td>
           <div class="dropdown">
 
