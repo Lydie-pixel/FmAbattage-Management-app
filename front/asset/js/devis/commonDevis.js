@@ -1,5 +1,5 @@
 // Charger les clients
-fetch("http://localhost:3000/api/client")
+fetch("/api/client")
   .then(res => res.json())
   .then(data => {
 

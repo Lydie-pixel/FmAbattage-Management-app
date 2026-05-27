@@ -1,5 +1,5 @@
 // Affiche la liste des clients
-fetch("http://localhost:3000/api/client")
+fetch("/api/client")
   .then(res => res.json())
   .then(clients => {
     const container = document.getElementById("clients");

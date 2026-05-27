@@ -127,7 +127,7 @@ function loadDepensesByType() {
 }
 
 function paiement(){
-fetch("http://localhost:3000/api/facture")
+fetch("/api/facture")
   .then(res => res.json())
   .then(data => {
 

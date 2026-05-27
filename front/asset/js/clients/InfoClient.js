@@ -13,13 +13,13 @@ function generatePDF(id) {
   window.open(`/api/pdf/devis/${id}`, "_blank");
 }
 function generateFacturePDF(id) {
-  window.open(`http://localhost:3000/api/pdf/facture/${id}`, "_blank");
+  window.open(`/api/pdf/facture/${id}`, "_blank");
 }
 function relancePDF(id){
-  window.open(`http://localhost:3000/api/pdf/relance/${id}`, "_blank");
+  window.open(`/api/pdf/relance/${id}`, "_blank");
 }
 
-fetch(`http://localhost:3000/api/client/${clientId}`)
+fetch(`/api/client/${clientId}`)
   .then(res => res.json())
   .then(client => {
 
@@ -34,7 +34,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
 });
 
 
-fetch(`http://localhost:3000/api/client/${clientId}`)
+fetch(`/api/client/${clientId}`)
   .then(res => res.json())
   .then(client => {
 
@@ -51,7 +51,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
     `;
   });
 
-  fetch("http://localhost:3000/api/devis")
+  fetch("/api/devis")
   .then(res => res.json())
   .then(data => {
 
@@ -96,7 +96,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
     container.innerHTML = html;
   });
 
-  fetch("http://localhost:3000/api/facture")
+  fetch("/api/facture")
   .then(res => res.json())
   .then(data => {
 
@@ -141,7 +141,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
     container.innerHTML = html;
   });
 
-  fetch("http://localhost:3000/api/paiement")
+  fetch("/api/paiement")
   .then(res => res.json())
   .then(data => {
 
@@ -182,7 +182,7 @@ fetch(`http://localhost:3000/api/client/${clientId}`)
   });
 
 
-  fetch("http://localhost:3000/api/relance")
+  fetch("/api/relance")
   .then(res => res.json())
   .then(data => {
 
