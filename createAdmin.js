@@ -14,7 +14,8 @@ async function createAdmin() {
         );
 
         await User.create({
-            username: "admin",
+            mail: "fleursdesiles7@gmail.com",
+            username: "Lydie",
             role: "admin",
             password_hash: hash
         });

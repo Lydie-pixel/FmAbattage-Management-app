@@ -155,6 +155,10 @@ function savePaiement() {
       .hide();
 
     document.getElementById("paieForm").reset();
+    if (typeof loadPaie === "function") {
+      console.log("Reload paiements");
+      window.loadPaie();
+    }
   })
   .catch(error => {
     console.error(error);
@@ -206,6 +210,11 @@ function saveDepense() {
       .hide();
 
     document.getElementById("depenseForm").reset();
+
+    if (typeof loadDepenses === "function") {
+      console.log("Reload dépenses");
+      window.loadDepenses();
+    }
   });
 }
 

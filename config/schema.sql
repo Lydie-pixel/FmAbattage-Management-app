@@ -12,6 +12,7 @@ USE fmabattage;
 
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    mail VARCHAR(300)NOT NULL UNIQUE,
     username VARCHAR(100) NOT NULL UNIQUE,
     role ENUM('user', 'admin') DEFAULT 'user',
     password_hash VARCHAR(255) NOT NULL

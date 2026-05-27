@@ -7,7 +7,7 @@ app.use(express.json());
 const session = require("express-session");
 
 app.use(session({
-    secret: "un-secret-tres-long",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {

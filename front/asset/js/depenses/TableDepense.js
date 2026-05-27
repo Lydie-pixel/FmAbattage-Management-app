@@ -82,7 +82,6 @@ function deleteDepense(id) {
   })
   .then(() => {
     showToast("Dépense supprimé", "success");
-
     loadDepenses();
   })
   .catch(err => {

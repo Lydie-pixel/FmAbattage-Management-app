@@ -6,8 +6,8 @@ async function login(e) {
 
     e.preventDefault();
 
-    const username =
-        document.getElementById("username").value;
+    const mail =
+        document.getElementById("mail").value;
 
     const password =
         document.getElementById("password").value;
@@ -20,7 +20,7 @@ async function login(e) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                username,
+                mail,
                 password
             })
         }
@@ -29,7 +29,7 @@ async function login(e) {
     if (res.ok) {
 
         window.location.href =
-            "/pages/Statistique.html";
+            "/";
 
     } else {
 

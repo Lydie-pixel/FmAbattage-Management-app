@@ -3,6 +3,11 @@ const sequelize = require("../config/database");
 
 const User = sequelize.define("User",{
 
+    mail:{
+        type: DataTypes.STRING(300),
+        unique: true 
+    },
+
     username: {
         type: DataTypes.STRING(100),
         unique: true

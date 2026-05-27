@@ -3,12 +3,12 @@ const User = require("../models/UserModel");
 
 exports.login = async (req, res) => {
 
-    const { username, password } = req.body;
+    const { mail, password } = req.body;
 
     try {
 
         const user = await User.findOne({
-            where: { username }
+            where: { mail }
         });
 
         if (!user) {
@@ -57,4 +57,18 @@ exports.logout = (req, res) => {
 
     });
 
+};
+
+exports.me = (req, res) => {
+
+    if (!req.session.userId) {
+        return res.status(401).json({
+            error: "Non connecté"
+        });
+    }
+
+    res.json({
+        id: req.session.userId,
+        role: req.session.role
+    });
 };
