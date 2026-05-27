@@ -179,9 +179,6 @@ exports.updateDevisStatut = async (req, res) => {
     if (!devis) {
       return res.status(404).json({ error: "Devis non trouvé" });
     }
-    if (devis.statut === "accepte") {
-      return res.status(400).json({ error: "Impossible de mettre à jour un devis accepté" });
-    }
     if (!['en_attente', 'accepte', 'refuse', 'archive'].includes(statut)) {
       return res.status(400).json({ error: "Statut invalide" });
     }

@@ -95,17 +95,16 @@ export function getDepenseColor(type) {
 // ===== TOASTS =====
 export function showToast(message, type = "success") {
 
-  console.log("showToast appelé");
-
   const toastEl = document.getElementById("successToast");
   const messageEl = document.getElementById("toastMessage");
 
-  console.log(toastEl);
-  console.log(messageEl);
+  if (!toastEl || !messageEl) {
+    console.warn("Toast introuvable :", message);
+    return;
+  }
 
   messageEl.textContent = message;
 
   const toast = new bootstrap.Toast(toastEl);
-
   toast.show();
 }

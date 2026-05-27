@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const PaiementController = require("../controllers/PaiementController");
+const isAuthenticated = require("../middlewares/authMiddleware");
+
+router.use(isAuthenticated);
 
 // créer un paiement
 router.post("/", PaiementController.createPaiement);

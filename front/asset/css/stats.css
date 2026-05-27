@@ -67,6 +67,10 @@
     width: 90%;
     margin: 0 auto 12px;
 }
+.stats-card p strong{
+    font-size: 1.3rem;
+    font-weight: 700;
+}
 
 .stats-card h5{
     font-size: 1.4rem;
@@ -93,7 +97,7 @@
 .card-cell{
     background-color: white;
     border-radius: 16px;
-    padding: 20px;
+    padding: 40px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 

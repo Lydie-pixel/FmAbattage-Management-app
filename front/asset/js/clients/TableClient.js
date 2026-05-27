@@ -6,7 +6,7 @@ let allClients = [];
 
 function loadClients() {
 
-  fetch("http://localhost:3000/api/client")
+  fetch("/api/client")
     .then(response => response.json())
     .then(data => {
 
@@ -100,7 +100,7 @@ loadClients();
 function deleteClient(id) {
   if (!confirm("Supprimer ce client ?")) return;
 
-  fetch(`api/client/${id}`, {
+  fetch(`/api/client/${id}`, {
     method: "DELETE"
   })
   .then(async res => {
@@ -114,10 +114,10 @@ function deleteClient(id) {
   .then(() => {
     showToast("Client supprimé", "success");
 
-    location.loadClients();
+    loadClients();
   })
   .catch(err => {
-    showToast("Erreur de suppression", "danger");
+    showToast(err.message, "danger");
   });
 }
 

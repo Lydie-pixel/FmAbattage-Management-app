@@ -27,7 +27,7 @@ document.addEventListener("click", function(e) {
     .then(res => res.json())
     .then(() => {
       showToast("Devis supprimé", "success");
-      location.reload(); // refresh liste
+      devis();
     })
     .catch(err => {
       showToast("Erreur lors de la suppression du devis", "danger");
@@ -47,16 +47,33 @@ document.addEventListener("click", function(e) {
 
 //Changer de statut
 function changeStatut(id, statut) {
-  fetch(`http://localhost:3000/api/devis/${id}/statut`, {
+
+  fetch(`/api/devis/${id}/statut`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ statut })
   })
+
+  .then(async res => {
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error);
+    }
+
+    return data;
+  })
+
   .then(() => {
-    showToast("Statut mis à jour", "success");
-    location.reload();
+    showToast("Statut mis à jour");
+    devis();
+  })
+
+  .catch(error => {
+    showToast(error.message, "danger");
   });
 }
 

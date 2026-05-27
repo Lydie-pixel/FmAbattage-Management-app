@@ -108,6 +108,7 @@ function deleteFacture(id) {
   })
   .then(() => {
     showToast("Facture supprimé", "success");
+    facture();
   })
   .catch(err => console.error(err));
 }
@@ -153,4 +154,5 @@ window.onload = () => {
   facture();
 };
 
-window.deleteFacture = deleteFacture
+window.deleteFacture = deleteFacture;
+window.facture = facture;
