@@ -222,7 +222,7 @@ function createRelance(e) {
 
 
     // ouvrir PDF direct
-    window.open(`http://localhost:3000/api/pdf/relance/${result.id}`, "_blank");
+    window.open(`/api/pdf/relance/${result.id}`, "_blank");
 
     // refresh
     window.location.href = "/pages/relance.html";

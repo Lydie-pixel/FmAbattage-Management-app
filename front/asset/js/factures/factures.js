@@ -142,7 +142,7 @@ function facturerDepuisListe(id) {
   .then(data => {
 
     // ouvrir PDF direct
-    window.open(`http://localhost:3000/api/pdf/facture/${data.facture.id}`, "_blank");
+    window.open(`/api/pdf/facture/${data.facture.id}`, "_blank");
 
     // refresh
     location.reload();

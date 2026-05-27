@@ -3,7 +3,7 @@ import {
   statutBadge
 } from "../helpers/badges.js"
 
-fetch("http://localhost:3000/api/facture")
+fetch("/api/facture")
   .then(res => res.json())
   .then(data => {
 

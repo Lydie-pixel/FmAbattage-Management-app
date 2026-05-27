@@ -2,7 +2,7 @@
 function openEditModal(id) {
   document.getElementById("modalTitle").innerText = "Modifier le client";
 
-  fetch(`http://localhost:3000/api/client/${id}`)
+  fetch(`/api/client/${id}`)
     .then(response => response.json())
     .then(client => {
       document.getElementById("clientId").value = client.id;
@@ -32,8 +32,8 @@ function saveClient() {
   };
 
   const url = id
-    ? `http://localhost:3000/api/client/${id}`
-    : `http://localhost:3000/api/client`;
+    ? `/api/client/${id}`
+    : `/api/client`;
 
   const method = id ? "PUT" : "POST";
 

@@ -21,7 +21,7 @@ document.addEventListener("click", function(e) {
 
     if (!confirm("Supprimer ce devis ?")) return;
 
-    fetch(`http://localhost:3000/api/devis/${id}`, {
+    fetch(`/api/devis/${id}`, {
       method: "DELETE"
     })
     .then(res => res.json())
@@ -80,7 +80,7 @@ function changeStatut(id, statut) {
 function facturer(devisId) {
   const frais = prompt("Frais de déplacement final ?");
 
-  fetch(`http://localhost:3000/api/facture/from-devis/${devisId}`, {
+  fetch(`/api/facture/from-devis/${devisId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -93,7 +93,7 @@ function facturer(devisId) {
   .then(data => {
 
     // 1. ouvrir le PDF
-    window.open(`http://localhost:3000/api/pdf/facture/${data.facture.id}`, "_blank");
+    window.open(`/api/pdf/facture/${data.facture.id}`, "_blank");
 
     // 2. rediriger vers la page factures
     window.location.href = "/pages/factures.html";

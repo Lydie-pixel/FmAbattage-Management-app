@@ -4,7 +4,7 @@ import {
 } from "../helpers/badges.js"
 
 function loadDevisAccueil() {
-  fetch("http://localhost:3000/api/devis/accueil")
+  fetch("/api/devis/accueil")
     .then(res => res.json())
     .then(data => {
 

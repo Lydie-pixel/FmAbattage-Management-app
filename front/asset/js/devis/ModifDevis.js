@@ -6,7 +6,7 @@ const params = new URLSearchParams(window.location.search);
 const devisId = params.get("id");
 
 // Récupérer les données du devis
-fetch(`http://localhost:3000/api/devis/${devisId}`)
+fetch(`/api/devis/${devisId}`)
   .then(res => res.json())
   .then(data => {
     remplirFormulaire(data);
@@ -62,7 +62,7 @@ document.getElementById("devisForm").addEventListener("submit", function(e) {
     });
   });
 
-  fetch(`http://localhost:3000/api/devis/${devisId}`, {
+  fetch(`/api/devis/${devisId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"

@@ -55,7 +55,7 @@ document.getElementById("devisForm").addEventListener("submit", function(e) {
     });
   });
 
-  fetch("http://localhost:3000/api/devis", {
+  fetch("/api/devis", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -73,7 +73,7 @@ document.getElementById("devisForm").addEventListener("submit", function(e) {
   .then(data => {
     console.log("DATA :", data);
 
-  const url = `http://localhost:3000/api/pdf/devis/${data.id}`;
+  const url = `/api/pdf/devis/${data.id}`;
 
   // ouvre le PDF
   window.open(url, "_blank");
