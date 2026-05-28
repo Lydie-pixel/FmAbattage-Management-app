@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const path = require("path");
 const { Devis, Client, DevisItem } = require("../models");
@@ -80,8 +80,12 @@ const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
 
     // 5. Puppeteer
     const browser = await puppeteer.launch({
-        headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"]
+      headless: true,
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox"
+      ]
     });
     const page = await browser.newPage();
 
@@ -152,7 +156,7 @@ exports.generateDevisPDFInternal = async (id) => {
 
   const browser = await puppeteer.launch({
     headless: true,
-    executablePath: puppeteer.executablePath(),
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox"

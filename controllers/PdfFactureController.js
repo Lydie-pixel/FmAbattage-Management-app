@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 const path = require("path");
 const { Facture, Devis, Client, DevisItem } = require("../models");
@@ -83,8 +83,12 @@ const itemsHTML = items.map(item => `
 
     // 5. Puppeteer
     const browser = await puppeteer.launch({
-        headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"]
+      headless: true,
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox"
+      ]
     });
     const page = await browser.newPage();
 
@@ -161,14 +165,14 @@ echeance.setDate(echeance.getDate() + 20);
 
     html = html.replace("{{items}}", itemsHTML);
 
-    const browser = await puppeteer.launch({
-      headless: true,
-      executablePath: puppeteer.executablePath(),
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox"
-      ]
-    });
+  const browser = await puppeteer.launch({
+    headless: true,
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox"
+    ]
+  });
   const page = await browser.newPage();
 
   await page.setContent(html);
