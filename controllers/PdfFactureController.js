@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer-core");
-const chromium = require("@sparticuz/chromium");
+const chromium = require("@sparticuz/chromium").default;
 const fs = require("fs");
 const path = require("path");
 const { Facture, Devis, Client, DevisItem } = require("../models");
