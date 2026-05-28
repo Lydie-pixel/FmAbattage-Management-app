@@ -1,4 +1,5 @@
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
+const chromium = require("@sparticuz/chromium");
 const fs = require("fs");
 const path = require("path");
 const { Devis, Client, DevisItem } = require("../models");
@@ -80,12 +81,10 @@ const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
 
     // 5. Puppeteer
     const browser = await puppeteer.launch({
-      headless: true,
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox"
-      ]
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless
     });
     const page = await browser.newPage();
 
@@ -155,12 +154,10 @@ exports.generateDevisPDFInternal = async (id) => {
     html = html.replace("{{items}}", itemsHTML);
 
   const browser = await puppeteer.launch({
-    headless: true,
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox"
-    ]
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath(),
+    headless: chromium.headless
   });
   const page = await browser.newPage();
 

@@ -1,4 +1,5 @@
-const puppeteer = require("puppeteer-core");
+const puppeteer = require("puppeteer");
+const chromium = require("@sparticuz/chromium");
 const fs = require("fs");
 const path = require("path");
 const { Relance, Facture, Client, Paiement } = require("../models");
@@ -164,12 +165,10 @@ exports.generateRelancePDF = async (req, res) => {
 
     // PDF
     const browser = await puppeteer.launch({
-      headless: true,
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox"
-      ]
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: chromium.headless
     });
     const page = await browser.newPage();
 
