@@ -82,7 +82,10 @@ const itemsHTML = items.map(item => `
     html = html.replace("{{items}}", itemsHTML);
 
     // 5. Puppeteer
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    });
     const page = await browser.newPage();
 
     await page.setContent(html);
@@ -158,7 +161,10 @@ echeance.setDate(echeance.getDate() + 20);
 
     html = html.replace("{{items}}", itemsHTML);
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+  });
   const page = await browser.newPage();
 
   await page.setContent(html);
