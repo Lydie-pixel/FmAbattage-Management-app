@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const chromium = require("@sparticuz/chromium");
 const fs = require("fs");
 const path = require("path");
@@ -167,7 +167,7 @@ exports.generateRelancePDF = async (req, res) => {
     const browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
+      executablePath: chromium.executablePath,
       headless: chromium.headless
     });
     const page = await browser.newPage();

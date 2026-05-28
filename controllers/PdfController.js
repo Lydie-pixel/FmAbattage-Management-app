@@ -1,4 +1,4 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-core");
 const chromium = require("@sparticuz/chromium");
 const fs = require("fs");
 const path = require("path");
@@ -83,7 +83,7 @@ const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
     const browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
+      executablePath: chromium.executablePath,
       headless: chromium.headless
     });
     const page = await browser.newPage();
@@ -156,7 +156,7 @@ exports.generateDevisPDFInternal = async (id) => {
   const browser = await puppeteer.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(),
+    executablePath: chromium.executablePath,
     headless: chromium.headless
   });
   const page = await browser.newPage();
