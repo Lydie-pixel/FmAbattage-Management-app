@@ -199,13 +199,13 @@ function createRelance(e) {
       document.getElementById("commentaire").value,
 
     penalites:
-      document.getElementById("penalites").value,
+      document.getElementById("penalites").value || null,
 
     delai_avant_poursuite:
-      document.getElementById("delai_avant_poursuite").value,
+      document.getElementById("delai_avant_poursuite").value || null,
 
     numero_ar:
-      document.getElementById("numero_ar").value
+      document.getElementById("numero_ar").value || null
   };
 
   fetch("/api/relance", {
