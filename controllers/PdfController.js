@@ -83,8 +83,8 @@ const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
     const browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
-      executablePath: chromium.executablePath,
-      headless: chromium.headless
+      executablePath: await chromium.executablePath(),
+      headless: true
     });
     const page = await browser.newPage();
 
@@ -156,8 +156,8 @@ exports.generateDevisPDFInternal = async (id) => {
   const browser = await puppeteer.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
-    executablePath: chromium.executablePath,
-    headless: chromium.headless
+    executablePath: await chromium.executablePath(),
+    headless: true
   });
   const page = await browser.newPage();
 
