@@ -81,7 +81,7 @@ const itemsHTML = items.map(item => `
 `).join("");
 
     html = html.replace("{{items}}", itemsHTML);
-
+console.log(chromium);
     // 5. Puppeteer
     const browser = await puppeteer.launch({
       args: chromium.args,
@@ -163,7 +163,7 @@ echeance.setDate(echeance.getDate() + 20);
   `).join("");
 
     html = html.replace("{{items}}", itemsHTML);
-
+console.log(chromium);
   const browser = await puppeteer.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,

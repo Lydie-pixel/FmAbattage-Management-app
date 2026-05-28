@@ -164,6 +164,7 @@ exports.generateRelancePDF = async (req, res) => {
       .replaceAll("{{paiement_partiel_demeure}}", paiementPartielTexteDemeure);
 
     // PDF
+    console.log(chromium);
     const browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,

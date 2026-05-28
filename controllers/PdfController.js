@@ -78,7 +78,7 @@ const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
     `).join("");
 
     html = html.replace("{{items}}", itemsHTML);
-
+console.log(chromium);
     // 5. Puppeteer
     const browser = await puppeteer.launch({
       args: chromium.args,
@@ -152,7 +152,7 @@ exports.generateDevisPDFInternal = async (id) => {
     `).join("");
 
     html = html.replace("{{items}}", itemsHTML);
-
+console.log(chromium);
   const browser = await puppeteer.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
