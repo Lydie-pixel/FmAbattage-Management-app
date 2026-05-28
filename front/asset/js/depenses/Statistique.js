@@ -58,7 +58,7 @@ function updateUI(data) {
   const paye = data.paye || 0;
   const attente = data.enAttente || 0;
   const depenses = data.depenses || 0;
-  const benef = ca - depenses;
+  const benef = paye - depenses;
 
   document.getElementById("ca").innerText = formatPrice(ca);
   document.getElementById("paye").innerText = formatPrice(paye);

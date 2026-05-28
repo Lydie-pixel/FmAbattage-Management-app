@@ -30,7 +30,7 @@ table th, table td{
 }
 
 table{
-    overflow: hidden;
+    overflow: visible ;
     border-radius: 12px;
     background-color: white;
     margin-top: 30px;
