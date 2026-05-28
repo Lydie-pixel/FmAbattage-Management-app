@@ -165,7 +165,11 @@ exports.generateRelancePDF = async (req, res) => {
     // PDF
     const browser = await puppeteer.launch({
       headless: true,
-      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+      executablePath: puppeteer.executablePath(),
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox"
+      ]
     });
     const page = await browser.newPage();
 
