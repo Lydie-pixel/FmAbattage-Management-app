@@ -178,32 +178,34 @@ function toggleMiseEnDemeure() {
 }
 
 //Envoi du formulaire
-document
-  .getElementById("relanceForm")
-  .addEventListener("submit", createRelance);
-
 function createRelance(e) {
 
-  e.preventDefault();
+  if (e) e.preventDefault();
 
   const data = {
 
     facture_id:
       document.getElementById("facture_id").value,
+
     niveau:
       document.getElementById("niveau").value,
+
     date_relance:
       document.getElementById("date_relance").value,
+
     statut: "envoyee",
+
     commentaire:
       document.getElementById("commentaire").value,
+
     penalites:
       document.getElementById("penalites").value,
+
     delai_avant_poursuite:
       document.getElementById("delai_avant_poursuite").value,
+
     numero_ar:
       document.getElementById("numero_ar").value
-
   };
 
   fetch("/api/relance", {
@@ -219,31 +221,39 @@ function createRelance(e) {
   })
 
   .then(async res => {
-        const result = await res.json();
-        if (!res.ok) {
-            throw new Error(result.error);
-        }
-        return result;
-    })
+
+    const result = await res.json();
+
+    if (!res.ok) {
+      throw new Error(result.error);
+    }
+
+    return result;
+  })
 
   .then(result => {
+
     showToast("Relance créée", "success");
 
-
-    // ouvrir PDF direct
     window.open(`/api/pdf/relance/${result.id}`, "_blank");
 
-    // refresh
     window.location.href = "/pages/relance.html";
   })
 
-    .catch(error => {
-        showToast("Erreur lors de la création de la relance", "danger");
-        console.error(error);
-    });
+  .catch(error => {
+
+    showToast(
+      "Erreur lors de la création de la relance",
+      "danger"
+    );
+
+    console.error(error);
+  });
 }
 
 window.onload = () => {
   loadFactures();
   toggleMiseEnDemeure();
 };
+
+window.createRelance = createRelance;
