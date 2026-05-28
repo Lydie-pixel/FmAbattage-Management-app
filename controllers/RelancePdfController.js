@@ -163,7 +163,10 @@ exports.generateRelancePDF = async (req, res) => {
       .replaceAll("{{paiement_partiel_demeure}}", paiementPartielTexteDemeure);
 
     // PDF
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    });
     const page = await browser.newPage();
 
     await page.setContent(html, { waitUntil: "load" });

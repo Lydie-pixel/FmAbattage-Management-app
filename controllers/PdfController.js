@@ -79,7 +79,10 @@ const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
     html = html.replace("{{items}}", itemsHTML);
 
     // 5. Puppeteer
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    });
     const page = await browser.newPage();
 
     await page.setContent(html);
@@ -147,7 +150,10 @@ exports.generateDevisPDFInternal = async (id) => {
 
     html = html.replace("{{items}}", itemsHTML);
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"]
+});
   const page = await browser.newPage();
 
   await page.setContent(html);
