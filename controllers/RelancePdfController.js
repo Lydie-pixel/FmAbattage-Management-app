@@ -167,8 +167,8 @@ exports.generateRelancePDF = async (req, res) => {
     const browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
-      executablePath: chromium.executablePath,
-      headless: chromium.headless
+      executablePath: await chromium.executablePath(),
+      headless: true
     });
     const page = await browser.newPage();
 
