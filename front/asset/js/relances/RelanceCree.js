@@ -15,7 +15,14 @@ function loadFactures() {
       const select =
         document.getElementById("facture_id");
 
-      // uniquement impayées
+      // reset
+      select.innerHTML = `
+        <option value="">
+          Sélectionner une facture
+        </option>
+      `;
+
+      // uniquement factures non payées
       const factures = data.filter(f =>
         f.statut !== "payee"
       );
