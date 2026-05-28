@@ -12,20 +12,22 @@ function loadFactures() {
     .then(res => res.json())
     .then(data => {
 
+      console.log(data);
+
       const select =
         document.getElementById("facture_id");
 
-      // reset
       select.innerHTML = `
         <option value="">
           Sélectionner une facture
         </option>
       `;
 
-      // uniquement factures non payées
       const factures = data.filter(f =>
         f.statut !== "payee"
       );
+
+      console.log(factures);
 
       factures.forEach(f => {
 
