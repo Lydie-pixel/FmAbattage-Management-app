@@ -38,8 +38,8 @@ export function formatNiveau(niveau) {
 // ===== MODE DE PAIEMENT =====
 export function formatMode(mode_paiement) {
     switch (mode_paiement) {
-        case "virement_A": return "Virement compte A";
-        case "virement_B": return "Virement compte B";
+        case "virement_A": return "Virement compte Nickel";
+        case "virement_B": return "Virement compte Sumup";
         case "cb": return "Carte Bancaire";
         case "cheque": return "Chèque";
         case "especes": return "Espèces";
