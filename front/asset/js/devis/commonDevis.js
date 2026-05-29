@@ -50,10 +50,10 @@ function addItem() {
       <input placeholder="Description" class="form-control desc">
     </div>
     <div class="col">
-      <input type="number" placeholder="Qté" class="form-control qty" oninput="updateTotals()">
+      <input type="number" step="0.01" placeholder="Qté" class="form-control qty" oninput="updateTotals()">
     </div>
     <div class="col">
-      <input type="number" placeholder="Prix" class="form-control price" oninput="updateTotals()">
+      <input type="number" step="0.01" placeholder="Prix" class="form-control price" oninput="updateTotals()">
     </div>
     <div class="col">
       <input type="text" class="form-control totalLigne" disabled>
