@@ -1,8 +1,11 @@
 const express = require("express");
 const router = express.Router();
+
 const PdfController = require("../controllers/PdfController");
 const PdfFactureController = require("../controllers/PdfFactureController");
-const RelancePdfController = require("../controllers/RelancePdfController")
+const RelancePdfController = require("../controllers/RelancePdfController");
+const PdfClientController = require("../controllers/PdfClientController");
+
 const isAuthenticated = require("../middlewares/authMiddleware");
 
 router.use(isAuthenticated);
