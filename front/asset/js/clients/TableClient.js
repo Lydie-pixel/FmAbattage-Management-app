@@ -69,6 +69,12 @@ function afficherClients(data) {
             onclick="deleteClient(${client.id})">
             Supprimer
           </button>
+
+          <button 
+            class="btn btn-outline-success btn-sm" 
+            onclick="printClientPDF(${client.id})">
+            Fiche Client PDF
+          </button>
         </td>
       </tr>
     `;
@@ -120,5 +126,18 @@ function deleteClient(id) {
     showToast(err.message, "danger");
   });
 }
+
+function printClientPDF(id) {
+  const clientId = id || new URLSearchParams(window.location.search).get("id");
+
+  if (!clientId) {
+    console.error("Client ID introuvable");
+    return;
+  }
+
+  window.open(`/api/pdf/client/${clientId}`, "_blank");
+}
+
+window.printClientPDF = printClientPDF;
 
 window.deleteClient = deleteClient

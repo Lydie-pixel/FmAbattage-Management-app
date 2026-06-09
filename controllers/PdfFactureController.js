@@ -1,10 +1,9 @@
-const puppeteer = require("puppeteer-core");
-const chromium = require("@sparticuz/chromium").default;
 const fs = require("fs");
 const path = require("path");
 const { Facture, Devis, Client, DevisItem } = require("../models");
+const launchBrowser = require("../config/puppeteer");
 
-function getDelaiPaiement(dateFacture, dateEcheance) {
+const getDelaiPaiement = (dateFacture, dateEcheance) => {
   const d1 = new Date(dateFacture);
   const d2 = new Date(dateEcheance);
   const diffTime = Math.abs(d2 - d1);
@@ -81,45 +80,42 @@ const itemsHTML = items.map(item => `
 `).join("");
 
     html = html.replace("{{items}}", itemsHTML);
-console.log(chromium);
+
+
     // 5. Puppeteer
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: true
-    });
-    const page = await browser.newPage();
+const browser = await launchBrowser();
+const page = await browser.newPage();
 
-    await page.setContent(html);
+await page.setContent(html, { waitUntil: "networkidle0" });
 
-    const filePath = path.join(__dirname, "../uploads", `facture_${facture.numero}.pdf`);
+const filePath = path.join(__dirname, "../uploads", `facture_${facture.numero}.pdf`);
 
-    await page.pdf({
-      path: filePath,
-      format: "A4",
-      printBackground: true,
-        margin: {
+await page.pdf({
+  path: filePath,
+  format: "A4",
+  printBackground: true,
+  margin: {
           top: "15mm",
           left: "10mm",
           right: "10mm"
         }
-    });
+});
 
-    await browser.close();
+await browser.close();
 
-    //  6. réponse
-    res.sendFile(filePath);
+return res.sendFile(filePath);
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };
 
 exports.generateFacturePDFInternal = async (id) => {
 
-    const facture = await Facture.findByPk(req.params.id, {
+  try{
+
+    const facture = await Facture.findByPk(id, {
     include: [
         { model: Client, as: "client" },
         {
@@ -163,31 +159,32 @@ echeance.setDate(echeance.getDate() + 20);
   `).join("");
 
     html = html.replace("{{items}}", itemsHTML);
-console.log(chromium);
-  const browser = await puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(),
-    headless: true
-  });
-  const page = await browser.newPage();
 
-  await page.setContent(html);
+    // Puppeteer
+const browser = await launchBrowser();
+const page = await browser.newPage();
 
-  const filePath = path.join(__dirname, "../uploads", `facture_${facture.numero}.pdf`);
+await page.setContent(html, { waitUntil: "networkidle0" });
 
-    await page.pdf({
-      path: filePath,
-      format: "A4",
-      printBackground: true,
-        margin: {
+const filePath = path.join(__dirname, "../uploads", `facture_${facture.numero}.pdf`);
+
+await page.pdf({
+  path: filePath,
+  format: "A4",
+  printBackground: true,
+  margin: {
           top: "15mm",
           left: "10mm",
           right: "10mm"
         }
-    });
+});
 
-  await browser.close();
+await browser.close();
 
-  return filePath;
+return res.sendFile(filePath);
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
+  }
 };

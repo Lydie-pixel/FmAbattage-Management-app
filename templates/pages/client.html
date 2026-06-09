@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+    <meta charset="UTF-8">
+    <title>Fiche client</title>
+    <link rel="stylesheet" href="client.css">
+    </head>
+
+    <body>
+
+        <header class="header">
+            <h1>{{client_nom}}</h1>
+            <p class="subtitle">Fiche client</p>
+        </header>
+
+
+        <main class="container">
+
+
+            <!-- INFOS CLIENT -->
+            <section class="card">
+            <h2>Informations</h2>
+
+            <div class="info-grid">
+                <div><span>Téléphone</span> {{client_tel}}</div>
+                <div><span>Email</span> {{client_email}}</div>
+                <div><span>Adresse</span> {{client_adresse}} {{client_code_postal}} {{client_ville}}</div>
+            </div>
+
+            <div class="commentaire">
+                <h3>Commentaires</h3>
+                <p>{{client_commentaire}}</p>
+            </div>
+            </section>
+
+
+            <!-- DEVIS -->
+            <section class="card">
+                <h2>Devis</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Numéro</th>
+                            <th>Date</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{devis_rows}}
+                    </tbody>
+                </table>
+            </section>
+
+
+            <!-- FACTURES -->
+            <section class="card">
+                <h2>Factures</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Numéro</th>
+                            <th>Date</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {{facture_rows}}
+                    </tbody>
+                </table>
+            </section>
+
+
+            <!-- PAIEMENTS -->
+            <section class="card">
+                <h2>Paiements</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Facture</th>
+                            <th>Date</th>
+                            <th>Montant</th>
+                            <th>Mode</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      {{paiement_rows}}
+                    </tbody>
+                </table>
+            </section>
+
+
+            <!-- RELANCES -->
+            <section class="card">
+                <h2>Relances</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Facture</th>
+                            <th>Niveau</th>
+                            <th>Date</th>
+                            <th>Pénalité</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{relance_rows}}
+                    </tbody>
+                </table>
+            </section>
+
+
+        </main>
+
+    </body>
+</html>

@@ -1,8 +1,7 @@
-const puppeteer = require("puppeteer-core");
-const chromium = require("@sparticuz/chromium").default;
 const fs = require("fs");
 const path = require("path");
 const { Relance, Facture, Client, Paiement } = require("../models");
+const launchBrowser = require("../config/puppeteer");
 
 exports.generateRelancePDF = async (req, res) => {
   try {
@@ -164,40 +163,31 @@ exports.generateRelancePDF = async (req, res) => {
       .replaceAll("{{paiement_partiel_demeure}}", paiementPartielTexteDemeure);
 
     // PDF
-    console.log(chromium);
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: true
-    });
-    const page = await browser.newPage();
+const browser = await launchBrowser();
+const page = await browser.newPage();
 
-    await page.setContent(html, { waitUntil: "load" });
+await page.setContent(html, { waitUntil: "networkidle0" });
 
-    const filePath = path.join(
-      __dirname,
-      "../uploads",
-      `relance_${facture.numero}.pdf`
-    );
+const filePath = path.join(__dirname, "../uploads", `relance_${facture.numero}.pdf`);
 
-    await page.pdf({
-      path: filePath,
-      format: "A4",
-      printBackground: true,
-      margin: {
+await page.pdf({
+  path: filePath,
+  format: "A4",
+  printBackground: true,
+  margin: {
         top: "8mm",
         left: "10mm",
         right: "10mm",
         bottom: "8mm"
       }
-    });
+});
 
-    await browser.close();
+await browser.close();
 
-    return res.sendFile(filePath);
+return res.sendFile(filePath);
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };

@@ -52,4 +52,9 @@ app.use("/api/stats", statsRoutes);
 const relanceRoutes = require("./routes/RelanceRoutes");
 app.use("/api/relance", relanceRoutes);
 
+
+// Export
+const exportRoutes = require('./routes/ExportRoutes');
+app.use('/api/export', exportRoutes);
+
 module.exports = app;

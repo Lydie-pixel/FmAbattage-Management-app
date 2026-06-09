@@ -121,6 +121,23 @@ function devis(){
         return new Date(d.date_devis).getFullYear() == selectedYear;
       });
 
+      data = data.filter(d => {
+        if (!d.date_devis) return false;
+        return new Date(d.date_devis).getFullYear() == selectedYear;
+      });
+
+      // TRI DES STATUTS
+      const ordreStatut = {
+        en_attente: 1,
+        accepte: 2,
+        refuse: 4,
+        archive: 3
+      };
+
+      data.sort((a, b) => {
+        return ordreStatut[a.statut] - ordreStatut[b.statut];
+      });
+
     const container = document.getElementById("tableDevis");
 
 
@@ -177,11 +194,6 @@ else if (devis.statut === "accepte") {
 else if (devis.statut === "refuse") {
 
   actions += `
-    <button
-      class="btn btn-warning btn-sm btn-modifier me-2"
-      data-id="${devis.id}">
-      Modifier
-    </button>
 
     <button
       class="btn btn-danger btn-sm btn-supprimer"

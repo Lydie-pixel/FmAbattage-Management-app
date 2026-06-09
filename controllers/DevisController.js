@@ -124,7 +124,7 @@ exports.getAllDevis = async (req, res) => {
   ],
   where: {
     statut: {
-      [Op.in]: ["en_attente", "accepte", "refuse"]
+      [Op.in]: ["en_attente", "accepte", "refuse", "archive"]
     }
   },
   order: [["date_devis", "DESC"]],
