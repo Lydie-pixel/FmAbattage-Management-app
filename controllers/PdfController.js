@@ -79,7 +79,7 @@ const page = await browser.newPage();
 
 await page.setContent(html, { waitUntil: "networkidle0" });
 
-const filePath = path.join(__dirname, "../uploads", `file.pdf`);
+filePath = path.join(__dirname, "../uploads", `devis_${devis.id}.pdf`);
 
 await page.pdf({
   path: filePath,
