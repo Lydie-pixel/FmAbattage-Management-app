@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 // connexion + lancement serveur
 sequelize.sync() 
   .then(() => {
-    app.listen(PORT, () => {
+    app.listen(PORT, "0.0.0.0", () => {
       console.log(`Serveur lancé sur le port ${PORT}`);
     });
   })
