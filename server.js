@@ -27,3 +27,11 @@ sequelize.sync()
   .catch((error) => {
     console.error("Erreur connexion BDD :", error);
   });
+
+process.on("unhandledRejection", err => {
+  console.error(err);
+});
+
+process.on("uncaughtException", err => {
+  console.error(err);
+});
