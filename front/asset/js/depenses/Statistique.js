@@ -169,3 +169,57 @@ factures.forEach(f => {
     container.innerHTML = html;
   });
 }
+
+
+function exportFactures() {
+  const url = '/api/export/factures';
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'factures.csv');
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function exportDepenses() {
+  const url = '/api/export/depenses';
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'depenses.csv');
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function exportRelances() {
+  const url = '/api/export/relances';
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'relances.csv');
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function exportDepensesParType() {
+  const url = '/api/export/depenses-par-type';
+
+  const link = document.createElement('a');
+  link.href = url; 
+  link.setAttribute('download', 'depenses-par-type.csv');
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+window.exportFactures = exportFactures;
+window.exportDepenses = exportDepenses;
+window.exportRelances = exportRelances;
+window.exportDepensesParType = exportDepensesParType;

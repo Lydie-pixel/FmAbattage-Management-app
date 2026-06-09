@@ -34,6 +34,11 @@ const Client = sequelize.define("Client", {
     allowNull: true
   },
 
+  commentaire: {
+    type: DataTypes.TEXT,
+    allowNull: true
+  },
+
   createdAt: {
   type: DataTypes.DATE,
   defaultValue: DataTypes.NOW

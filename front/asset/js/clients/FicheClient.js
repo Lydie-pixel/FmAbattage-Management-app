@@ -12,6 +12,7 @@ function openEditModal(id) {
       document.getElementById("adresse").value = client.adresse;
       document.getElementById("ville").value = client.ville;
       document.getElementById("code_postal").value = client.code_postal;
+      document.getElementById("commentaire").value = client.commentaire;
     });
 
   const modal = new bootstrap.Modal(document.getElementById("clientModal"));
@@ -28,7 +29,8 @@ function saveClient() {
     email: document.getElementById("email").value,
     adresse: document.getElementById("adresse").value,
     ville: document.getElementById("ville").value,
-    code_postal: document.getElementById("code_postal").value
+    code_postal: document.getElementById("code_postal").value,
+    commentaire: document.getElementById("commentaire").value
   };
 
   const url = id

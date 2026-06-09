@@ -49,6 +49,7 @@ fetch(`/api/client/${clientId}`)
         <span><strong>Code postal :</strong> ${client.code_postal || "-"}</span>
       </div>
     `;
+    document.getElementById("clientCommentaire").textContent = client.commentaire || "-";
   });
 
   fetch("/api/devis")

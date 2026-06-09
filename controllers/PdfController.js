@@ -1,25 +1,26 @@
-const puppeteer = require("puppeteer-core");
-const chromium = require("@sparticuz/chromium").default;
 const fs = require("fs");
 const path = require("path");
 const { Devis, Client, DevisItem } = require("../models");
+const launchBrowser = require("../config/puppeteer");
 
 function formatDate(date) {
-  const d = new Date(date);
-  return d.toLocaleDateString("fr-FR");
+  return date ? new Date(date).toLocaleDateString("fr-FR") : "";
+}
+
+function formatPrice(value) {
+  return Number(value || 0).toLocaleString("fr-FR", {
+    minimumFractionDigits: 2
+  }) + " €";
 }
 
 function getDelai(dateDevis, dateEcheance) {
   const d1 = new Date(dateDevis);
   const d2 = new Date(dateEcheance);
-  const diffTime = Math.abs(d2 - d1);
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return Math.ceil(Math.abs(d2 - d1) / (1000 * 60 * 60 * 24));
 }
 
 exports.generateDevisPDF = async (req, res) => {
   try {
-
-    // 1. récupérer le devis
     const devis = await Devis.findByPk(req.params.id, {
       include: [
         { model: Client, as: "client" },
@@ -31,90 +32,80 @@ exports.generateDevisPDF = async (req, res) => {
       return res.status(404).json({ error: "Devis non trouvé" });
     }
 
-    // 2. charger le template
-    function formatDate(date) {
-      const d = new Date(date);
-      return d.toLocaleDateString("fr-FR");
-    }
-    function formatPrice(value) {
-      return Number(value).toLocaleString("fr-FR", {
-        minimumFractionDigits: 2
-      }) + " €";
-    }
-    let html = fs.readFileSync("./templates/pages/devis.html", "utf8");
+    let html = fs.readFileSync(
+      path.join(__dirname, "../templates/pages/devis.html"),
+      "utf8"
+    );
 
-    const css = fs.readFileSync("./templates/asset/css/Devis.css", "utf8");
-    html = `
-    <style>${css}</style>
-    ${html}
-    `;
+    const css = fs.readFileSync(
+      path.join(__dirname, "../templates/asset/css/Devis.css"),
+      "utf8"
+    );
+
+    html = `<style>${css}</style>${html}`;
 
     const logoPath = path.join(__dirname, "../templates/asset/img/logo.png");
-const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
+    const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
 
-    // 3. remplacer les variables
-    html = html.replace("{{logo}}", logoBase64);
-    html = html.replace("{{client_nom}}", devis.client.nom);
-    html = html.replace("{{client_tel}}", devis.client.tel || "");
-    html = html.replace("{{client_adresse}}", devis.client.adresse || "");
-    html = html.replaceAll("{{client_code_postal}}", devis.client.code_postal || "");
-    html = html.replaceAll("{{client_ville}}", devis.client.ville || "");
-    html = html.replace("{{client_email}}", devis.client.email || "");
-    html = html.replace("{{numero}}", devis.numero);
-    html = html.replaceAll("{{date_devis}}", formatDate(devis.date_devis));
-    html = html.replace("{{date_echeance}}", formatDate(devis.date_echeance));
-    html = html.replace("{{frais}}", devis.frais_deplacement + " €");
-    html = html.replaceAll("{{total}}", devis.montant);
-    html = html.replace("{{delai}}", getDelai(devis.date_devis, devis.date_echeance) + " jours");
 
-    //4. générer les lignes
-    const itemsHTML = devis.items.map(item => `
+    // Items
+    const itemsHTML = (devis.items || []).map(item => `
       <tr>
         <td>${item.description}</td>
         <td>${item.quantite}</td>
-        <td>${item.prix_unitaire} €</td>
-        <td>${item.prix_unitaire * item.quantite} €</td>
+        <td>${formatPrice(item.prix_unitaire)}</td>
+        <td>${formatPrice(item.prix_unitaire * item.quantite)}</td>
       </tr>
     `).join("");
 
-    html = html.replace("{{items}}", itemsHTML);
-console.log(chromium);
-    // 5. Puppeteer
-    const browser = await puppeteer.launch({
-      args: chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
-      headless: true
-    });
-    const page = await browser.newPage();
+    html = html
+      .replace("{{client_nom}}", devis.client?.nom || "")
+      .replace("{{client_tel}}", devis.client?.tel || "")
+      .replace("{{client_adresse}}", devis.client?.adresse || "")
+      .replace("{{client_code_postal}}", devis.client?.code_postal || "")
+      .replace("{{client_ville}}", devis.client?.ville || "")
+      .replace("{{client_email}}", devis.client?.email || "")
+      .replace("{{numero}}", devis.numero || "")
+      .replace("{{date_devis}}", formatDate(devis.date_devis))
+      .replace("{{date_echeance}}", formatDate(devis.date_echeance))
+      .replace("{{frais}}", formatPrice(devis.frais_deplacement))
+      .replace("{{total}}", formatPrice(devis.montant))
+      .replace("{{delai}}", getDelai(devis.date_devis, devis.date_echeance))
+      .replace("{{items}}", itemsHTML)
+      .replace("{{logo}}", logoBase64);
 
-    await page.setContent(html);
+const browser = await launchBrowser();
+const page = await browser.newPage();
 
-    const filePath = path.join(__dirname, "../uploads", `devis_${devis.numero}.pdf`);
+await page.setContent(html, { waitUntil: "networkidle0" });
 
-    await page.pdf({
-      path: filePath,
-      format: "A4",
-      printBackground: true,
-        margin: {
-          top: "15mm",
-          left: "10mm",
-          right: "10mm"
-        }
-    });
+const filePath = path.join(__dirname, "../uploads", `file.pdf`);
 
-    await browser.close();
+await page.pdf({
+  path: filePath,
+  format: "A4",
+  printBackground: true,
+  margin: {
+        top: "8mm",
+        left: "10mm",
+        right: "10mm",
+        bottom: "8mm"
+      }
+});
 
-    // 6. réponse
-    res.sendFile(filePath);
+await browser.close();
+
+return res.sendFile(filePath);
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: error.message });
   }
 };
 
 exports.generateDevisPDFInternal = async (id) => {
+
+  try{
 
   const devis = await Devis.findByPk(id, {
     include: [
@@ -128,6 +119,10 @@ exports.generateDevisPDFInternal = async (id) => {
   const css = fs.readFileSync("./templates/asset/css/Devis.css", "utf8");
   html = `<style>${css}</style>${html}`;
 
+      const logoPath = path.join(__dirname, "../templates/asset/img/logo.png");
+  const logoBase64 = fs.readFileSync(logoPath, { encoding: "base64" });
+
+
     // 3. remplacer les variables
     html = html.replace("{{client_nom}}", devis.client.nom);
     html = html.replace("{{client_tel}}", devis.client.tel || "");
@@ -140,6 +135,7 @@ exports.generateDevisPDFInternal = async (id) => {
     html = html.replace("{{date_echeance}}", formatDate(devis.date_echeance));
     html = html.replace("{{frais}}", devis.frais_deplacement + " €");
     html = html.replaceAll("{{total}}", devis.montant);
+    html = html.replace("{{logo}}", logoBase64);
 
     // 4. générer les lignes
     const itemsHTML = devis.items.map(item => `
@@ -152,31 +148,32 @@ exports.generateDevisPDFInternal = async (id) => {
     `).join("");
 
     html = html.replace("{{items}}", itemsHTML);
-console.log(chromium);
-  const browser = await puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(),
-    headless: true
-  });
-  const page = await browser.newPage();
 
-  await page.setContent(html);
+const browser = await launchBrowser();
+const page = await browser.newPage();
 
-  const filePath = path.join(__dirname, "../uploads", `devis_${devis.numero}.pdf`);
+await page.setContent(html, { waitUntil: "networkidle0" });
 
-    await page.pdf({
-      path: filePath,
-      format: "A4",
-      printBackground: true,
-        margin: {
-          top: "15mm",
-          left: "10mm",
-          right: "10mm"
-        }
-    });
+const filePath = path.join(__dirname, "../uploads", `file.pdf`);
 
-  await browser.close();
+await page.pdf({
+  path: filePath,
+  format: "A4",
+  printBackground: true,
+  margin: {
+        top: "8mm",
+        left: "10mm",
+        right: "10mm",
+        bottom: "8mm"
+      }
+});
 
-  return filePath;
+await browser.close();
+
+return res.sendFile(filePath);
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
+  }
 };
