@@ -69,7 +69,7 @@ exports.generateDevisPDF = async (req, res) => {
       .replace("{{date_devis}}", formatDate(devis.date_devis))
       .replace("{{date_echeance}}", formatDate(devis.date_echeance))
       .replace("{{frais}}", formatPrice(devis.frais_deplacement))
-      .replace("{{total}}", formatPrice(devis.montant))
+      .replaceAll("{{total}}", formatPrice(devis.montant))
       .replace("{{delai}}", getDelai(devis.date_devis, devis.date_echeance))
       .replace("{{items}}", itemsHTML)
       .replace("{{logo}}", logoBase64);
