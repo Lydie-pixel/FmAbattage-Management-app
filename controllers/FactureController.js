@@ -17,7 +17,8 @@ exports.getAllFactures = async (req, res) => {
         { 
           model: Paiement,
           as: "paiements" 
-        }]
+        }],
+        order: [["date_facture", "DESC"]]
     });
 
     res.json(factures);
@@ -110,7 +111,7 @@ exports.createFactureFromDevis = async (req, res) => {
     });
 
     res.status(201).json({
-      message: "Facture créée avec succès 🔥",
+      message: "Facture créée avec succès ",
       facture
     });
 
