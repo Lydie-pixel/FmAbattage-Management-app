@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
 
 const cors = require("cors");
 app.use(express.json());
@@ -56,5 +58,8 @@ app.use("/api/relance", relanceRoutes);
 // Export
 const exportRoutes = require('./routes/ExportRoutes');
 app.use('/api/export', exportRoutes);
+
+// Swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 module.exports = app;
