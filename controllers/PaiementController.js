@@ -15,7 +15,8 @@ exports.getAllPaiements = async (req, res) => {
           as: "client",
           attributes: ["nom"]
         }]
-      }]
+      }],
+      order: [["date_paiement", "DESC"]]
     });
     res.json(paiements);
   } catch (error) {

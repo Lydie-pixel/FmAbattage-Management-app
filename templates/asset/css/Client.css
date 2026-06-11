@@ -10,7 +10,9 @@ body {
 /* HEADER */
 .header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #63b193;
 }
 
 .header h1 {
@@ -26,18 +28,19 @@ body {
 
 /* CONTAINER */
 .container {
-  max-width: 900px;
-  margin: auto;
+  width: 100%;
+  padding: 40px;
+  box-sizing: border-box;
 }
 
 
 /* CARD */
 .card {
+  width: 90%;
+  min-height: 60vh;
+  padding: 40px;
   border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 15px;
-  margin-bottom: 20px;
-  page-break-inside: avoid;
+  border-radius: 10px;
 }
 
 .card h2 {
@@ -49,40 +52,45 @@ body {
 
 
 /* INFOS CLIENT */
-.info-grid {
+
+.grid-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.top {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 10px;
+  gap: 20px;
 }
 
-.info-grid span {
-  font-weight: bold;
-  color: #555;
-  display: block;
+.full {
+  width: 90%;
 }
 
-
-/* TABLE */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
+/* blocs */
+.info-block, .comment-box {
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  padding: 20px;
+  background: #fafafa;
 }
 
-th {
-  background: #5A8F6B;
-  color: white;
-  padding: 8px;
-  font-size: 12px;
+/* titres */
+.info-block h3, .comment-box h3 {
+  margin-top: 0;
+  font-size: 16px;
+  border-left: 4px solid #63b193;
+  padding-left: 10px;
 }
 
-td {
-  border-bottom: 1px solid #eee;
-  padding: 8px;
-  font-size: 12px;
+/* texte commentaire */
+.comment-box p {
+  line-height: 1.6;
+  color: #333;
+  white-space: pre-wrap;
 }
-
 
 /* PRINT */
 @media print {
